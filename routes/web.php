@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Test;
+use App\Livewire\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,5 @@ use App\Livewire\Test;
 
 Route::view('/', 'welcome')->name('home');
 Route::get('/test', Test::class);
+Route::get('/dashboard', Dashboard::class)->name('dashboard');
 

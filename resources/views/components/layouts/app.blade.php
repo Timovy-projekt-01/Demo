@@ -7,6 +7,8 @@
         @vite('resources/js/app.js')
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <title>{{ $title ?? 'Page Title' }}</title>
+        @livewireStyles
+        @livewireScripts
     </head>
     <body>
         {{ $slot }}
