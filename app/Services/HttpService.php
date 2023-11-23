@@ -11,7 +11,6 @@ class HttpService {
         $response = Http::acceptJson()->get($blazegraphEndpoint, [
             'query' => $query,
         ]);
-
         $results = $response->json();
         $results = $results['results']['bindings'];
 

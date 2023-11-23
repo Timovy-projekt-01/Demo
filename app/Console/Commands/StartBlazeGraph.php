@@ -11,7 +11,7 @@ class StartBlazeGraph extends Command
      *
      * @var string
      */
-    protected $signature = 'blazegraph:start';
+    protected $signature = 'bg-start';
 
     /**
      * The console command description.
