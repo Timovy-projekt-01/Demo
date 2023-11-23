@@ -6,7 +6,8 @@
     <body>
         @include('components.layouts.includes.navbar')
         <div class="min-h-screen">
-            {{ $slot }}
+           {{--  {{ $slot }} --}}
+           @yield('content')
         </div>
         @include('components.layouts.includes.footer')
         @livewireScripts()

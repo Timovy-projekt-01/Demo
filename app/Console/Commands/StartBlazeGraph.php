@@ -11,7 +11,7 @@ class StartBlazeGraph extends Command
      *
      * @var string
      */
-    protected $signature = 'bg-start';
+    protected $signature = 'bg';
 
     /**
      * The console command description.
@@ -26,13 +26,13 @@ class StartBlazeGraph extends Command
     public function handle()
     {
         // Specify the full path to the directory containing blazegraph.jar
-        $blazegraphDirectory = 'C:\Users\mvrbo\OneDrive\Documents\STU_FEI\TP1\timak\myowl';
+        //$blazegraphDirectory = 'C:\Users\mvrbo\OneDrive\Documents\STU_FEI\TP1\timak\myowl';
+        //chdir($blazegraphDirectory);
 
         // Build the command to start BlazeGraph
         $blazegraphCommand = "java -jar blazegraph.jar";
 
         $this->info("BlazeGraph is starting... \nWorkBench is available at http://localhost:9999 \n");
-        chdir($blazegraphDirectory);
         shell_exec($blazegraphCommand);
         $this->info("Failed to start BlazeGraph.");
     }

@@ -14,8 +14,8 @@ use App\Livewire\Dashboard;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::view('/', 'welcome')->name('home');
-Route::get('/test', Test::class);
-Route::get('/dashboard', Dashboard::class)->name('dashboard');
+//Route::get('/dashboard', SearchBar::class)->name('dashboard');
+Route::get('/', function () {
+    return view('main-page');
+});
 
