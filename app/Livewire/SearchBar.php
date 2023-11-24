@@ -5,11 +5,11 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Item;
 use App\Ontologies;
+use Livewire\Attributes\On;
+
 class SearchBar extends Component
 {
-    public $filter;
-    public $filterItems = '';
-    public $items;
+    public $searchTerm = '';
     public $counter = 0;
     public $entitiesFromSearch = '';
     public $properties;
@@ -21,15 +21,17 @@ class SearchBar extends Component
     }
     public function render()
     {
-        if($this->filterItems != ''){
-            $this->entitiesFromSearch = $this->sparql->searchEntities($this->filterItems);
+        if ($this->searchTerm != '') {
+            $this->entitiesFromSearch = $this->sparql->searchEntities($this->searchTerm);
         }
         return view('livewire.search-bar');
     }
 
-    public function showEntireEntity($malwareId) {
-
-        $this->properties = $this->sparql->getMalwareProperties($malwareId);
-        $this->filterItems = '';
+    public function showEntireEntity($malwareId)
+    {
+        $properties = $this->sparql->getMalwareProperties($malwareId);
+        $this->dispatch('show-entity', $properties)->to(RenderEntity::class);
+        $this->searchTerm = '';
     }
+
 }
