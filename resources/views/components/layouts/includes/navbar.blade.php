@@ -1,8 +1,8 @@
 <nav class="bg-gray-900 border-gray-200 dark:bg-gray-900">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
-        <a href="" class="flex items-center">
-            <img src="/balogh.png" class="h-32 p-2 " alt="upb eshop logo" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Semantický Web</span>
+        <a href="" class="flex items-center gap-5">
+            <img src="/balogh.png" class="h-32 p-2 rounded-3xl" alt="upb eshop logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Security domain ontology browser</span>
         </a>
         <button data-collapse-toggle="navbar-default" type="button"
             class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -22,15 +22,7 @@
                         class="block py-2 pl-3 pr-4  rounded
                              md:border-0 md:hover:text-blue-700 md:p-0 text-white
                              md:dark:hover:text-blue-500
-                              md:dark:hover:bg-transparent">Toto nic nerobi</a>
-                </li>
-                <li>
-                    <a href=""
-                        class="block py-2 pl-3 pr-4  rounded
-                             md:border-0 md:hover:text-blue-700 md:p-0 text-white
-                             md:dark:hover:text-blue-500
-                              md:dark:hover:bg-transparent">Ani toto
-                        <?php $cartItem; ?></a>
+                              md:dark:hover:bg-transparent">About</a>
                 </li>
 
             </ul>

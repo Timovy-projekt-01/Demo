@@ -5,15 +5,16 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Ontologies;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Computed;
+
 class RenderEntity extends Component
 {
     public $properties;
     private $sparql;
-    public $allProperties;
     public $malware;
     protected $propertyTypes = [
         'TYPE' => 'type',
-        'DOMAIN' => 'domain',
+        'DOMAIN' => 'hasDomain',
         'RANGE' => 'range',
         'MITIGATES' => 'mitigates',
         'HAS_DESCRIPTION' => 'hasDescription',
@@ -55,28 +56,35 @@ class RenderEntity extends Component
         'HAS_SUBMISSION' => 'hasSubmission',
         'USED_IN_TACTIC' => 'usedInTactic',
     ];
+    public $isOpen = false;
 
-    public $propertyValues = [];
+    public function toggleTechniques()
+    {
+        //dump($this->isOpen);
+        $this->isOpen = !$this->isOpen;
+    }
     public function boot(Ontologies\Malware\Queries $sparql)
     {
         $this->sparql = $sparql;
     }
     public function render()
     {
-
         return view('livewire.render-entity');
     }
 
     #[On('show-entity')]
     public function showEntireEntity($id)
     {
+       // dump($id);
         $this->properties = $this->sparql->getMalwareProperties($id);
         $this->parseValues();
-       //dd($this->malware);
+        $this->getNamesToIds(['usesTechnique', 'hasMitigators', 'usesSoftware']);
     }
 
-    //Parses all entity properties so we have assoc array with only property and its value
-    private function parseValues() {
+    //Parses all entity properties so we remove things like uri, literal and
+    //have assoc array with only property and its value
+    private function parseValues()
+    {
 
         //Fills the malware with all possible properties and its values.
         foreach ($this->propertyTypes as $type) {
@@ -85,7 +93,6 @@ class RenderEntity extends Component
 
         // Map the values into assoc array
         $this->malware = array_map(function ($values) {
-            // If $values has more than one value, keep the original array; otherwise, use the original value
             return count($values) > 1 ? $values : $values[0] ?? null;
         }, $this->malware);
     }
@@ -99,6 +106,21 @@ class RenderEntity extends Component
         // Step 2: Get the 'value' of 'value' for each filtered element
         $extractedValues = array_map(fn ($element) => $element['value']['value'], array_values($filteredData));
         return $extractedValues;
+    }
+
+    private function getNamesToIds(array $propertyTypes)
+    {
+        foreach ($propertyTypes as $propertyType) {
+            if (!isset($this->malware[$propertyType])) {
+                continue; // Skip if property type not found in malware
+            }
+
+            foreach ($this->malware[$propertyType] as $key => $propertyId) {
+                $name = $this->sparql->getName($propertyId);
+                // Replace the ID with a tuple (ID, Name) in the existing array
+                $this->malware[$propertyType][$key] = ['id' => $propertyId, 'name' => $name];
+            }
+        }
     }
 
 }
