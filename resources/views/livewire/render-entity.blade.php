@@ -151,21 +151,21 @@
 
             {{-- POKUS O COLLAPSABLE MENU ale ani za boha sa nevyrenderuje ked kliknem na wire:click --}}
 
-            {{-- @if ($malware['usesTechnique'] != null)
+            @if ($malware['usesTechnique'] != null)
                 <h3 class="font-bold cursor-pointer" wire:click="toggleTechniques">
                     Techniques <span>{{ $isOpen ? '▼' : '►' }}</span>
                 </h3>
                 @if ($isOpen)
                     <ul>
                         @foreach ($malware['usesTechnique'] as $technique)
-                            <li class="hover:underline underline-offset-4 border-b py-2"
-                                wire:key="{{ $technique }}">
-                                <h4 class="text-gray-600">{{ $technique }}</h4>
+                            <li class="hover:underline underline-offset-4 border-b py-2">
+                                <h4 class="text-gray-600 cursor-pointer"
+                                    wire:click="showEntireEntity('{{ $technique['id'] }}')">
+                                    {{ $technique['name'] }}</h4>
                             </li>
                         @endforeach
                     </ul>
                 @endif
-            @endif --}}
-        </div>
+            @endif
     @endif
 </div>

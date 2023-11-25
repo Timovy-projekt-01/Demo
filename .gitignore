@@ -20,3 +20,4 @@ yarn-error.log
 .jar
 .jnl
 rules.log
+blazegraph.jnl
