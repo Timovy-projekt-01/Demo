@@ -85,7 +85,7 @@
             {{--              FOURTH PART  (dropdown menus)      --}}
             {{-- ------------------------------------------------ --}}
             <div>
-                @if ($malware['usesTechnique'] != null)
+                {{-- @if ($malware['usesTechnique'] != null)
                     <h3 class="font-bold">Techniques:</h3>
                     <ul>
                         @foreach ($malware['usesTechnique'] as $technique)
@@ -96,43 +96,64 @@
                             </li>
                         @endforeach
                     </ul>
+                @endif --}}
+
+                @if ($malware['usesTechnique'] != null)
+                    <h3 class="font-bold cursor-pointer" wire:click="toggleTechniques">
+                        Techniques <span>{{ $isOpen ? '▼' : '►' }}</span>
+                    </h3>
+                    @if ($isOpen)
+                        <ul>
+                            @foreach ($malware['usesTechnique'] as $technique)
+                                <li class="hover:underline underline-offset-4 border-b py-2">
+                                    <h4 class="text-gray-600 cursor-pointer"
+                                        wire:click="showEntireEntity('{{ $technique['id'] }}')">
+                                        {{ $technique['name'] }}</h4>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 @endif
+
                 @if ($malware['usesSoftware'] != null)
-                    <h3 class="font-bold">Techniques:</h3>
+                    <h3 class="font-bold">Software:</h3>
                     <ul>
-                        @foreach ($malware['usesSoftware'] as $technique)
+                        @foreach ($malware['usesSoftware'] as $software)
                             <li class="hover:underline underline-offset-4 border-b py-2">
                                 <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $technique['id'] }}')">
-                                    {{ $technique['name'] }}</h4>
+                                    wire:click="showEntireEntity('{{ $software['id'] }}')">
+                                    {{ $software['name'] }}</h4>
                             </li>
                         @endforeach
                     </ul>
                 @endif
+
                 @if ($malware['hasMitigators'] != null)
-                    <h3 class="font-bold">Techniques:</h3>
+                    <h3 class="font-bold">Mitigators:</h3>
                     <ul>
-                        @foreach ($malware['hasMitigators'] as $technique)
+                        @foreach ($malware['hasMitigators'] as $mitigator)
                             <li class="hover:underline underline-offset-4 border-b py-2">
                                 <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $technique['id'] }}')">
-                                    {{ $technique['name'] }}</h4>
+                                    wire:click="showEntireEntity('{{ $mitigator['id'] }}')">
+                                    {{ $mitigator['name'] }}</h4>
                             </li>
                         @endforeach
                     </ul>
                 @endif
+
                 @if ($malware['usedInTactic'] != null)
-                    <h3 class="font-bold">Techniques:</h3>
+                    <h3 class="font-bold">Tactics:</h3>
                     <ul>
-                        @foreach ($malware['usedInTactic'] as $technique)
+                        @foreach ($malware['usedInTactic'] as $tactic)
                             <li class="hover:underline underline-offset-4 border-b py-2">
                                 <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $technique['id'] }}')">
-                                    {{ $technique['name'] }}</h4>
+                                    wire:click="showEntireEntity('{{ $tactic['id'] }}')">
+                                    {{ $tactic['name'] }}</h4>
                             </li>
                         @endforeach
                     </ul>
                 @endif
+
                 @if ($malware['hasRelationshipCitations'] != null)
                     <p class="font-bold">Citations</p>
                     <ul>
@@ -146,26 +167,7 @@
                         @endforeach
                     </ul>
                 @endif
+
             </div>
-
-
-            {{-- POKUS O COLLAPSABLE MENU ale ani za boha sa nevyrenderuje ked kliknem na wire:click --}}
-
-            @if ($malware['usesTechnique'] != null)
-                <h3 class="font-bold cursor-pointer" wire:click="toggleTechniques">
-                    Techniques <span>{{ $isOpen ? '▼' : '►' }}</span>
-                </h3>
-                @if ($isOpen)
-                    <ul>
-                        @foreach ($malware['usesTechnique'] as $technique)
-                            <li class="hover:underline underline-offset-4 border-b py-2">
-                                <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $technique['id'] }}')">
-                                    {{ $technique['name'] }}</h4>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-            @endif
     @endif
 </div>
