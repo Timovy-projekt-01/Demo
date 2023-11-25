@@ -25,6 +25,12 @@ class RenderEntity extends Component
     }
 
     #[On('show-entity')]
+    /**
+     * Retrieves and displays the entire entity with the given ID.
+     *
+     * @param int $id The ID of the entity to retrieve.
+     * @return void
+     */
     public function showEntireEntity($id)
     {
         $this->malware = $this->service->getCleanMalwareProperties($id);
