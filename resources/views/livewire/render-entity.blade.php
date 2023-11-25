@@ -1,7 +1,7 @@
 {{-- TODO finish for all properties --}}
 {{-- TODO Pre entity typu T a M treba nejak dodatocne ziskat Mitigators, Uses Software, Mitigates, Used in tactic atd --}}
 <div class="w-full">
-    @if ($properties != null)
+    @if ($malware != null)
         <div class="shadow-lg my-5 p-5  mx-auto">
 
             {{-- ------------------------------------------------ --}}
@@ -139,7 +139,7 @@
                         @foreach (explode(',', $malware['hasRelationshipCitations']) as $citation)
                             @if ($citation)
                                 <li class="border-b py-2" wire:key="{{ $citation }}">
-                                    <h4 class="text-gray-600 cursor-pointer">
+                                    <h4 class="text-gray-600">
                                         {{ trim(explode(':', $citation)[1] ?? '') }}</h4>
                                 </li>
                             @endif
@@ -149,7 +149,7 @@
             </div>
 
 
-            {{-- POKUS O COLLAPSABLE MENU --}}
+            {{-- POKUS O COLLAPSABLE MENU ale ani za boha sa nevyrenderuje ked kliknem na wire:click --}}
 
             {{-- @if ($malware['usesTechnique'] != null)
                 <h3 class="font-bold cursor-pointer" wire:click="toggleTechniques">
