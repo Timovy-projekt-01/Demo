@@ -38,7 +38,6 @@ class RenderEntity extends Component
     }
     public function toggleTechniques()
     {
-        //dump($this->isOpen);
         $this->counter = $this->counter + 0.5;
         $this->isOpen = ($this->counter % 2 == 0) ? true : false;
     }
