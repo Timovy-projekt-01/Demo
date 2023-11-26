@@ -25,23 +25,28 @@ class RenderEntity extends Component
         return view('livewire.render-entity');
     }
 
-    #[On('show-entity')]
     /**
      * Retrieves and displays the entire entity with the given ID.
      *
      * @param int $id The ID of the entity to retrieve.
      * @return void
      */
+    #[On('show-entity')]
     public function showEntireEntity($id)
     {
+        $this->resetOpenMenu();
         $this->malware = $this->service->getCleanMalwareProperties($id);
     }
+
     public function toggleTechniques()
     {
         $this->counter = $this->counter + 0.5;
-        $this->isOpen = ($this->counter % 2 == 0) ? true : false;
+        $this->isOpen = $this->counter % 2 == 0 ? true : false;
     }
 
-
-
+    public function resetOpenMenu()
+    {
+        $this->counter = 1;
+        $this->isOpen = false;
+    }
 }
