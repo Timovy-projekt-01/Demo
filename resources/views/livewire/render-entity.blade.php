@@ -9,6 +9,7 @@
             {{-- ------------------------------------------------ --}}
             <div>
                 <h2 class="text-4xl font-bold mb-2">{{ $malware['hasName'] }}</h2>
+                <h5 class="text-slate-500 font-mono">{{ $malware['hasId'] }}</h5>
                 <h3 class="text-xl font-semibold mb-2">{{ $malware['hasAliases'] }}</h3>
                 <h4 class="text-gray-600">Created: {{ $malware['wasCreated'] }} | Modified:
                     {{ $malware['wasLastModified'] }}</h4>
@@ -93,10 +94,11 @@
                     @if ($isOpen)
                         <ul>
                             @foreach ($malware['usesTechnique'] as $technique)
-                                <li class="hover:underline underline-offset-4 border-b py-2" wire:key="{{$technique['id']}}">
-                                    <h4 class="text-gray-600 cursor-pointer"
-                                        wire:click="showEntireEntity('{{ $technique['id'] }}')">
-                                        {{ $technique['name'] }}</h4>
+                                <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                    wire:key="{{ $technique['id'] }}"
+                                    wire:click="showEntireEntity('{{ $technique['id'] }}')">
+                                    <h4 class="">{{ $technique['name'] }}</h4>
+                                    <span class="text-slate-500 font-mono text-sm">{{ $technique['id'] }}</span>
                                 </li>
                             @endforeach
                         </ul>
@@ -107,10 +109,11 @@
                     <h3 class="font-bold">Software:</h3>
                     <ul>
                         @foreach ($malware['usesSoftware'] as $software)
-                            <li class="hover:underline underline-offset-4 border-b py-2" wire:key="{{$software['id']}}>
-                                <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $software['id'] }}')">
-                                    {{ $software['name'] }}</h4>
+                            <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                wire:key="{{ $software['id'] }}"
+                                wire:click="showEntireEntity('{{ $software['id'] }}')">
+                                <h4 class="">{{ $software['name'] }}</h4>
+                                <span class="text-slate-500 font-mono text-sm">{{ $software['id'] }}</span>
                             </li>
                         @endforeach
                     </ul>
@@ -120,23 +123,11 @@
                     <h3 class="font-bold">Mitigators:</h3>
                     <ul>
                         @foreach ($malware['hasMitigators'] as $mitigator)
-                            <li class="hover:underline underline-offset-4 border-b py-2" wire:key="{{$mitigator['id']}}>
-                                <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $mitigator['id'] }}')">
-                                    {{ $mitigator['name'] }}</h4>
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
-
-                @if ($malware['usedInTactic'] != null)
-                    <h3 class="font-bold">Tactics:</h3>
-                    <ul>
-                        @foreach ($malware['usedInTactic'] as $tactic)
-                            <li class="hover:underline underline-offset-4 border-b py-2" wire:key="{{$tactic['id']}}>
-                                <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $tactic['id'] }}')">
-                                    {{ $tactic['name'] }}</h4>
+                            <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                wire:key="{{ $mitigator['id'] }}"
+                                wire:click="showEntireEntity('{{ $mitigator['id'] }}')">
+                                <h4 class="">{{ $mitigator['name'] }}</h4>
+                                <span class="text-slate-500 font-mono text-sm">{{ $mitigator['id'] }}</span>
                             </li>
                         @endforeach
                     </ul>
@@ -146,10 +137,11 @@
                     <h3 class="font-bold">Mitigates:</h3>
                     <ul>
                         @foreach ($malware['mitigates'] as $mitigates)
-                            <li class="hover:underline underline-offset-4 border-b py-2" wire:key="{{$mitigates['id']}}>
-                                <h4 class="text-gray-600 cursor-pointer"
-                                    wire:click="showEntireEntity('{{ $mitigates['id'] }}')">
-                                    {{ $mitigates['name'] }}</h4>
+                            <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                wire:key="{{ $mitigates['id'] }}"
+                                wire:click="showEntireEntity('{{ $mitigates['id'] }}')">
+                                <h4 class="">{{ $mitigates['name'] }}</h4>
+                                <span class="text-slate-500 font-mono text-sm">{{ $mitigates['id'] }}</span>
                             </li>
                         @endforeach
                     </ul>
@@ -162,7 +154,7 @@
                             @if ($citation)
                                 <li class="border-b py-2" wire:key="{{ $citation }}">
                                     <h4 class="text-gray-600">
-                                        {{trim(explode(':', $citation)[1] ?? '') }}</h4>
+                                        {{ trim(explode(':', $citation)[1] ?? '') }}</h4>
                                 </li>
                             @endif
                         @endforeach
