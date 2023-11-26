@@ -1,7 +1,7 @@
 <nav class="bg-gray-900 border-gray-200 dark:bg-gray-900">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
         <a href="" class="flex items-center gap-5">
-            <img src="/balogh.png" class="h-32 p-2 rounded-3xl" alt="upb eshop logo" />
+            <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl" alt="upb eshop logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Security domain ontology browser</span>
         </a>
         <button data-collapse-toggle="navbar-default" type="button"
@@ -14,7 +14,7 @@
                     d="M1 1h15M1 7h15M1 13h15" />
             </svg>
         </button>
-        <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+        <div class="hidden w-full md:block md:w-auto mr-5" id="navbar-default">
             <ul
                 class="font-medium flex flex-col p-4 md:p-0   rounded-lg  md:flex-row md:space-x-8 md:mt-0 md:border-0  bg-gray-900 dark:border-gray-700">
                 <li>

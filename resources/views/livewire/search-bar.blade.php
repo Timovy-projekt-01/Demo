@@ -23,18 +23,23 @@
             wire:model.live="searchTerm" placeholder="Hľadať ..." />
         @if ($searchTerm != '')
             <ul
-                class="divide-y absolute z-10 bg-white border border-gray-300 rounded-md shadow-md w-full flex flex-col  mt-2 p-3 overflow-auto max-h-60 ">
-                @foreach ($entitiesFromSearch as $entity)
-                    <li class="flex flex-col hover:underline underline-offset-4 cursor-pointer"
-                        wire:key="{{ $entity['entity']['value'] }}"
-                        wire:click.prevent="clearSearch(); $dispatch('show-entity', { id: '{{ $entity['entity']['value'] }}' });"
-                        >
-                        <p type="button" class="font-semibold">
-                            {{ $entity['value']['value'] }}
-                        </p>
-                        <span class="text-slate-500 font-mono text-base mb-2">{{ $entity['entity']['value'] }}</span>
-                    </li>
-                @endforeach
+                class="divide-y absolute z-10 bg-white border border-gray-300 rounded-md
+                        shadow-md w-full flex flex-col  mt-2 overflow-auto max-h-60 ">
+                @if (!empty($entitiesFromSearch))
+                    @foreach ($entitiesFromSearch as $entity)
+                        <li class="flex flex-col cursor-pointer hover:bg-gray-100 px-3 py-1"
+                            wire:key="{{ $entity['entity']['value'] }}"
+                            wire:click.prevent="clearSearch(); $dispatch('show-entity', { id: '{{ $entity['entity']['value'] }}' });">
+                            <p type="button" class="font-semibold">
+                                {{ $entity['value']['value'] }}
+                            </p>
+                            <span
+                                class="text-slate-500 font-mono text-base mb-2">{{ $entity['entity']['value'] }}</span>
+                        </li>
+                    @endforeach
+                @else
+                    <li>No results</li>
+                @endif
             </ul>
         @endif
     </div>

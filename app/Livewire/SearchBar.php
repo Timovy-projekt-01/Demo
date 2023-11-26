@@ -21,8 +21,9 @@ class SearchBar extends Component
     }
     public function render()
     {
-        if ($this->searchTerm != '') {
-            $this->entitiesFromSearch = $this->sparql->searchEntities($this->searchTerm);
+        $trimmedSearch = trim($this->searchTerm);
+        if ($trimmedSearch != "") {
+            $this->entitiesFromSearch = $this->sparql->searchEntities($trimmedSearch);
         }
         return view('livewire.search-bar');
     }

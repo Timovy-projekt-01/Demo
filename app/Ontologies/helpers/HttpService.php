@@ -12,6 +12,9 @@ class HttpService {
             'query' => $query,
         ]);
         $results = $response->json();
+        if(!isset($results['results']['bindings'])) {
+            return false;
+        }
         $results = $results['results']['bindings'];
 
         return $results;
