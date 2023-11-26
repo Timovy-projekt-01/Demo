@@ -13,8 +13,28 @@ class RenderEntity extends Component
     public $properties;
     private $service;
     public $malware;
-    public $counter = 1;
-    public $isOpen = false;
+    public $menu = [
+        'technique' => [
+            'counter' => 1,
+            'isOpen' => false,
+        ],
+        'software' => [
+            'counter' => 1,
+            'isOpen' => false,
+        ],
+        'mitigator' => [
+            'counter' => 1,
+            'isOpen' => false,
+        ],
+        'mitigates' => [
+            'counter' => 1,
+            'isOpen' => false,
+        ],
+        'citation' => [
+            'counter' => 1,
+            'isOpen' => false,
+        ],
+    ];
 
     public function boot(Service $service)
     {
@@ -38,15 +58,36 @@ class RenderEntity extends Component
         $this->malware = $this->service->getCleanMalwareProperties($id);
     }
 
-    public function toggleTechniques()
+    public function toggleMenu($chosenMenu)
     {
-        $this->counter = $this->counter + 0.5;
-        $this->isOpen = $this->counter % 2 == 0 ? true : false;
+        // Counter, lebo z nejakeho dovodu sa vola funkcia 2x pri stlaceni
+        $this->menu[$chosenMenu]['counter'] += 0.5;
+        $this->menu[$chosenMenu]['isOpen'] = $this->menu[$chosenMenu]['counter'] % 2 == 0 ? true : false;
     }
 
     public function resetOpenMenu()
     {
-        $this->counter = 1;
-        $this->isOpen = false;
+        $this->menu = [
+            'technique' => [
+                'counter' => 1,
+                'isOpen' => false,
+            ],
+            'software' => [
+                'counter' => 1,
+                'isOpen' => false,
+            ],
+            'mitigator' => [
+                'counter' => 1,
+                'isOpen' => false,
+            ],
+            'mitigates' => [
+                'counter' => 1,
+                'isOpen' => false,
+            ],
+            'citation' => [
+                'counter' => 1,
+                'isOpen' => false,
+            ],
+        ];
     }
 }

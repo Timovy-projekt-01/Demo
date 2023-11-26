@@ -86,12 +86,11 @@
             {{--              FOURTH PART  (dropdown menus)      --}}
             {{-- ------------------------------------------------ --}}
             <div>
-
                 @if ($malware['usesTechnique'] != null)
-                    <h3 class="font-bold cursor-pointer" wire:click="toggleTechniques">
-                        Techniques <span>{{ $isOpen ? '▼' : '►' }}</span>
+                    <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('technique')">
+                        Techniques <span>{{ $menu['technique']['isOpen'] ? '▼' : '►' }}</span>
                     </h3>
-                    @if ($isOpen)
+                    @if ($menu['technique']['isOpen'])
                         <ul>
                             @foreach ($malware['usesTechnique'] as $technique)
                                 <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
@@ -106,61 +105,76 @@
                 @endif
 
                 @if ($malware['usesSoftware'] != null)
-                    <h3 class="font-bold">Software:</h3>
-                    <ul>
-                        @foreach ($malware['usesSoftware'] as $software)
-                            <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
-                                wire:key="{{ $software['id'] }}"
-                                wire:click="showEntireEntity('{{ $software['id'] }}')">
-                                <h4 class="">{{ $software['name'] }}</h4>
-                                <span class="text-slate-500 font-mono text-sm">{{ $software['id'] }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('software')">
+                        Software: <span>{{ $menu['software']['isOpen'] ? '▼' : '►' }}</span>
+                    </h3>
+                    @if ($menu['software']['isOpen'])
+                        <ul>
+                            @foreach ($malware['usesSoftware'] as $software)
+                                <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                    wire:key="{{ $software['id'] }}"
+                                    wire:click="showEntireEntity('{{ $software['id'] }}')">
+                                    <h4 class="">{{ $software['name'] }}</h4>
+                                    <span class="text-slate-500 font-mono text-sm">{{ $software['id'] }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 @endif
 
                 @if ($malware['hasMitigators'] != null)
-                    <h3 class="font-bold">Mitigators:</h3>
-                    <ul>
-                        @foreach ($malware['hasMitigators'] as $mitigator)
-                            <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
-                                wire:key="{{ $mitigator['id'] }}"
-                                wire:click="showEntireEntity('{{ $mitigator['id'] }}')">
-                                <h4 class="">{{ $mitigator['name'] }}</h4>
-                                <span class="text-slate-500 font-mono text-sm">{{ $mitigator['id'] }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('mitigator')">
+                        Mitigators: <span>{{ $menu['mitigator']['isOpen'] ? '▼' : '►' }}</span>
+                    </h3>
+                    @if ($menu['mitigator']['isOpen'])
+                        <ul>
+                            @foreach ($malware['hasMitigators'] as $mitigator)
+                                <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                    wire:key="{{ $mitigator['id'] }}"
+                                    wire:click="showEntireEntity('{{ $mitigator['id'] }}')">
+                                    <h4 class="">{{ $mitigator['name'] }}</h4>
+                                    <span class="text-slate-500 font-mono text-sm">{{ $mitigator['id'] }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 @endif
 
                 @if ($malware['mitigates'] != null)
-                    <h3 class="font-bold">Mitigates:</h3>
-                    <ul>
-                        @foreach ($malware['mitigates'] as $mitigates)
-                            <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
-                                wire:key="{{ $mitigates['id'] }}"
-                                wire:click="showEntireEntity('{{ $mitigates['id'] }}')">
-                                <h4 class="">{{ $mitigates['name'] }}</h4>
-                                <span class="text-slate-500 font-mono text-sm">{{ $mitigates['id'] }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('mitigates')">
+                        Mitigates: <span>{{ $menu['mitigates']['isOpen'] ? '▼' : '►' }}</span>
+                    </h3>
+                    @if ($menu['mitigates']['isOpen'])
+                        <ul>
+                            @foreach ($malware['mitigates'] as $mitigates)
+                                <li class="hover:underline underline-offset-4 border-b py-2 cursor-pointer"
+                                    wire:key="{{ $mitigates['id'] }}"
+                                    wire:click="showEntireEntity('{{ $mitigates['id'] }}')">
+                                    <h4 class="">{{ $mitigates['name'] }}</h4>
+                                    <span class="text-slate-500 font-mono text-sm">{{ $mitigates['id'] }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 @endif
 
                 @if ($malware['hasRelationshipCitations'] != null)
-                    <p class="font-bold">Citations</p>
-                    <ul>
-                        @foreach (explode('),(', $malware['hasRelationshipCitations']) as $citation)
-                            @if ($citation)
-                                <li class="border-b py-2" wire:key="{{ $citation }}">
-                                    <h4 class="text-gray-600">
-                                        {{ trim(explode(':', $citation)[1] ?? '') }}</h4>
-                                </li>
-                            @endif
-                        @endforeach
-                    </ul>
+                    <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('citation')">
+                        Citations <span>{{ $menu['citation']['isOpen'] ? '▼' : '►' }}</span>
+                    </h3>
+                    @if ($menu['citation']['isOpen'])
+                        <ul>
+                            @foreach (explode('),(', $malware['hasRelationshipCitations']) as $citation)
+                                @if ($citation)
+                                    <li class="border-b py-2" wire:key="{{ $citation }}">
+                                        <h4 class="text-gray-600">
+                                            {{ trim(explode(':', $citation)[1] ?? '') }}</h4>
+                                    </li>
+                                @endif
+                            @endforeach
+                        </ul>
+                    @endif
                 @endif
-
             </div>
     @endif
 </div>
