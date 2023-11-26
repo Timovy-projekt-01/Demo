@@ -63,6 +63,7 @@ class RenderEntity extends Component
         // Counter, lebo z nejakeho dovodu sa vola funkcia 2x pri stlaceni
         $this->menu[$chosenMenu]['counter'] += 0.5;
         $this->menu[$chosenMenu]['isOpen'] = $this->menu[$chosenMenu]['counter'] % 2 == 0 ? true : false;
+        if($this->menu[$chosenMenu]['counter'] == 3) $this->menu[$chosenMenu]['counter'] = 1;
     }
 
     public function resetOpenMenu()
