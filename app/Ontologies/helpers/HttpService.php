@@ -4,7 +4,7 @@ namespace App\Ontologies\Helpers;
 
 use Illuminate\Support\Facades\Http;
 class HttpService {
-    public function get($query) {
+    public function get($query): array {
 
         $blazegraphEndpoint = 'http://localhost:9999/bigdata/sparql';
 
@@ -12,10 +12,7 @@ class HttpService {
             'query' => $query,
         ]);
         $results = $response->json();
-        if(!isset($results['results']['bindings'])) {
-            return false;
-        }
-        $results = $results['results']['bindings'];
+        $results = $results['results']['bindings'] ?? [];
 
         return $results;
     }
