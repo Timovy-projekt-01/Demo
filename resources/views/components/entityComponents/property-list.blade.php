@@ -1,5 +1,5 @@
 <div x-data="{ open: false, listType: '{{ $listType }}'}">
-    @if ($malware[$listType] != null)
+    @if (isset($malware[$listType]))
         <h3 @click="open = ! open" class="font-bold cursor-pointer">
             {{$listType}} <span x-text="open ? '▼' : '►'"></span>
         </h3>

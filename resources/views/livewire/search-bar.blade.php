@@ -9,13 +9,13 @@
                 @if (!empty($entitiesFromSearch))
                     @foreach ($entitiesFromSearch as $entity)
                         <li class="flex flex-col cursor-pointer hover:bg-gray-100 px-3 py-1"
-                            wire:key="{{ $entity['entity']['value'] }}"
-                            wire:click.prevent="clearSearch(); $dispatch('show-entity', { id: '{{ $entity['entity']['value'] }}' });">
+                            wire:key="{{ $entity['entityLocal']['value'] }}"
+                            wire:click.prevent="clearSearch(); $dispatch('show-entity', { id: '{{ $entity['entityLocal']['value'] }}' });">
                             <p type="button" class="font-semibold">
-                                {{ $entity['value']['value'] }}
+                                {{ $entity['valueLocal']['value'] }}
                             </p>
                             <span
-                                class="text-slate-500 font-mono text-base mb-2">{{ $entity['entity']['value'] }}</span>
+                                class="text-slate-500 font-mono text-base mb-2">{{ $entity['entityLocal']['value'] }}</span>
                         </li>
                     @endforeach
                 @else
