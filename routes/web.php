@@ -1,6 +1,8 @@
 <?php
 
 use App\Exceptions\ScriptFailedException;
+use App\Ontologies\Helpers\HttpService;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Test;
 use App\Livewire\Dashboard;
@@ -20,17 +22,4 @@ Route::get('/', function () {
     return view('main-page');
 });
 
-//todo for testing purposes
-Route::get('/update/malware', function () {
-    $service = new App\Ontologies\Malware\Service();
-    try {
-        return response()->json($service->updateMalware(new App\Ontologies\Malware\Parser()));
-    } catch (ScriptFailedException $e) {
-        return response()->json([
-            'message' => $e->getMessage(),
-            'body' => $e->getBody(),
-        ], 500);
-    }
-
-});
 
