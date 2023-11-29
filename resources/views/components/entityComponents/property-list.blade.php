@@ -1,7 +1,7 @@
-<div x-data="{ open: false, listType: '{{ $listType }}'}">
+<div x-data="{ open: false, listType: '{{ $listType }}' }" x-init="console.log(open)">
     @if (isset($malware[$listType]))
-        <h3 @click="open = ! open" class="font-bold cursor-pointer">
-            {{$listType}} <span x-text="open ? '▼' : '►'"></span>
+        <h3 @click="open = !open;"  class="font-bold cursor-pointer">
+            {{ $listType }} <span x-text="open ? '▼' : '►'" ></span>
         </h3>
         <ul x-show="open">
             @foreach ($malware[$listType] as $technique)
@@ -13,4 +13,5 @@
             @endforeach
         </ul>
     @endif
+
 </div>

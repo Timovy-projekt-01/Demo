@@ -54,10 +54,14 @@
                     </div>
                 @endif
                 @if (isset($malware['hasDataSources']))
-                    <p class="font-bold">Data Sources: </p>
-                    @foreach (explode(', ', $malware['hasDataSources']) as $item)
-                        <p class="font-mono">{{ $item }}</p>
-                    @endforeach
+                    <div class="flex gap-3">
+                        <p class="font-bold">Data Sources: </p>
+                        <div>
+                            @foreach (explode(', ', $malware['hasDataSources']) as $item)
+                                <p class="font-mono">{{ $item }}</p>
+                            @endforeach
+                        </div>
+                    </div>
                 @endif
                 <hr class="my-5  border-b-0.5 border-black">
             </div>
@@ -86,10 +90,14 @@
             {{--              FOURTH PART  (dropdown menus)      --}}
             {{-- ------------------------------------------------ --}}
             <div>
-                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'usesTechnique'])@endcomponent
-                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'usesSoftware'])@endcomponent
-                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'mitigates'])@endcomponent
-
+                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'usesTechnique'])
+                @endcomponent
+                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'mitigates'])
+                @endcomponent
+                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'usesSoftware'])
+                @endcomponent
+                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'usedIn'])
+                @endcomponent
                 @if (isset($malware['hasRelationshipCitations']))
                     <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('citation')">
                         Citations <span>{{ $menu['citation']['isOpen'] ? '▼' : '►' }}</span>
