@@ -98,6 +98,8 @@
                 @endcomponent
                 @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'usedIn'])
                 @endcomponent
+                @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'hasSubTechnique'])
+                @endcomponent
                 @if (isset($malware['hasRelationshipCitations']))
                     <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('citation')">
                         Citations <span>{{ $menu['citation']['isOpen'] ? '▼' : '►' }}</span>
