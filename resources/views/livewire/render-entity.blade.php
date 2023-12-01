@@ -1,8 +1,9 @@
 {{-- TODO finish for all properties --}}
 {{-- TODO Pre entity typu T a M treba nejak dodatocne ziskat Mitigators, Uses Software, Mitigates, Used in tactic atd --}}
 <div class="w-full">
-    @if ($malware != null)
-        <div class="shadow-lg my-5 p-5  mx-auto">
+    <div wire:loading.attr="disabled" >Toto by sa malo zobrazovat len ked sa loaduje nova entita ale nefunguje to</div>
+    @if ($malware != null && $loadingEntity == false)
+        <div class="shadow-lg my-5 p-5  mx-auto" wire:loading.remove>
 
             {{-- ------------------------------------------------ --}}
             {{--              FIRST PART (name, crated, aliased) --}}
@@ -100,23 +101,24 @@
                 @endcomponent
                 @component('components.entityComponents.property-list', ['malware' => $malware, 'listType' => 'hasSubTechnique'])
                 @endcomponent
-                @if (isset($malware['hasRelationshipCitations']))
-                    <h3 class="font-bold cursor-pointer" wire:click="toggleMenu('citation')">
-                        Citations <span>{{ $menu['citation']['isOpen'] ? '▼' : '►' }}</span>
-                    </h3>
-                    @if ($menu['citation']['isOpen'])
-                        <ul>
-                            @foreach (explode('),(', $malware['hasRelationshipCitations']) as $citation)
-                                @if ($citation)
-                                    <li class="border-b py-2" wire:key="{{ $citation }}">
-                                        <h4 class="text-gray-600">
-                                            {{ trim(explode(':', $citation)[1] ?? '') }}</h4>
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ul>
+                <div x-data="{open: false}">
+                    @if (isset($malware['hasRelationshipCitations']))
+                        <h3 class="font-bold cursor-pointer" @click="open = !open;">
+                            Citations <span x-text="open ? '▼' : '►'"></span>
+                        </h3>
+                            <ul x-show="open" >
+                                @foreach (explode('),(', $malware['hasRelationshipCitations']) as $citation)
+                                    @if ($citation)
+                                        <li class="border-b py-2" wire:key="{{ $citation }}">
+                                            <h4 class="text-gray-600">
+                                                {{ trim(explode(':', $citation)[1] ?? '') }}</h4>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </ul>
                     @endif
-                @endif
+                </div>
             </div>
-    @endif
+        </div>
+        @endif
 </div>

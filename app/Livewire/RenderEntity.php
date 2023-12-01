@@ -14,6 +14,7 @@ class RenderEntity extends Component
     public $properties;
     private $service;
     public $malware;
+    public $loadingEntity = false;
     public $menu = [
         'technique' => [
             'counter' => 1,
@@ -59,7 +60,6 @@ class RenderEntity extends Component
     {
         $this->resetOpenMenu();
         $this->malware = $this->service->getCleanMalwareProperties($id);
-        
     }
 
     public function toggleMenu($chosenMenu)
