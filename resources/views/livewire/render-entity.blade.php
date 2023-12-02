@@ -1,6 +1,6 @@
 <div class="w-full">
     <div class="" >
-        <div wire:loading class="mx-auto z-30 fixed  flex justify-center items-center h-screen w-screen opacity-70 ">
+        <div wire:loading class="z-30 fixed flex inset-0 justify-center items-center  opacity-70 ">
             <svg aria-hidden="true" class="absolute z- w-32 h-32  animate-spin text-gray-400 fill-gray-100"
                 viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
