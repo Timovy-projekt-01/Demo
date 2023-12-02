@@ -10,7 +10,9 @@
                     @foreach ($entitiesFromSearch as $entity)
                         <li class="flex flex-col cursor-pointer hover:bg-gray-100 px-3 py-1"
                             wire:key="{{ $entity['entity']['value'] }}"
-                            wire:click.prevent="clearSearch(); $dispatch('show-entity', { id: '{{ $entity['entity']['value'] }}' });">
+                            wire:click.prevent="
+                            clearSearch();
+                            $dispatch('show-entity', { id: '{{ $entity['entity']['value'] }}' });">
                             <p type="button" class="font-semibold">
                                 {{ $entity['value']['value'] }}
                             </p>
