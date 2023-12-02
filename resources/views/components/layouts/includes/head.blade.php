@@ -4,6 +4,5 @@
 @vite('resources/js/app.js')
 <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 <title>{{ $title ?? 'Page Title' }}</title>
-{{-- @livewireStyles
-@livewireScripts --}}
+@livewireStyles
 @yield('additional_head')

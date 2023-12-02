@@ -1,4 +1,4 @@
-<nav class="bg-gray-900 border-gray-200 dark:bg-gray-900">
+<nav class="bg-gray-900 border-gray-200 ">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto ">
         <a href="" class="flex items-center gap-5">
             <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl" alt="upb eshop logo" />

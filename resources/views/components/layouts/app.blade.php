@@ -7,9 +7,11 @@
 
     <body>
         @include('components.layouts.includes.navbar')
+
         <div class="min-h-screen">
            @yield('content')
         </div>
+
         @include('components.layouts.includes.footer')
     </body>
 
