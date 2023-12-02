@@ -60,7 +60,6 @@ class RenderEntity extends Component
     {
         $this->resetOpenMenu();
         $this->malware = $this->service->getCleanMalwareProperties($id);
-        //sleep(5);
     }
 
     public function toggleMenu($chosenMenu)
