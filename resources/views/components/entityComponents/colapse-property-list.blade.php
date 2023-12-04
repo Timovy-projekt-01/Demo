@@ -13,7 +13,6 @@
                 </li>
             @endforeach
         </ul>
-        <button id="123">Click</button>
     @endif
 </div>
 
