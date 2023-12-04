@@ -1,3 +1,6 @@
+{{--
+Livewire component to render an entire entity
+--}}
 <div class="w-full">
     <x-miscellaneous.loading-wheel/>
     @if ($malware != null)
@@ -29,6 +32,7 @@
                 <x-entityComponents.simple-property :property="$malware['hasSystemRequirements'] ?? null" :label="'System Requirements'" />
                 <x-entityComponents.simple-property :property="$malware['hasDefensesBypassed'] ?? null" :label="'Defenses Bypassed'" />
                 <x-entityComponents.simple-property :property="$malware['hasDataSources'] ?? null" :label="'Data Sources'" />
+                <x-entityComponents.simple-property :property="$malware['hasAssociatedGroups'] ?? null" :label="'Associated Groups'"/>
                 <hr class="my-5  border-b-0.5 border-black">
             </div>
 
@@ -50,11 +54,6 @@
             <x-entityComponents.colapse-property-list :property="$malware['usesSoftware'] ?? null" :label="'Softwares'" />
             <x-entityComponents.colapse-property-list :property="$malware['hasSubTechnique'] ?? null" :label="'hasSubTechnique'" />
             <x-entityComponents.colapse-property-list :property="$malware['usedIn'] ?? null" :label="'Used in'" />
-
-            {{-- ------------------------------------------------ --}}
-            {{--              COLAPSE STRINGS                      --}}
-            {{-- ------------------------------------------------ --}}
-            <x-entityComponents.colapse-property-string :property="$malware['hasAssociatedGroups'] ?? null" :label="'Associated Groups'" :stringSeparation="','" />
         </div>
     @endif
 </div>

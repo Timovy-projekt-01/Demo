@@ -1,3 +1,7 @@
+{{--
+Simple loading wheel made with tailwindc css
+Always appears in the center of the screen while livewire fires server request
+--}}
 <div class="">
     <div wire:loading>
         <div class="z-30 fixed flex inset-0 justify-center items-center  opacity-70 ">

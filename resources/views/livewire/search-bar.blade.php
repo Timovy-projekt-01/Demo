@@ -1,3 +1,7 @@
+{{--
+Dynamic search bar. When selected entity is clicked, it dispatched (emits) a custom event
+to RenderEntity component. This component is then responsible for rendering the entity.
+--}}
 <div class="flex flex-col justify-center p-5 align-middle shadow-lg w-1/2">
     <div class="p-5 w-full px-4 py-2 relative">
         <input type="text" name="eventSearch" id="eventSearch" class="form-input rounded-md shadow-sm mt-1 block w-full"
