@@ -6,6 +6,8 @@
             <livewire-search-bar />
 
             <livewire-render-entity />
+
+            <livewire-search-history />
         </div>
     </div>
     @livewireScripts

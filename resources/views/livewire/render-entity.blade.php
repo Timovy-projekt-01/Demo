@@ -50,6 +50,25 @@ Livewire component to render an entire entity
             </div>
             {{-- <hr class="my-5  border-b-0.5 border-black"> --}}
         </div>
-    @endif
+        @endif
+        {{-- @assets
+        @vite(['resources/js/list-pagination.js'])
+        @endassets --}}
+        @script
+        <script>
+            $wire.on('newSearch', (malware) => {
+                updateSearchHistory(malware);
+                let history = JSON.parse(localStorage.getItem('searchHistory'));
+                $wire.dispatch('add-to-history', { history: history })
+            });
+
+            function updateSearchHistory(newSearch) {
+                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+                history.push(newSearch[0]);
+                localStorage.setItem('searchHistory', JSON.stringify(history));
+
+            }
+        </script>
+        @endscript
 </div>
 
