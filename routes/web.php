@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Test;
 use App\Livewire\Dashboard;
+use App\Livewire\SearchHistory;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +22,7 @@ use App\Livewire\Dashboard;
 Route::get('/', function () {
     return view('main-page');
 });
+
+Route::get('/history', SearchHistory::class)->name('history');
 
 
