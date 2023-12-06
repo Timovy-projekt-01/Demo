@@ -56,8 +56,8 @@ Livewire component to render an entire entity
         @endassets --}}
         @script
         <script>
-            $wire.on('newSearch', (malware) => {
-                updateSearchHistory(malware);
+            $wire.on('newSearch', (entity) => {
+                updateSearchHistory(entity);
                 let history = JSON.parse(localStorage.getItem('searchHistory'));
                 $wire.dispatch('add-to-history', { history: history })
             });

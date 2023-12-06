@@ -34,8 +34,8 @@ class RenderEntity extends Component
     #[On('show-entity')]
     public function showEntireEntity($id)
     {
-        $this->malware = $this->service->getCleanMalwareProperties($id);
-        $this->dispatch('newSearch', $this->malware);
+        $this->entity = $this->service->getCleanMalwareProperties($id);
+        $this->dispatch('newSearch', $this->entity);
 
     }
 }
