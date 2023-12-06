@@ -17,9 +17,8 @@ class RenderEntity extends Component
     public function boot(Service $service)
     {
         $this->service = $service;
-        // $parser = new Parser();
-        // $parser->getPredicates();
     }
+
     public function render()
     {
         return view('livewire.render-entity');
