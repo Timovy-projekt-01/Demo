@@ -1,3 +1,8 @@
+{{--
+This component displays other entities that are always in array
+and is expected to have many values. All values are clickable.
+Pagination is therefore also included here.
+--}}
 <div x-data="{ open: false }">
     @if (isset($property))
         <h3 @click="open = !open;" class="font-bold text-lg cursor-pointer mb-2">
@@ -13,7 +18,6 @@
                 </li>
             @endforeach
         </ul>
-        <button id="123">Click</button>
     @endif
 </div>
 
