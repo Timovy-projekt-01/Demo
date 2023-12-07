@@ -48,18 +48,23 @@ Livewire component to render an entire entity
                     @endif
                 @endforeach
             </div>
-            {{-- <hr class="my-5  border-b-0.5 border-black"> --}}
         </div>
-        @endif
-        {{-- @assets
+    @endif
+    {{-- @assets
         @vite(['resources/js/list-pagination.js'])
         @endassets --}}
-        @script
+    @script
         <script>
+            Livewire.hook('component.init', ({ component, cleanup }) => {
+                console.log("component init");
+            })
             $wire.on('newSearch', (entity) => {
+                // console.log("PIPIK: ", $wire.entity);
                 updateSearchHistory(entity);
                 let history = JSON.parse(localStorage.getItem('searchHistory'));
-                $wire.dispatch('add-to-history', { history: history })
+                $wire.dispatch('add-to-history', {
+                    history: history
+                })
             });
 
             function updateSearchHistory(newSearch) {
@@ -69,6 +74,6 @@ Livewire component to render an entire entity
 
             }
         </script>
-        @endscript
+    @endscript
+    
 </div>
-
