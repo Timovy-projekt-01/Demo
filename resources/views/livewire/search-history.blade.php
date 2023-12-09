@@ -16,7 +16,7 @@
                 @forelse ($history as $item)
                     <div class="transition-transform duration-500 ease-in-out hover:underline border-b py-2 cursor-pointer transform hover:translate-x-1"
                         wire:key="{{ $item['hasId'] }}"
-                        wire:click.prevent="$dispatch('show-entity', { id: '{{ $item['hasId'] }}'});""
+                        wire:click.prevent="$dispatch('show-entity', { id: '{{ $item['hasId'] }}'});"
                         @click="() => { window.scrollTo({top: 0, behavior: 'smooth'}); }">
                         <p class="font-mono  ">
                             {{ $item['hasName'] }}

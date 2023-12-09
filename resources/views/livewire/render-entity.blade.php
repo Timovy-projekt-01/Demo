@@ -44,15 +44,14 @@ Livewire component to render an entire entity
                     {{-- Checks if the $value is associative array
                         Shouldn't be neccesary as we unset all properties along the way but just to be sure --}}
                     @if (isset($value[0]) && is_array($value[0]) && !array_is_list($value[0]))
-                        <x-entityComponents.colapse-property-list :property="$value" :label="$key" />
+                        <livewire:paginated-colapse-property-list :list="$value" :label="$key" :key="'unique_' . uniqid()" />
                     @endif
                 @endforeach
             </div>
         </div>
     @endif
-    {{-- @assets
-        @vite(['resources/js/list-pagination.js'])
-        @endassets --}}
+
+
     @script
         <script>
             Livewire.hook('component.init', ({ component, cleanup }) => {
@@ -75,5 +74,5 @@ Livewire component to render an entire entity
             }
         </script>
     @endscript
-    
+
 </div>
