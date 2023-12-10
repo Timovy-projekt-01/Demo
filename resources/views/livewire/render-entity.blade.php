@@ -16,13 +16,8 @@ Livewire component to render an entire entity
                 @endif
 
                 @if (isset($entity['hasId']))
-                    <h5 class="text-slate-500 font-mono">{{ $entity['hasId'] }}</h5>
-                    @unset($entity['hasId'])
-                @endif
-
-                @if (isset($entity['hasAliases']))
-                    <h3 class="text-xl font-semibold mb-2">{{ $entity['hasAliases'] }}</h3>
-                    @unset($entity['hasAliases'])
+                    <h5 class="text-slate-500 font-mono">{{ $entity[array_key_first($entity)] }}</h5>
+                    @unset($entity[array_key_first($entity)])
                 @endif
 
             </div>
@@ -54,9 +49,6 @@ Livewire component to render an entire entity
 
     @script
         <script>
-            Livewire.hook('component.init', ({ component, cleanup }) => {
-                console.log("component init");
-            })
             $wire.on('newSearch', (entity) => {
                 // console.log("PIPIK: ", $wire.entity);
                 updateSearchHistory(entity);

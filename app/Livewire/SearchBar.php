@@ -33,11 +33,4 @@ class SearchBar extends Component
         $this->searchTerm = '';
     }
 
-    public function showEntireEntity($malwareId)
-    {
-        $properties = $this->sparql->getMalwareProperties($malwareId);
-        $this->dispatch('show-entity', $properties)->to(RenderEntity::class);
-        $this->clearSearch();
-    }
-
 }

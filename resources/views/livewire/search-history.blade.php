@@ -13,16 +13,16 @@
         <div class="flex flex-col ">
             <h3 class="text-xl font-bold text-center border-b-2 border-slate-600 pb-3">Search History</h3>
             <div class="py-3 divide-y">
-                @forelse ($history as $item)
+                @forelse ($history as $index => $entity)
                     <div class="transition-transform duration-500 ease-in-out hover:underline border-b py-2 cursor-pointer transform hover:translate-x-1"
-                        wire:key="{{ $item['hasId'] }}"
-                        wire:click.prevent="$dispatch('show-entity', { id: '{{ $item['hasId'] }}'});"
+                        wire:key="{{ $entity[array_key_first($entity)] }}"
+                        wire:click.prevent="$dispatch('show-entity', { id: '{{ $entity[array_key_first($entity)] }}'});"
                         @click="() => { window.scrollTo({top: 0, behavior: 'smooth'}); }">
                         <p class="font-mono  ">
-                            {{ $item['hasName'] }}
+                            {{ $entity['hasName'] ?? '' }}
                         </p>
                         <p class="font-mono text-sm text-gray-600 break-all">
-                            {{ $item['hasId'] }}
+                            {{ $entity[array_key_first($entity)] }}
                         </p>
                     </div>
                 @empty
