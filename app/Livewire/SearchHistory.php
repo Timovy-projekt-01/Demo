@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
+
 
 class SearchHistory extends Component
 {
@@ -20,5 +22,11 @@ class SearchHistory extends Component
     public function render()
     {
         return view('livewire.search-history');
+    }
+
+    #[On('add-to-history')]
+    public function addToHistory($history)
+    {
+        $this->history = $history;
     }
 }

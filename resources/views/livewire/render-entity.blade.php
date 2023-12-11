@@ -39,7 +39,8 @@ Livewire component to render an entire entity
                     {{-- Checks if the $value is associative array
                         Shouldn't be neccesary as we unset all properties along the way but just to be sure --}}
                     @if (isset($value[0]) && is_array($value[0]) && !array_is_list($value[0]))
-                        <livewire:paginated-colapse-property-list :list="$value" :label="$key" :key="'unique_' . uniqid()" />
+                        <livewire:paginated-colapse-property-list :list="$value" :label="$key"
+                            :key="'unique_' . uniqid()" />
                     @endif
                 @endforeach
             </div>
@@ -50,19 +51,23 @@ Livewire component to render an entire entity
     @script
         <script>
             $wire.on('newSearch', (entity) => {
-                // console.log("PIPIK: ", $wire.entity);
-                updateSearchHistory(entity);
-                let history = JSON.parse(localStorage.getItem('searchHistory'));
-                $wire.dispatch('add-to-history', {
-                    history: history
-                })
+                updateSearchHistory(entity)
             });
 
             function updateSearchHistory(newSearch) {
                 let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                history.push(newSearch[0]);
-                localStorage.setItem('searchHistory', JSON.stringify(history));
+                // Check if the entity already exists in the history before adding it
+                const filteredArray = history.filter(element => {
+                    return Object.values(element)[0] === Object.values(newSearch[0])[0];
+                });
 
+                if (filteredArray.length === 0) {
+                    history.push(newSearch[0]);
+                    localStorage.setItem('searchHistory', JSON.stringify(history));
+                    $wire.dispatch('add-to-history', {
+                    history: history
+                })
+                }
             }
         </script>
     @endscript

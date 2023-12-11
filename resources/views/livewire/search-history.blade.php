@@ -7,9 +7,7 @@
             console.log($wire.history);
             $wire.dispatch('re-render');
         }
-    }" x-init="let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-    console.log(history);
-    $wire.history = history;">
+    }">
         <div class="flex flex-col ">
             <h3 class="text-xl font-bold text-center border-b-2 border-slate-600 pb-3">Search History</h3>
             <div class="py-3 divide-y">
@@ -39,17 +37,9 @@
     </div>
     @script
         <script>
-            Livewire.on('add-to-history', (data) => {
-                $wire.history = data['history'];
-                console.log($wire.history.length == data['history'].length);
-                Livewire.dispatch('re-render');
-            });
-
-            Livewire.on('mountHistory', () => {
-                console.log('mountHistory');
-                let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-                $wire.history = history;
-            });
+            let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+            $wire.history = history;
+            $wire.dispatch('re-render');
         </script>
     @endscript
 </div>
