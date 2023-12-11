@@ -10,23 +10,20 @@ class SearchHistory extends Component
 {
     public $history = [];
 
-    protected $listeners = [
-       're-render' => 'reRender',
-    ];
-
-    public function reRender()
-    {
-        $this->render();
-    }
-
     public function render()
     {
         return view('livewire.search-history');
     }
 
-    #[On('add-to-history')]
-    public function addToHistory($history)
+    #[On('update-history')]
+    public function updateHistory($history)
     {
         $this->history = $history;
+    }
+
+    #[On('clear-history')]
+    public function clearHistory()
+    {
+        $this->history = [];
     }
 }

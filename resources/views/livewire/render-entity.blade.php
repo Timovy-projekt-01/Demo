@@ -64,7 +64,7 @@ Livewire component to render an entire entity
                 if (filteredArray.length === 0) {
                     history.push(newSearch[0]);
                     localStorage.setItem('searchHistory', JSON.stringify(history));
-                    $wire.dispatch('add-to-history', {
+                    $wire.dispatch('update-history', {
                     history: history
                 })
                 }
