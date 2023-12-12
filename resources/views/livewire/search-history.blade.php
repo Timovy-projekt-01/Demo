@@ -11,7 +11,7 @@
                 @forelse ($history as $index => $entity)
                     <div class="transition-transform duration-500 ease-in-out hover:underline border-b py-2 cursor-pointer transform hover:translate-x-1"
                         wire:key="{{ $entity[array_key_first($entity)] }}"
-                        wire:click.prevent="$dispatch('show-entity', { id: '{{ $entity[array_key_first($entity)] }}'});"
+                        wire:click.prevent="retrieveLoadedEntity('{{ $entity[array_key_first($entity)] }}')"
                         @click="() => { window.scrollTo({top: 0, behavior: 'smooth'}); }">
                         <p class="font-mono  ">
                             {{ $entity['hasName'] ?? '' }}

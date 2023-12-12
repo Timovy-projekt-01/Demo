@@ -33,7 +33,7 @@ class SearchBar extends Component
             $this->entitiesFromSearch = $this->sparql->searchEntities($this->searchTerm, "");
         }
     }
-    
+
     public function showMoreResults()
     {
         $idsToExclude = array_map(function ($entity) {
@@ -42,7 +42,8 @@ class SearchBar extends Component
 
         $entitiesToExclude = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $idsToExclude));
 
-        $this->entitiesFromSearch = array_merge($this->entitiesFromSearch, $this->sparql->searchEntities($this->searchTerm, (string) $entitiesToExclude));
+        $moreResults = $this->sparql->searchEntities($this->searchTerm, (string) $entitiesToExclude);
+        $this->entitiesFromSearch = array_merge($this->entitiesFromSearch, $moreResults);
     }
 
 }

@@ -30,11 +30,17 @@ class RenderEntity extends Component
      * @param int $id The ID of the entity to retrieve.
      * @return void
      */
-    #[On('show-entity')]
-    public function showEntireEntity($id)
+    #[On('show-new-entity')]
+    public function showNewEntity($id)
     {
         $this->entity = $this->service->getCleanMalwareProperties($id);
         $this->dispatch('newSearch', $this->entity);
 
+    }
+
+    #[On('show-loaded-entity')]
+    public function showLoadedEntity($entityFromHistory)
+    {
+        $this->entity = $entityFromHistory;
     }
 }

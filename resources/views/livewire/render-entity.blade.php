@@ -7,7 +7,7 @@ Livewire component to render an entire entity
         <div class="flex flex-col shadow-lg my-5 p-5 divide-y divide-black mx-auto" wire:loading.class="opacity-20">
 
             {{-- ------------------------------------------------ --}}
-            {{--              FIRST PART (name, crated, aliased) --}}
+            {{--              FIRST PART (name, crated, aliased)  --}}
             {{-- ------------------------------------------------ --}}
             <div class="py-5">
                 @if (isset($entity['hasName']))
@@ -16,10 +16,10 @@ Livewire component to render an entire entity
                 @endif
 
                 @if (isset($entity['hasId']))
+                {{-- Prints the entity ID which is always FIRST element in associative array --}}
                     <h5 class="text-slate-500 font-mono">{{ $entity[array_key_first($entity)] }}</h5>
                     @unset($entity[array_key_first($entity)])
                 @endif
-
             </div>
 
             <div class="py-5">

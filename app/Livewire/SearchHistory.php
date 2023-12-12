@@ -26,4 +26,13 @@ class SearchHistory extends Component
     {
         $this->history = [];
     }
+
+    public function retrieveLoadedEntity($id)
+    {
+        $loadedEntity = array_filter($this->history, function ($item) use ($id) {
+            return $item[array_key_first($item)] == $id;
+        });
+
+        $this->dispatch('show-loaded-entity', reset($loadedEntity))->to(RenderEntity::class);
+    }
 }

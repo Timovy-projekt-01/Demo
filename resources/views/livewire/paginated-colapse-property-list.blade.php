@@ -14,7 +14,7 @@ Pagination is therefore also included here.
         <ul x-show="open" @click="open = !open" class="list-none pl-4">
             @foreach ($currentList as $item)
                 <li class="transition-transform duration-500 ease-in-out hover:underline border-b py-2 cursor-pointer transform hover:translate-x-1"
-                    wire:key="{{ $item['id'] }}" wire:click="$dispatch('show-entity', { id: '{{ $item['id'] }}' })"
+                    wire:key="{{ $item['id'] }}" wire:click="$dispatch('show-new-entity', { id: '{{ $item['id'] }}' })"
                     @click="() => { window.scrollTo({top: 0, behavior: 'smooth'}); }">
                     <h4>{{ $item['name'] }}</h4>
                     <span class="text-gray-500 font-mono text-sm">{{ $item['id'] }}</span>

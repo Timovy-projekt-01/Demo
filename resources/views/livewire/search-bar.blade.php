@@ -1,6 +1,6 @@
 {{--
 Dynamic search bar. When selected entity is clicked, it dispatched (emits) a custom event
-to RenderEntity component. This component is then responsible for rendering the entity.
+to RenderEntity component. That component is then responsible for rendering the entity.
 --}}
 <div class="flex flex-col justify-center p-5 align-middle shadow-lg w-full">
     <div class="p-5 w-full px-4 py-2 relative">
@@ -16,7 +16,7 @@ to RenderEntity component. This component is then responsible for rendering the 
                             wire:key="{{ $entity['entity']['value'] }}"
                             wire:click.prevent="
                             clearSearch();
-                            $dispatch('show-entity', { id: '{{ $entity['entity']['value'] }}' });">
+                            $dispatch('show-new-entity', { id: '{{ $entity['entity']['value'] }}' });">
                             <p type="button" class="font-semibold">
                                 {{ $entity['value']['value'] }}
                             </p>
