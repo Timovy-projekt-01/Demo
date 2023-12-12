@@ -10,9 +10,7 @@ use Livewire\Attributes\On;
 class SearchBar extends Component
 {
     public $searchTerm = '';
-    public $counter = 0;
-    public $entitiesFromSearch = '';
-    public $properties;
+    public $entitiesFromSearch = [];
     private $sparql;
 
     public function boot(Ontologies\Malware\Queries $sparql)
@@ -21,16 +19,30 @@ class SearchBar extends Component
     }
     public function render()
     {
-        $trimmedSearch = trim($this->searchTerm);
-        if ($trimmedSearch != "") {
-            $this->entitiesFromSearch = $this->sparql->searchEntities($trimmedSearch);
-        }
         return view('livewire.search-bar');
     }
 
     public function clearSearch()
     {
         $this->searchTerm = '';
+    }
+    public function searchEntities()
+    {
+        $this->searchTerm = trim($this->searchTerm);
+        if ($this->searchTerm != "") {
+            $this->entitiesFromSearch = $this->sparql->searchEntities($this->searchTerm, "");
+        }
+    }
+    
+    public function showMoreResults()
+    {
+        $idsToExclude = array_map(function ($entity) {
+            return $entity['entity']['value'];
+        }, $this->entitiesFromSearch);
+
+        $entitiesToExclude = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $idsToExclude));
+
+        $this->entitiesFromSearch = array_merge($this->entitiesFromSearch, $this->sparql->searchEntities($this->searchTerm, (string) $entitiesToExclude));
     }
 
 }
