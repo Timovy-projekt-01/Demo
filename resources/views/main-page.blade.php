@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="flex my-5 mx-auto">
-        <div class="xl:container mx-auto flex w-full px-5 gap-5">
+        <div class="xl:container mx-auto flex flex-col-reverse sm:flex-row w-full px-5 gap-5">
 
             <div class="basis-2/12 py-5 px-3 shadow-lg h-fit">
                 <livewire-search-history />

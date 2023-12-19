@@ -29,6 +29,7 @@
             <button class="text-sm text-center bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded" @click="clearHistory">Clear History</button>
         </div>
     </div>
+
     @script
         <script>
             let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
@@ -37,4 +38,5 @@
             });
         </script>
     @endscript
+
 </div>

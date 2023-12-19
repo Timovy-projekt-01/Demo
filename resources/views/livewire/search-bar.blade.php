@@ -9,7 +9,7 @@ to RenderEntity component. That component is then responsible for rendering the 
         @if ($searchTerm != '')
             <ul
                 class="divide-y absolute z-10 bg-white border border-gray-300 rounded-md
-                        shadow-md w-full flex flex-col  mt-2 overflow-auto max-h-60">
+                        shadow-md w-full flex flex-col mt-2 overflow-auto max-h-60">
                 @if (!empty($entitiesFromSearch))
                     @foreach ($entitiesFromSearch as $entity)
                         <li class="flex flex-col cursor-pointer hover:bg-gray-100 px-3 py-1"
