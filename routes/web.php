@@ -25,4 +25,6 @@ Route::get('/', function () {
 
 Route::get('/history', SearchHistory::class)->name('history');
 
-
+Route::get('/about', function () {
+    return view('about-page');
+});

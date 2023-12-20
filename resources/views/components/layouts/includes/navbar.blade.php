@@ -1,6 +1,6 @@
 <nav class="bg-gray-900 border-gray-200 p-3">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-        <a href="" class="flex items-center gap-5">
+        <a href="/" class="flex items-center gap-5">
             <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl sm:hidden md:block" alt="upb eshop logo" />
             <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hidden sm:block">
                 Security domain ontology browser
@@ -26,9 +26,9 @@
                 class="font-medium flex flex-col p-4 md:p-0rounded-lg md:flex-row
                         md:space-x-8 md:mt-0 md:border-0 bg-gray-900 dark:border-gray-700">
                 <li>
-                    <a href=""
+                    <a href="/about"
                        class="block py-2 pl-3 pr-4  rounded
-                             md:border-0 md:hover:text-blue-700 md:p-0 text-white
+                             md:border-0 md:hover:text-blue-500 md:p-0 text-white
                              md:dark:hover:text-blue-500
                              md:dark:hover:bg-transparent">About</a>
                 </li>
