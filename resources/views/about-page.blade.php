@@ -4,19 +4,17 @@
     <div class="flex my-5 px-5 mx-auto">
         <div class="shadow-lg mb-5 p-5 xl:container mx-auto block w-full px-5">
             <div class="pt-5">
-                <h2 class="text-3xl font-bold mb-2">About project</h2>
+                <h2 class="text-3xl font-bold mb-2">{{__('about-page.about project')}}</h2>
             </div>
 
             <hr>
 
             <div class="p-3">
-                <p> This project was created in order to provide a structured view into different ontologies
-                    and to keep itself expandable.
-                </p>
+                <p>{{__('about-page.project info')}}</p>
             </div>
 
             <div class="p-3">
-                <p> <span class="font-bold">Project repository:</span>
+                <p> <span class="font-bold"> {{__('about-page.project repository')}} </span>
                     <a href="https://github.com/Timovy-projekt-01/Demo"
                         class="font-mono text-blue-500 hover:underline underline-offset-2 break-all" target="_blank">
                         https://github.com/Timovy-projekt-01/Demo
@@ -25,43 +23,39 @@
             </div>
 
             <div class="mt-16">
-                <h2 class="text-3xl font-bold mb-2">Documentation</h2>
+                <h2 class="text-3xl font-bold mb-2">{{__('about-page.documentation')}}</h2>
             </div>
 
             <hr>
 
             <div class="p-3 w-11/12">
-                <h4 class="text-xl font-bold mb-2 underline decoration-1 mt-2">Data sources</h4>
+                <h4 class="text-xl font-bold mb-2 underline decoration-1 mt-2">{{__('about-page.data sources title')}}</h4>
                 <p class="p-2 text-justify">
-                    Currently the Security domain ontology browser provides data from
-                    <span class="font-medium">MITRE ATT&CK</span> (Adversarial Tactics, Techniques and Common Knowledge)
-                    database alongside with data from
-                    <span class="font-medium">CVE</span> (Common Vulnerabilities and Exposures) database
-                    and <span class="font-medium">hybrid analysis</span> created by Bc. Lukáš Hurtiš within his
+                    {{__('about-page.data sources info pt1')}}
+                    <span class="font-medium">MITRE ATT&CK</span> {{__('about-page.data sources info pt2')}}
+                    <span class="font-medium">CVE</span> {{__('about-page.data sources info pt3')}}
+                    <span class="font-medium">{{__('about-page.data sources info pt4')}}</span>
+                    {{__('about-page.data sources info pt5')}}
                     <a
                         href="https://opac.crzp.sk/?fn=detailBiblioFormChildCK36V&sid=2D0B46080A5AC858A715B81AE978&seo=CRZP-detail-kniha"
                         target="_blank">
-                        bachelor thesis
+                        {{__('about-page.data sources info pt6')}}
                     </a>
-                    in which he addressed the issue of storing and sharing data from dynamic malware analysis.
-                    To create the dynamic analysis he used the open source tool Cuckoo Sandbox.
-                    The results of the analysis were stored in an ontology, which is based on the MAEC security standard.
-                </p>
-                <p class="p-2 text-justify">
-                    In the future, the intention is to extend the ontology model with additional data from different security domains.
+                    {{__('about-page.data sources info pt7')}}
                 </p>
 
-                <h4 class="text-xl font-bold mb-2 underline decoration-1 mt-10">Search</h4>
                 <p class="p-2 text-justify">
-                    You can easily start browsing just by typing a name of the malware, technique, tactic, group
-                    or a software you are searching for in the searchbar.
+                    {{__('about-page.data sources info pt8')}}
                 </p>
 
-                <h4 class="text-xl font-bold mb-2 underline decoration-1 mt-10">Search history</h4>
+                <h4 class="text-xl font-bold mb-2 underline decoration-1 mt-10">{{__('about-page.search title')}}</h4>
                 <p class="p-2 text-justify">
-                    You can also easily browse through the entities you have already explored. These are being stored in
-                    the search history panel on the side. By clicking on any of the entities you can get back to exploring
-                    the entity.
+                    {{__('about-page.search info')}}
+                </p>
+
+                <h4 class="text-xl font-bold mb-2 underline decoration-1 mt-10">{{__('about-page.search history title')}}</h4>
+                <p class="p-2 text-justify">
+                    {{__('about-page.search history info')}}
                 </p>
             </div>
         </div>

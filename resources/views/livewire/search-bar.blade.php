@@ -5,7 +5,7 @@ to RenderEntity component. That component is then responsible for rendering the 
 <div class="flex flex-col justify-center p-5 align-middle shadow-lg w-full">
     <div class="p-5 w-full px-4 py-2 relative">
         <input type="text" name="eventSearch" id="eventSearch" class="form-input rounded-md shadow-sm mt-1 block w-full"
-            wire:model.live="searchTerm" wire:input="searchEntities" placeholder="Hľadať ..." />
+            wire:model.live="searchTerm" wire:input="searchEntities" placeholder="{{__('app-labels.search bar placeholder')}}" />
         @if ($searchTerm != '')
             <ul
                 class="divide-y absolute z-10 bg-white border border-gray-300 rounded-md
@@ -24,9 +24,9 @@ to RenderEntity component. That component is then responsible for rendering the 
                                 class="text-slate-500 font-mono text-base mb-2">{{ $entity['entity']['value'] }}</span>
                         </li>
                     @endforeach
-                    <button class="p-2 hover:bg-slate-200" wire:click="showMoreResults()">Show more</button>
+                    <button class="p-2 hover:bg-slate-200" wire:click="showMoreResults()">{{__('app-labels.search bar more')}}</button>
                 @else
-                    <li class="text-slate-500 font-mono text-base m-2">No results</li>
+                    <li class="text-slate-500 font-mono text-base m-2">{{__('app-labels.search bar no results')}}</li>
                 @endif
             </ul>
         @endif
