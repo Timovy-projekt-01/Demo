@@ -7,7 +7,7 @@ Livewire component to render an entire entity
         <div class="flex flex-col shadow-lg my-5 p-5 divide-y divide-black mx-auto" wire:loading.class="opacity-20">
 
             {{-- ------------------------------------------------ --}}
-            {{--              FIRST PART (name, crated, aliased)  --}}
+            {{--              FIRST PART (name, crated, aliases)  --}}
             {{-- ------------------------------------------------ --}}
             <div class="py-5">
                 @if (isset($entity['hasName']))
@@ -46,7 +46,6 @@ Livewire component to render an entire entity
             </div>
         </div>
     @endif
-
 
     @script
         <script>

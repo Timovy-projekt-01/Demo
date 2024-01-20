@@ -21,8 +21,12 @@ use App\Livewire\SearchHistory;
 //Route::get('/dashboard', SearchBar::class)->name('dashboard');
 Route::get('/', function () {
     return view('main-page');
-});
+})->middleware('lang');
 
 Route::get('/history', SearchHistory::class)->name('history');
 
+Route::get('/about', function () {
+    return view('about-page');
+})->middleware('lang');
 
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);

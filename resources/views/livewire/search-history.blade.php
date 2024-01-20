@@ -6,7 +6,7 @@
         }
     }">
         <div class="flex flex-col ">
-            <h3 class="text-xl font-bold text-center border-b-2 border-slate-600 pb-3">Search History</h3>
+            <h3 class="text-xl font-bold text-center border-b-2 border-slate-600 pb-3">{{__('app-labels.search history title')}}</h3>
             <div class="py-3 divide-y">
                 @forelse ($history as $index => $entity)
                     <div class="transition-transform duration-500 ease-in-out hover:underline border-b py-2 cursor-pointer transform hover:translate-x-1"
@@ -22,13 +22,18 @@
                     </div>
                 @empty
                     <p class="text-center font-mono text-slate-400">
-                        Empty
+                        {{__('app-labels.search history empty')}}
                     </p>
                 @endforelse
             </div>
-            <button class="text-sm text-center bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded" @click="clearHistory">Clear History</button>
+            <button class="text-sm text-center bg-transparent hover:bg-blue-500
+                           text-blue-700 font-semibold hover:text-white py-1 px-2 border
+                           border-blue-500 hover:border-transparent rounded" @click="clearHistory">
+                {{__('app-labels.search history clear button')}}
+            </button>
         </div>
     </div>
+
     @script
         <script>
             let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
@@ -37,4 +42,5 @@
             });
         </script>
     @endscript
+
 </div>
