@@ -42,7 +42,7 @@
                 <li>
                     <button
                         id="dropdownLangButton" data-dropdown-toggle="dropdownLang"
-                        class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center
+                        class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative
                         inline-flex items-center" type="button" onclick="toggleDropdown('dropdownLang')">
                         {{ Config::get('languages')[App::getLocale()] }}
 
@@ -53,7 +53,7 @@
                         </svg>
                     </button>
 
-                    <div id="dropdownLang" class="z-50 hidden divide-y divide-gray-100 shadow w-26 dark:bg-gray-700">
+                    <div id="dropdownLang" class="z-50 absolute hidden divide-y divide-gray-100 shadow w-26 dark:bg-gray-700">
                         <ul class="p-2 text-base font-semibold text-gray-700 dark:text-gray-200"
                             aria-labelledby="dropdownLangButton">
                             @foreach (Config::get('languages') as $lang => $language)
