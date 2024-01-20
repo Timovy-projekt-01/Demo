@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Ontologies\Malware\Parser;
+use App\Ontologies\Handler\Parser;
 use Livewire\Component;
-use App\Ontologies\Malware\Queries;
-use App\Ontologies\Malware\Service;
+use App\Ontologies\Handler\Queries;
+use App\Ontologies\Handler\Service;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 
@@ -33,7 +33,7 @@ class RenderEntity extends Component
     #[On('show-new-entity')]
     public function showNewEntity($id)
     {
-        $this->entity = $this->service->getCleanMalwareProperties($id);
+        $this->entity = $this->service->getCleanEntityProperties($id);
         $this->dispatch('newSearch', $this->entity);
 
     }

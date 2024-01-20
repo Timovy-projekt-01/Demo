@@ -1,24 +1,17 @@
 <?php
 
-namespace App\Ontologies\Malware;
+namespace App\Ontologies\Handler;
 
 use App\Ontologies\Helpers\HttpService;
 use Illuminate\Support\Facades\Cache;
 
 class Queries
 {
-    private $httpService;
-    private $feiOntology = 'http://stufei/ontologies/malware#';
-    public function __construct(HttpService $httpService)
-    {
-        $this->httpService = $httpService;
-    }
+    private static $feiOntology = 'http://stufei/ontologies/malware#';
 
-
-    public function getRelations(string $techniqueId, string $relationType1, string $relationType2)
+    public static function getRelations(string $techniqueId, string $relationType1, string $relationType2)
     {
-        // Query to retrieve entities related to the given technique ID based on the two relation types
-        $query = 'PREFIX malware: <' . $this->feiOntology . '>
+        $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
                     (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                 WHERE {
@@ -33,14 +26,13 @@ class Queries
                     }
                 }';
 
-        $result = $this->httpService->get($query);
-        //dd($result);
+        $result = HttpService::get($query);
         return $result;
     }
 
-    public function getNames($entityIds): array
+    public static function getNames($entityIds): array
     {
-        $query = 'PREFIX malware: <' . $this->feiOntology . '>
+        $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
                     (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                     ?name
@@ -49,43 +41,42 @@ class Queries
                     ?e malware:hasName ?name .
                     }';
 
-        $result = $this->httpService->get($query);
+        $result = HttpService::get($query);
         return $result;
     }
 
-    public function searchEntities(string $searchTerm, $entitiesToExclude)
+    public static function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        $query = 'PREFIX malware: <' . $this->feiOntology . '>
+        $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
                     (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                     (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
                     (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
                 WHERE {
                     ?e ?p ?v .
-                    FILTER (regex(?v, "^'.$searchTerm.'", "i")) .
+                    FILTER (regex(?v, "^' . $searchTerm . '", "i")) .
                     FILTER (?p IN (
                         malware:hasName,
                         malware:name,
                         malware:hasSubmitName
                     )) .
 
-                    # Exclude entities that have already been fetched
                     FILTER NOT EXISTS {
                         VALUES ?fetchedEntities {
-                             '. $entitiesToExclude.'
+                             ' . $entitiesToExclude . '
                         }
                         FILTER (?e IN (?fetchedEntities))
                     }
                 }
                 LIMIT 3';
 
-        $result = $this->httpService->get($query);
+        $result = HttpService::get($query);
         return $result;
     }
 
-    public function getRawMalwareProperties($entityId)
+    public static function getRawEntityProperties($entityId)
     {
-        $query = 'PREFIX malware: <' . $this->feiOntology . '>
+        $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
                 (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                 (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
@@ -96,7 +87,8 @@ class Queries
                 }
                 ORDER BY (STRLEN(?value))';
 
-        $result = $this->httpService->get($query);
+        $result = HttpService::get($query);
         return $result;
     }
 }
+

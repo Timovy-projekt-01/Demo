@@ -4,19 +4,13 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Item;
-use App\Ontologies;
+use App\Ontologies\Handler\Queries;
 use Livewire\Attributes\On;
 
 class SearchBar extends Component
 {
     public $searchTerm = '';
     public $entitiesFromSearch = [];
-    private $sparql;
-
-    public function boot(Ontologies\Malware\Queries $sparql)
-    {
-        $this->sparql = $sparql;
-    }
     public function render()
     {
         return view('livewire.search-bar');
@@ -30,7 +24,7 @@ class SearchBar extends Component
     {
         $this->searchTerm = trim($this->searchTerm);
         if ($this->searchTerm != "") {
-            $this->entitiesFromSearch = $this->sparql->searchEntities($this->searchTerm, "");
+            $this->entitiesFromSearch = Queries::searchEntities($this->searchTerm, "");
         }
     }
 
@@ -42,7 +36,7 @@ class SearchBar extends Component
 
         $entitiesToExclude = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $idsToExclude));
 
-        $moreResults = $this->sparql->searchEntities($this->searchTerm, (string) $entitiesToExclude);
+        $moreResults = Queries::searchEntities($this->searchTerm, (string) $entitiesToExclude);
         $this->entitiesFromSearch = array_merge($this->entitiesFromSearch, $moreResults);
     }
 

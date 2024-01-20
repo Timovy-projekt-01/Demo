@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ontologies\Malware;
+namespace App\Ontologies\Handler;
 use App\Exceptions\ScriptFailedException;
 
 class Parser

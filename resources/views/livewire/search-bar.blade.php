@@ -1,5 +1,5 @@
 {{--
-Dynamic search bar. When selected entity is clicked, it dispatched (emits) a custom event
+Dynamic search bar. When selected entity is clicked, it dispatches (emits) a custom event
 to RenderEntity component. That component is then responsible for rendering the entity.
 --}}
 <div class="flex flex-col justify-center p-5 align-middle shadow-lg w-full">

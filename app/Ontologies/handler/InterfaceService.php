@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ontologies\Malware;
+namespace App\Ontologies\Handler;
 use App\Exceptions\ScriptFailedException;
 use App\Ontologies\Helpers\HttpService;
 interface InterfaceService {
@@ -19,7 +19,7 @@ interface InterfaceService {
      * @param int $id The ID of the malware entity.
      * @return array The cleaned malware properties.
      */
-    public function getCleanMalwareProperties($id): array;
+    public function getCleanEntityProperties($id): array;
 
     /**
      * Maps fetched properties from DB to malware associative array.

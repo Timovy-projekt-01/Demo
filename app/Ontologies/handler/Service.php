@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Ontologies\Malware;
+namespace App\Ontologies\Handler;
 
 use App\Exceptions\ScriptFailedException;
 use App\Ontologies\Helpers\HttpService;
-use App\Ontologies\Malware\Queries;
-use App\Ontologies\Malware\ServiceInterface;
+use App\Ontologies\Handler\Queries;
+use App\Ontologies\Handler\ServiceInterface;
 
 class Service implements InterfaceService
 {
-    private $sparql;
     private $objectProperties;
     private $fe_config;
 
-    public function __construct(Queries $sparql)
+    public function __construct()
     {
-        $this->sparql = $sparql;
         $this->objectProperties = json_decode(file_get_contents(base_path("\\app\\bin\\malware\\output\\object_properties.json")), true);
         $this->fe_config = json_decode(file_get_contents(base_path("\\app\\bin\\malware\\output\\fe_config.json")), true);
 
@@ -26,13 +24,13 @@ class Service implements InterfaceService
         return $httpService->postOwl($parser->parseMalware());
     }
 
-    public function getCleanMalwareProperties($id): array
+    public function getCleanEntityProperties($id): array
     {
         $entity = [];
-        $properties = $this->sparql->getRawMalwareProperties($id);
+        $properties = Queries::getRawEntityProperties($id);
 
         if ($this->isTechnique($properties)) {
-            $relationNames = $this->sparql->getRelations($id, 'mitigates', 'usesTechnique');
+            $relationNames = Queries::getRelations($id, 'mitigates', 'usesTechnique');
             $relationNames = $this->mapTechniqueRelations($relationNames);
             $properties = array_merge($properties, $relationNames);
         }
@@ -89,7 +87,7 @@ class Service implements InterfaceService
 
                 foreach (array_chunk((array) $entityIds, 100) as $chunk) {
                     $ids = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $chunk));
-                    $chunkResult = $this->sparql->getNames($ids);
+                    $chunkResult = Queries::getNames($ids);
                     $results = array_merge($results, $chunkResult);
                 }
 
