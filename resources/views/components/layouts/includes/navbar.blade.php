@@ -1,4 +1,5 @@
-<nav class="bg-gray-900 border-gray-200 p-3">
+<nav x-data="{ langDropdownisOpen: false }"
+    class="bg-gray-900 border-gray-200 p-3">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
         <a href="/" class="flex items-center gap-5">
             <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl sm:hidden md:block" alt="upb eshop logo" />
@@ -8,7 +9,8 @@
             </span>
         </a>
 
-        <button data-collapse-toggle="navbar-default" type="button" id="toggleButton"
+        <button
+                data-collapse-toggle="navbar-default" type="button" id="toggleButton"
                 class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500
                         rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2
                         focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -21,13 +23,13 @@
             </svg>
         </button>
 
-        <div class="hidden w-full lg:flex lg:w-auto lg:mr-5" id="navbar-default">
+        <div
+            class="hidden w-full lg:flex lg:w-auto lg:mr-5" id="navbar-default">
             <span class="self-center text-base p-4 font-semibold whitespace-nowrap text-white sm:hidden">
                 Security domain ontology browser
             </span>
 
-            <ul
-                class="font-medium flex flex-col p-4 md:p-0rounded-lg md:flex-row
+            <ul class="font-medium flex flex-col p-4 md:p-0rounded-lg md:flex-row
                         md:space-x-8 md:mt-0 md:border-0 bg-gray-900 dark:border-gray-700">
                 <li class="py-2">
                     <a href="/about"
@@ -40,10 +42,8 @@
                 </li>
 
                 <li>
-                    <button
-                        id="dropdownLangButton" data-dropdown-toggle="dropdownLang"
-                        class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative
-                        inline-flex items-center" type="button" onclick="toggleDropdown('dropdownLang')">
+                    <button @click="langDropdownisOpen = !langDropdownisOpen"
+                        class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center">
                         {{ Config::get('languages')[App::getLocale()] }}
 
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -53,9 +53,9 @@
                         </svg>
                     </button>
 
-                    <div id="dropdownLang" class="z-50 absolute hidden divide-y divide-gray-100 shadow w-26 dark:bg-gray-700">
-                        <ul class="p-2 text-base font-semibold text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownLangButton">
+                    <div x-show="langDropdownisOpen" @click.away="langDropdownisOpen = false"
+                        class="z-50 absolute divide-y divide-gray-100 shadow w-26 dark:bg-gray-700">
+                        <ul class="p-2 text-base font-semibold text-gray-700 dark:text-gray-200 bg-white">
                             @foreach (Config::get('languages') as $lang => $language)
                                 @if ($lang != App::getLocale())
                                     <li>
@@ -81,22 +81,6 @@
             toggleButton.addEventListener('click', function () {
                 navLinks.classList.toggle('hidden');
             });
-        });
-
-
-        function toggleDropdown(dropdownId) {
-            var dropdown = document.getElementById(dropdownId);
-            dropdown.classList.toggle("hidden");
-        }
-
-        // Close dropdown when clicking outside
-        window.addEventListener('click', function (e) {
-            var dropdown = document.getElementById('dropdownLang');
-            var button = document.getElementById('dropdownLangButton');
-
-            if (dropdown.contains(e.target) || button.contains(e.target)) return;
-
-            dropdown.classList.add('hidden');
         });
     </script>
 
