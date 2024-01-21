@@ -1,4 +1,4 @@
-<nav x-data="{ langDropdownisOpen: false }"
+<nav
     class="bg-gray-900 border-gray-200 p-3">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
         <a href="/" class="flex items-center gap-5">
@@ -41,7 +41,7 @@
                     </a>
                 </li>
 
-                <li>
+                <li  x-data="{ langDropdownisOpen: false }" x-init="console.log('init')">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"
                         class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center">
                         {{ Config::get('languages')[App::getLocale()] }}
@@ -53,7 +53,7 @@
                         </svg>
                     </button>
 
-                    <div x-show="langDropdownisOpen" @click.away="langDropdownisOpen = false"
+                    <div x-cloak x-show="langDropdownisOpen" @click.away="langDropdownisOpen = false"
                         class="z-50 absolute divide-y divide-gray-100 shadow w-26 dark:bg-gray-700">
                         <ul class="p-2 text-base font-semibold text-gray-700 dark:text-gray-200 bg-white">
                             @foreach (Config::get('languages') as $lang => $language)
@@ -74,15 +74,15 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        /* document.addEventListener('DOMContentLoaded', function () {
             const toggleButton = document.getElementById('toggleButton');
             const navLinks = document.getElementById('navbar-default');
 
             toggleButton.addEventListener('click', function () {
                 navLinks.classList.toggle('hidden');
             });
-        });
-    </script>
+        }); */
+        </script>
 
 </nav>
 

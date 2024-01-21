@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Ontologies\Handler;
+namespace App\Ontologies\Handlers;
 use App\Exceptions\ScriptFailedException;
 use App\Ontologies\Helpers\HttpService;
 interface InterfaceService {
     /**
      * Updates the malware using the provided parser.
      *
-     * @param Parser $parser The parser used to parse the malware.
      * @return true If the malware was successfully updated. Otherwise, false.
      * @throws ScriptFailedException If the script fails to update the malware ontology.
      */
-    public function updateMalware(Parser $parser, HttpService $httpService): string;
+    public function updateMalware(): string;
     /**
      * Parses all entity properties to remove things like uri, literal, and
      * returns an associative array with only the property and its value.

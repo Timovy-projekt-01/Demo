@@ -17,7 +17,7 @@ class HttpService {
         return $results;
     }
 
-    public function postOwl($file_path)
+    public static function postOwl($file_path)
     {
         $blazegraphEndpoint = 'http://localhost:9999/bigdata/sparql';
 

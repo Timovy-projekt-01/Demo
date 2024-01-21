@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Ontologies\Handler;
+namespace App\Ontologies\Handlers;
 
 use App\Exceptions\ScriptFailedException;
 use App\Ontologies\Helpers\HttpService;
-use App\Ontologies\Handler\Queries;
-use App\Ontologies\Handler\ServiceInterface;
+use App\Ontologies\Handlers\Queries;
+use App\Ontologies\Handlers\Parser;
+use App\Ontologies\Handlers\ServiceInterface;
 
 class Service implements InterfaceService
 {
@@ -19,9 +20,9 @@ class Service implements InterfaceService
 
     }
 
-    public function updateMalware(Parser $parser, HttpService $httpService): string
+    public function updateMalware(): string
     {
-        return $httpService->postOwl($parser->parseMalware());
+        return HttpService::postOwl(Parser::parseMalware());
     }
 
     public function getCleanEntityProperties($id): array

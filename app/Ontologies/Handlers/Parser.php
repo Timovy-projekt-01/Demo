@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ontologies\Handler;
+namespace App\Ontologies\Handlers;
 use App\Exceptions\ScriptFailedException;
 
 class Parser
@@ -11,7 +11,7 @@ class Parser
      * @return string The path to the generated malware ontology file.
      * @throws ScriptFailedException If the script fails to update the malware ontology.
      */
-    public function parseMalware(): string
+    public static function parseMalware(): string
     {
         //todo change command based on server config (python3 vs python vs ...)
         //todo pip install owlready2

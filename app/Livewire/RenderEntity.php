@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Ontologies\Handler\Parser;
+use App\Ontologies\Handlers\Parser;
 use Livewire\Component;
-use App\Ontologies\Handler\Queries;
-use App\Ontologies\Handler\Service;
+use App\Ontologies\Handlers\Queries;
+use App\Ontologies\Handlers\Service;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 

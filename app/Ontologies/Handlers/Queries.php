@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Ontologies\Handler;
+namespace App\Ontologies\Handlers;
 
 use App\Ontologies\Helpers\HttpService;
 use Illuminate\Support\Facades\Cache;

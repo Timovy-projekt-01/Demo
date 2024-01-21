@@ -6,13 +6,16 @@
     </head>
 
     <body>
-        @include('components.layouts.includes.navbar')
+        <div>
+
+            @include('components.layouts.includes.navbar')
+        </div>
 
         <div class="min-h-screen">
            @yield('content')
         </div>
 
         @include('components.layouts.includes.footer')
+        @livewireScripts
     </body>
-
 </html>
