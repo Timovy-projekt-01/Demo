@@ -1,6 +1,6 @@
-<nav
-    class="bg-gray-900 border-gray-200 p-3">
-    <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
+<nav class="bg-gray-900 border-gray-200 p-3">
+    <div x-data="{ mobileNavisOpen: true}"
+        class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
         <a href="/" class="flex items-center gap-5">
             <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl sm:hidden md:block" alt="upb eshop logo" />
 
@@ -9,7 +9,7 @@
             </span>
         </a>
 
-        <button
+        <button @click="mobileNavisOpen = !mobileNavisOpen"
                 data-collapse-toggle="navbar-default" type="button" id="toggleButton"
                 class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500
                         rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2
@@ -23,8 +23,8 @@
             </svg>
         </button>
 
-        <div
-            class="hidden w-full lg:flex lg:w-auto lg:mr-5" id="navbar-default">
+        <div x-cloak x-show="mobileNavisOpen"
+            class="w-full lg:flex lg:w-auto lg:mr-5" id="navbar-default">
             <span class="self-center text-base p-4 font-semibold whitespace-nowrap text-white sm:hidden">
                 Security domain ontology browser
             </span>
@@ -41,7 +41,7 @@
                     </a>
                 </li>
 
-                <li  x-data="{ langDropdownisOpen: false }" x-init="console.log('init')">
+                <li  x-data="{ langDropdownisOpen: false }">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"
                         class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center">
                         {{ Config::get('languages')[App::getLocale()] }}
@@ -72,17 +72,5 @@
             </ul>
         </div>
     </div>
-
-    <script>
-        /* document.addEventListener('DOMContentLoaded', function () {
-            const toggleButton = document.getElementById('toggleButton');
-            const navLinks = document.getElementById('navbar-default');
-
-            toggleButton.addEventListener('click', function () {
-                navLinks.classList.toggle('hidden');
-            });
-        }); */
-        </script>
-
 </nav>
 
