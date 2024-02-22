@@ -45,10 +45,11 @@ class Queries
         return $result;
     }
 
-    public static function searchEntities(string $searchTerm, $entitiesToExclude)
+
+    public static function searchEntities(string $URIprefixes, string $searchables, string $searchTerm, $entitiesToExclude)
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
+        $query = $URIprefixes.
+                'SELECT
                     (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                     (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
                     (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
@@ -56,9 +57,7 @@ class Queries
                     ?e ?p ?v .
                     FILTER (regex(?v, "^' . $searchTerm . '", "i")) .
                     FILTER (?p IN (
-                        malware:hasName,
-                        malware:name,
-                        malware:hasSubmitName
+                        ' . $searchables . '
                     )) .
 
                     FILTER NOT EXISTS {
@@ -69,7 +68,6 @@ class Queries
                     }
                 }
                 LIMIT 3';
-
         $result = HttpService::get($query);
         return $result;
     }

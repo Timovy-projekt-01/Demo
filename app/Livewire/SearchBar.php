@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Item;
 use App\Ontologies\Handlers\Queries;
 use Livewire\Attributes\On;
+use App\Ontologies\Handlers\Service;
 
 class SearchBar extends Component
 {
@@ -20,15 +21,15 @@ class SearchBar extends Component
     {
         $this->searchTerm = '';
     }
-    public function searchEntities()
+    public function searchEntities(Service $service)
     {
         $this->searchTerm = trim($this->searchTerm);
         if ($this->searchTerm != "") {
-            $this->entitiesFromSearch = Queries::searchEntities($this->searchTerm, "");
+            $this->entitiesFromSearch = $service->searchEntities($this->searchTerm, "");
         }
     }
 
-    public function showMoreResults()
+    public function showMoreResults(Service $service)
     {
         $idsToExclude = array_map(function ($entity) {
             return $entity['entity']['value'];
@@ -36,7 +37,7 @@ class SearchBar extends Component
 
         $entitiesToExclude = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $idsToExclude));
 
-        $moreResults = Queries::searchEntities($this->searchTerm, (string) $entitiesToExclude);
+        $moreResults = $service->searchEntities($this->searchTerm, (string) $entitiesToExclude);
         $this->entitiesFromSearch = array_merge($this->entitiesFromSearch, $moreResults);
     }
 

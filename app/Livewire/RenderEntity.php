@@ -11,13 +11,7 @@ use Livewire\Attributes\Computed;
 
 class RenderEntity extends Component
 {
-    private $service;
     public $entity;
-
-    public function boot(Service $service)
-    {
-        $this->service = $service;
-    }
 
     public function render()
     {
@@ -31,9 +25,9 @@ class RenderEntity extends Component
      * @return void
      */
     #[On('show-new-entity')]
-    public function showNewEntity($id)
+    public function showNewEntity($id, Service $service)
     {
-        $this->entity = $this->service->getCleanEntityProperties($id);
+        $this->entity = $service->getCleanEntityProperties($id);
         $this->dispatch('newSearch', $this->entity);
 
     }

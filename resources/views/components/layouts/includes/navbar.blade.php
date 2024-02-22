@@ -1,7 +1,7 @@
 <nav
     class="bg-gray-900 border-gray-200 p-3">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-        <a href="/" class="flex items-center gap-5">
+        <a  wire:navigate href="/" class="flex items-center gap-5">
             <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl sm:hidden md:block" alt="upb eshop logo" />
 
             <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hidden sm:block">
@@ -32,7 +32,7 @@
             <ul class="font-medium flex flex-col p-4 md:p-0rounded-lg md:flex-row
                         md:space-x-8 md:mt-0 md:border-0 bg-gray-900 dark:border-gray-700">
                 <li class="py-2">
-                    <a href="/about"
+                    <a  wire:navigate href="/about"
                        class="block px-5 pl-3 pr-4 rounded
                              md:border-0 md:hover:text-blue-500 md:p-0 text-white
                              md:dark:hover:text-blue-500
@@ -41,7 +41,7 @@
                     </a>
                 </li>
 
-                <li  x-data="{ langDropdownisOpen: false }" x-init="console.log('init')">
+                <li  x-data="{ langDropdownisOpen: false }">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"
                         class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center">
                         {{ Config::get('languages')[App::getLocale()] }}
@@ -59,7 +59,7 @@
                             @foreach (Config::get('languages') as $lang => $language)
                                 @if ($lang != App::getLocale())
                                     <li>
-                                        <a class="block pl-1 pr-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        <a wire:navigate class="block pl-1 pr-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                                            href="{{ route('lang.switch', $lang) }}">
                                             {{$language}}
                                         </a>
@@ -73,16 +73,6 @@
         </div>
     </div>
 
-    <script>
-        /* document.addEventListener('DOMContentLoaded', function () {
-            const toggleButton = document.getElementById('toggleButton');
-            const navLinks = document.getElementById('navbar-default');
-
-            toggleButton.addEventListener('click', function () {
-                navLinks.classList.toggle('hidden');
-            });
-        }); */
-        </script>
 
 </nav>
 

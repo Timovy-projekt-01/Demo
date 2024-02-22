@@ -24,10 +24,34 @@ class Service implements InterfaceService
     {
         return HttpService::postOwl(Parser::parseMalware());
     }
+    public function searchEntities(string $searchTerm, $entitiesToExclude)
+    {
+        $prefixStatements = '';
+        $searchables = '';
+        //Search Entities in every ontology
+        foreach ($this->fe_config as $index => $config) {
+            //Get prefix and baseURI
+            $baseURI = $config['baseURI'];
+            $prefix = $config['ontology'];
+            $prefixStatements .= "PREFIX $prefix: <$baseURI>\n";
+
+            //Match prefix with searchable properties
+            foreach ($config['searchable'] as $index => $searchable) {
+                $searchables .= "$prefix:$searchable";
+                //Add a comma if it's not the last searchable property
+                if ($index < count($config['searchable']) - 1) {
+                    $searchables .= ",\n";
+                }
+            }
+        }
+        $results = Queries::searchEntities($prefixStatements, $searchables, $searchTerm, $entitiesToExclude);
+        return $results;
+    }
 
     public function getCleanEntityProperties($id): array
     {
         $entity = [];
+        //dd($this->fe_config);
         $properties = Queries::getRawEntityProperties($id);
 
         if ($this->isTechnique($properties)) {

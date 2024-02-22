@@ -16,6 +16,6 @@
         </div>
 
         @include('components.layouts.includes.footer')
-        @livewireScripts
+       {{--  @livewireScripts --}}
     </body>
 </html>
