@@ -22,7 +22,17 @@ statement is identical. We also check if its URL so its clickable.
             @if (filter_var($property, FILTER_VALIDATE_URL))
                 <a href="{{ $property }}" class="font-mono text-blue-500 hover:underline underline-offset-2 break-all" target="_blank">{{ $property }}</a>
             @else
-                <p class="font-mono text-gray-600 break-all">{{ $property }}</p>
+                <div class="flex-grow">
+                @php
+                    echo preg_replace_callback(
+                        '/\[([^\]]+)\]\(([^)]+)\)/',
+                        function($matches) {
+                            return '<a class="font-mono text-blue-500 hover:underline underline-offset-2"
+                                     target="_blank" href="' . $matches[2] . '">' . $matches[1] . '</a>';
+                        }, $property
+                    );
+                @endphp
+                </div>
             @endif
         @endif
     </div>
