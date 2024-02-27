@@ -68,6 +68,7 @@ class Queries
                     }
                 }
                 LIMIT 3';
+        //dd($query);
         $result = HttpService::get($query);
         return $result;
     }

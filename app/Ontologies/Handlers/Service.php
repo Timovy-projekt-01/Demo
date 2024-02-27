@@ -17,7 +17,6 @@ class Service implements InterfaceService
     {
         $this->objectProperties = json_decode(file_get_contents(base_path("\\app\\bin\\malware\\output\\object_properties.json")), true);
         $this->fe_config = json_decode(file_get_contents(base_path("\\app\\bin\\malware\\output\\fe_config.json")), true);
-
     }
 
     public function updateMalware(): string
@@ -26,25 +25,19 @@ class Service implements InterfaceService
     }
     public function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        $prefixStatements = '';
-        $searchables = '';
-        //Search Entities in every ontology
-        foreach ($this->fe_config as $index => $config) {
-            //Get prefix and baseURI
-            $baseURI = $config['baseURI'];
-            $prefix = $config['ontology'];
-            $prefixStatements .= "PREFIX $prefix: <$baseURI>\n";
+        $prefixes = implode(" ", array_column($this->fe_config, 'ontologyPrefix'));
 
-            //Match prefix with searchable properties
-            foreach ($config['searchable'] as $index => $searchable) {
-                $searchables .= "$prefix:$searchable";
-                //Add a comma if it's not the last searchable property
-                if ($index < count($config['searchable']) - 1) {
-                    $searchables .= ",\n";
-                }
-            }
+        $searchables = '';
+        // Create a single string with all the searchable properties
+        foreach ($this->fe_config as $config) {
+            $searchables .= implode(",\n", array_map(function ($searchable) use ($config) {
+                return "{$config['ontology']}:$searchable";
+            }, $config['searchable'])) . ",\n";
         }
-        $results = Queries::searchEntities($prefixStatements, $searchables, $searchTerm, $entitiesToExclude);
+        // Remove the trailing comma and newline, if any (because it brakes SPARQL queries)
+        $searchables = rtrim($searchables, ",\n");
+        $results = Queries::searchEntities($prefixes, $searchables, $searchTerm, $entitiesToExclude);
+       //dd($results);
         return $results;
     }
 
