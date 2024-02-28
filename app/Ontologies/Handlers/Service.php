@@ -37,7 +37,6 @@ class Service implements InterfaceService
         // Remove the trailing comma and newline, if any (because it brakes SPARQL queries)
         $searchables = rtrim($searchables, ",\n");
         $results = Queries::searchEntities($prefixes, $searchables, $searchTerm, $entitiesToExclude);
-       //dd($results);
         return $results;
     }
 

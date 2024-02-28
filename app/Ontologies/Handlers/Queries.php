@@ -46,9 +46,9 @@ class Queries
     }
 
 
-    public static function searchEntities(string $URIprefixes, string $searchables, string $searchTerm, $entitiesToExclude)
+    public static function searchEntities(string $uriPrefixes, string $searchables, string $searchTerm, $entitiesToExclude)
     {
-        $query = $URIprefixes.
+        $query = $uriPrefixes.
                 'SELECT
                     (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                     (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
@@ -68,7 +68,7 @@ class Queries
                     }
                 }
                 LIMIT 3';
-        //dd($query);
+
         $result = HttpService::get($query);
         return $result;
     }

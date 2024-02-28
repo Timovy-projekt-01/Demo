@@ -30,8 +30,8 @@ class StartBlazeGraph extends Command
         //chdir($blazegraphDirectory);
 
         // Build the command to start BlazeGraph
-        $blazegraphCommand = "java -server -Xmx4g -jar blazegraph.jar &";
 
+        $blazegraphCommand = "java -jar blazegraph.jar";
         $this->info("BlazeGraph is starting... \nWorkBench is available at http://localhost:9999 \n");
         shell_exec($blazegraphCommand);
         $this->info("Failed to start BlazeGraph.");
