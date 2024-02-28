@@ -2,6 +2,7 @@
 
 return [
     'about' => 'O nás',
+    'upload' => 'Nahrať',
     'search history title' => 'História vyhľadávania',
     'search history empty' => 'Prázdne',
     'search history clear button' => 'Zmazať Históriu',

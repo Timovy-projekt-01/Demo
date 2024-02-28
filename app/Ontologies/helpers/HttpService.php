@@ -17,14 +17,25 @@ class HttpService {
         return $results;
     }
 
-    public static function postOwl($file_path)
+    /**
+     * Function to post an OWL file to BlazeGraph
+     * Performs a POST request to BlazeGraph with the given file
+     * https://github.com/blazegraph/database/wiki/REST_API
+     * 
+     * @param string $file_path
+     * @return bool
+     */
+    public static function postOwl(string $file_path): bool
     {
-        $blazegraphEndpoint = 'http://localhost:9999/bigdata/sparql';
+        //todo move to .env
+        $blazegraphEndpoint = 'http://localhost:9999/blazegraph/sparql';
 
         $response = shell_exec('curl -X POST -H "Content-Type: application/rdf+xml" --data-binary @' . $file_path . ' ' . $blazegraphEndpoint);
         if (empty($response)){
             return false;
         }
+
+        return true;
     }
 
 }

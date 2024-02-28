@@ -40,6 +40,15 @@
                         {{__('app-labels.about')}}
                     </a>
                 </li>
+                <li class="py-2">
+                    <a  wire:navigate href="{{ route('update') }}"
+                       class="block px-5 pl-3 pr-4 rounded
+                             md:border-0 md:hover:text-blue-500 md:p-0 text-white
+                             md:dark:hover:text-blue-500
+                             md:dark:hover:bg-transparent">
+                        {{__('app-labels.upload')}}
+                    </a>
+                </li>
 
                 <li  x-data="{ langDropdownisOpen: false }" x-init="console.log('init')">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"

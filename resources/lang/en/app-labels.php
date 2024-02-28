@@ -2,6 +2,7 @@
 
 return [
     'about' => 'About',
+    'upload' => 'Upload',
     'search history title' => 'Search History',
     'search history empty' => 'Empty',
     'search history clear button' => 'Clear History',

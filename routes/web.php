@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Test;
 use App\Livewire\Dashboard;
 use App\Livewire\SearchHistory;
+use App\Livewire\UploadOntology;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +31,9 @@ Route::get('/about', function () {
 })->middleware('lang');
 
 Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
+
+Route::get('/update', function(){
+    return view('upload-page');
+})->name('update');
+
+Route::post('/update/upload', [UploadOntology::class, 'uploadFile'])->name('upload');
