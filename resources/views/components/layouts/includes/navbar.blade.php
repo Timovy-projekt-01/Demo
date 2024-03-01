@@ -1,7 +1,7 @@
 <nav class="bg-gray-900 border-gray-200 p-3">
     <div x-data="{ mobileNavisOpen: true}"
         class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
-        <a href="/" class="flex items-center gap-5">
+        <a wire:navigate href="/" class="flex items-center gap-5">
             <img src="/stu_logo4.png" class="h-24 p-2 rounded-3xl sm:hidden md:block" alt="upb eshop logo" />
 
             <span class="self-center text-2xl font-semibold whitespace-nowrap text-white hidden sm:block">
@@ -50,7 +50,7 @@
                     </a>
                 </li>
 
-                <li  x-data="{ langDropdownisOpen: false }" x-init="console.log('init')">
+                <li  x-data="{ langDropdownisOpen: false }">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"
                         class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center">
                         {{ Config::get('languages')[App::getLocale()] }}

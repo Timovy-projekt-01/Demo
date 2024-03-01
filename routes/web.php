@@ -36,4 +36,4 @@ Route::get('/update', function(){
     return view('upload-page');
 })->name('update');
 
-Route::post('/update/upload', [UploadOntology::class, 'uploadFile'])->name('upload');
+//Route::post('/update/upload', [UploadOntology::class, 'uploadFile'])->name('upload');
