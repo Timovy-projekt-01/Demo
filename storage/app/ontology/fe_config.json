@@ -3,7 +3,7 @@
         "name": "malware",
         "baseURI": "http://stufei/ontologies/malware#",
         "ontologyPrefix": "PREFIX malware: <http://stufei/ontologies/malware#>",
-        "searchable": [],
+        "searchable": ["hasName", "hasSubmitName", "name"],
         "data_properties": {
             "hasId": "",
             "hasDomain": "",
@@ -197,7 +197,7 @@
         "name": "CVE-2000-owl",
         "baseURI": "http://FEI-STU/TP2019/Security/",
         "ontologyPrefix": "PREFIX CVE-2000-owl: <http://FEI-STU/TP2019/Security/>",
-        "searchable": [],
+        "searchable": ["Title"],
         "data_properties": {
             "Description": "",
             "Title": "",

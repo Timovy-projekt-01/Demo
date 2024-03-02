@@ -39,5 +39,5 @@ interface InterfaceService {
      * @param array $colapsProps The properties to retrieve names for.
      * @return array The updated malware data with names mapped to entity IDs.
      */
-    public function getNamesToIds($malware, array $colapsProps): array;
+    public function getNamesToIds($malware): array;
 }

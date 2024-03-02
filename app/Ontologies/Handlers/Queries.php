@@ -48,8 +48,8 @@ class Queries
 
     public static function searchEntities(string $uriPrefixes, string $searchables, string $searchTerm, $entitiesToExclude)
     {
-        $query = $uriPrefixes.
-                'SELECT
+        $query = $uriPrefixes .
+            'SELECT
                     (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
                     (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
                     (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
@@ -68,7 +68,7 @@ class Queries
                     }
                 }
                 LIMIT 3';
-                
+
         $result = HttpService::get($query);
         return $result;
     }
@@ -85,9 +85,7 @@ class Queries
                 malware:' . $entityId . ' ?p ?v.
                 }
                 ORDER BY (STRLEN(?value))';
-
         $result = HttpService::get($query);
         return $result;
     }
 }
-
