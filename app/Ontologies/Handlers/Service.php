@@ -7,6 +7,7 @@ use App\Ontologies\Helpers\HttpService;
 use App\Ontologies\Handlers\Queries;
 use App\Ontologies\Handlers\Parser;
 use App\Ontologies\Handlers\ServiceInterface;
+use Illuminate\Support\Facades\Storage;
 
 class Service implements InterfaceService
 {
@@ -15,8 +16,8 @@ class Service implements InterfaceService
 
     public function __construct()
     {
-        $this->objectProperties = json_decode(file_get_contents(base_path("\\app\\bin\\malware\\output\\object_properties.json")), true);
-        $this->fe_config = json_decode(file_get_contents(base_path("\\storage\\app\\ontology\\fe_config.json")), true);
+        $this->fe_config = json_decode(Storage::get('ontology/fe_config.json'), true);
+
     }
 
     public function updateMalware(): string
@@ -35,6 +36,7 @@ class Service implements InterfaceService
         }
         // Remove the trailing comma and newline, if any (because it brakes SPARQL queries)
         $searchables = rtrim($searchables, ",\n");
+        //dd($searchables);
         $results = Queries::searchEntities($prefixes, $searchables, $searchTerm, $entitiesToExclude);
         return $results;
     }
@@ -42,7 +44,6 @@ class Service implements InterfaceService
     public function getCleanEntityProperties($id): array
     {
         $entity = [];
-        //dd($this->fe_config);
         $properties = Queries::getRawEntityProperties($id);
 
         if ($this->isTechnique($properties)) {
@@ -51,7 +52,7 @@ class Service implements InterfaceService
             $properties = array_merge($properties, $relationNames);
         }
         $entity = $this->mapExistingData($entity, $properties);
-        $entity = $this->getNamesToIds($entity, $this->objectProperties);
+        $entity = $this->getNamesToIds($entity);
         return $entity;
     }
 
@@ -94,11 +95,15 @@ class Service implements InterfaceService
         return $entity;
     }
 
-    public function getNamesToIds($entity, array $colapsProps): array
+    public function getNamesToIds($entity): array
     {
-        foreach ($colapsProps as $colapsProp) {
-            if (isset($entity[$colapsProp])) {
-                $entityIds = $entity[$colapsProp];
+        $objectProps = [];
+        foreach($this->fe_config as $config){
+            $objectProps += $config['object_properties'];
+        }
+        foreach ($objectProps as $objectProp => $value) {
+            if (isset($entity[$objectProp])) {
+                $entityIds = $entity[$objectProp];
                 $results = [];
 
                 foreach (array_chunk((array) $entityIds, 100) as $chunk) {
@@ -111,7 +116,7 @@ class Service implements InterfaceService
                 foreach ($results as $result) {
                     $names[] = $result['name']['value'];
                 }
-                $entity[$colapsProp] = array_map(fn ($id, $name) => ['id' => $id, 'name' => $name], (array) $entityIds, (array) $names);
+                $entity[$objectProp] = array_map(fn ($id, $name) => ['id' => $id, 'name' => $name], (array) $entityIds, (array) $names);
             }
         }
 

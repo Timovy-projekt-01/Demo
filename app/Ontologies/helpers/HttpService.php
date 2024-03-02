@@ -21,7 +21,7 @@ class HttpService {
      * Function to post an OWL file to BlazeGraph
      * Performs a POST request to BlazeGraph with the given file
      * https://github.com/blazegraph/database/wiki/REST_API
-     * 
+     *
      * @param string $file_path
      * @return bool
      */

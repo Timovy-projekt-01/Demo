@@ -1,3 +1,5 @@
 *
 !public/
+!ontology/
+!ontology/**
 !.gitignore
