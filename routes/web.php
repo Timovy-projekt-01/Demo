@@ -8,6 +8,7 @@ use App\Livewire\Test;
 use App\Livewire\Dashboard;
 use App\Livewire\SearchHistory;
 use App\Livewire\UploadOntology;
+use App\Livewire\Actions\Logout;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,7 @@ use App\Livewire\UploadOntology;
 //Route::get('/dashboard', SearchBar::class)->name('dashboard');
 Route::get('/', function () {
     return view('main-page');
-})->middleware('lang');
+})->name('home')->middleware('lang');
 
 Route::get('/history', SearchHistory::class)->name('history');
 
@@ -37,3 +38,13 @@ Route::get('/update', function(){
 })->name('update');
 
 //Route::post('/update/upload', [UploadOntology::class, 'uploadFile'])->name('upload');
+Route::get('logout', function(Logout $logout) {
+    $logout();
+    return redirect(route('home'));
+})->name('logout');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+require __DIR__.'/auth.php';
