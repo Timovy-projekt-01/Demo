@@ -18,7 +18,8 @@ class Parser
         //todo change command based on server config (python3 vs python vs ...)
         //todo pip install owlready2
         //todo pip install mitreattack-python
-        $command = 'python ' . base_path('app/bin/ontologyMappers/malware-attck.py') . ' ' . escapeshellarg(base_path('app/bin/malware/malwareTemplate.owl')) . ' ' . escapeshellarg(base_path('app/bin/malware/output/malware.owl'));
+        //todo cronjob to run this script every x hours/days
+        $command = getenv('PYTHON_COMMAND') . ' ' . base_path('app/bin/ontologyMappers/malware-attck.py') . ' ' . escapeshellarg(base_path('app/bin/malware/malwareTemplate.owl')) . ' ' . escapeshellarg(base_path('app/bin/malware/output/malware.owl'));
         $output = [];
         $return_var = -1;
         exec($command, $output, $return_var);
@@ -39,9 +40,8 @@ class Parser
     public static function createOntologyConfig($owlFileName)
     {
         $path = app_path() . '\bin';
-        //todo change python path based on server config
-        //If you manage to change this function to work without absolute path for python, feel free to
-        $command = ' C:\Users\mvrbo\AppData\Local\Programs\Python\Python312\python.exe createOntologyConfig.py ' . $owlFileName;
+        //todo validate that this works, replace in env vars depending on your enviroment
+        $command = getenv('PYTHON_COMMAND') . ' createOntologyConfig.py ' . $owlFileName;
 
         $result = Process::path($path)->run($command);
         return $result->successful();
