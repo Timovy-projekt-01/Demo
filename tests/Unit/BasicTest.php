@@ -51,7 +51,7 @@ class BasicTest extends TestCase
         $response = $this->get('/about');
 
         // Assert that the about page contains English text
-        $response->assertSee('About');
+        $response->assertSee('About project');
 
         // Set the language to Spanish
         $this->followingRedirects()->get(route('lang.switch', 'sk'));
@@ -60,6 +60,22 @@ class BasicTest extends TestCase
         $response = $this->get('/about');
 
         // Assert that the about page contains Spanish text
-        $response->assertSee('O nás');
+        $response->assertSee('O projekte');
+    }
+
+    public function test_client_gets_correct_response_for_api_endpoint()
+    {
+        // Create a Guzzle HTTP client
+        $client = new \GuzzleHttp\Client();
+
+        // Send a GET request to the API endpoint
+        $response = $client->get('http://localhost:9999/bigdata/sparql', [
+            'query' => [
+                'query' => 'SELECT * WHERE {?s ?p ?o} LIMIT 1',
+            ],
+        ]);
+
+        // Assert the response status is 200 (OK)
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }
