@@ -6,6 +6,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrationMail;
 
 use function Livewire\Volt\layout;
 use function Livewire\Volt\rules;
@@ -29,7 +31,7 @@ rules([
 $register = function () {
     $validated = $this->validate();
 
-    //TODO: send email here
+    Mail::to($validated['email'])->send(new RegistrationMail($validated['password']));
 
     $validated['password'] = Hash::make($validated['password']);
 
