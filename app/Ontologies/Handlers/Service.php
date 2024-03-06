@@ -22,6 +22,7 @@ class Service implements InterfaceService
 
     public function updateMalware(): string
     {
+        //todo cronjob yada yada
         return HttpService::postOwl(Parser::parseMalware());
     }
     public function searchEntities(string $searchTerm, $entitiesToExclude)

@@ -5,8 +5,6 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Ontologies\Helpers\HttpService;
-use Livewire\Attributes\Validate;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Visibility;
 use App\Ontologies\Handlers\Parser;
@@ -19,36 +17,57 @@ class UploadOntology extends Component
     public $error;
     public $ontologyFile;
 
-    public function uploadFile(Request $request)
+    public function uploadFile()
     {
-        //dd($request);
-        //todo idk store, call postOwl, delete file
-        $path = $this->ontologyFile->storeAs('', $this->ontologyFile->getFileName(), 'public');
-        $success = (new HttpService())->postOwl($path);
-        if(!$success){
-            Storage::disk('public')->delete($path);
-            $this->error = 'Error';
+        $file_names = $this->saveFile();
+
+        if(
+            is_null($file_names)
+            || !$this->createOwlConfig($file_names['original_name'])
+            || !$this->uploadOwlFile($file_names['full_path'])
+        ){
+            Storage::delete($file_names['full_path']);
             return;
         }
-        Storage::disk('public')->delete($path);
+
         return redirect()->route('update');
     }
 
-    public function createOwlConfig()
+    protected function saveFile(): ?array
     {
         $this->validate([
             'ontologyFile' => 'required|file|max:204800',
         ]);
+
         $originalName = $this->ontologyFile->getClientOriginalName();
-        if (!Storage::putFileAs('ontology/owlFiles', $this->ontologyFile, $originalName, Visibility::PRIVATE)) {
-            $this->error = 'Error';
-            return;
+        if (!($path = Storage::putFileAs('ontology/owlFiles', $this->ontologyFile, $originalName, Visibility::PRIVATE))) {
+            $this->error = 'Error saving file...';
+            return null;
         }
+
+        return [
+            'full_path' => Storage::path($path),
+            'original_name' => $originalName
+        ];
+    }
+
+    protected function uploadOwlFile(string $full_path): bool
+    {
+        $success = (new HttpService())->postOwl($full_path);
+        if(!$success){
+            $this->error = 'Error uploading file...';
+            return false;
+        }
+        return true;
+    }
+
+    public function createOwlConfig(string $originalName): bool
+    {
         if (!Parser::createOntologyConfig($originalName)) {
             $this->error = 'Error';
-            return;
+            return false;
         }
-        
+        return true;
     }
 
     public function render()

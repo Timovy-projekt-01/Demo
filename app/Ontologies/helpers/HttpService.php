@@ -27,8 +27,7 @@ class HttpService {
      */
     public static function postOwl(string $file_path): bool
     {
-        //todo move to .env
-        $blazegraphEndpoint = 'http://localhost:9999/blazegraph/sparql';
+        $blazegraphEndpoint = getenv('CLIENT_REST_BLAZEGRAPH_UPLOAD_URL');
 
         $response = shell_exec('curl -X POST -H "Content-Type: application/rdf+xml" --data-binary @' . $file_path . ' ' . $blazegraphEndpoint);
         if (empty($response)){
