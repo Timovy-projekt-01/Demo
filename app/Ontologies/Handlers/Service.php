@@ -9,15 +9,9 @@ use App\Ontologies\Handlers\Parser;
 use App\Ontologies\Handlers\ServiceInterface;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use App\Ontologies\Helpers\RandomHelper;
 class Service implements InterfaceService
 {
-    private $fe_config;
-
-    public function __construct()
-    {
-        $this->fe_config = json_decode(Storage::get('ontology/fe_config.json'), true);
-    }
 
     public function updateMalware(): string
     {
@@ -26,32 +20,14 @@ class Service implements InterfaceService
 
     public function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        $prefixes = implode(" ", $this->fromConfigGet('ontologyPrefix'));
-        $prefixedSearchables = $this->prepareSearchables();
-        $results = Queries::searchEntities($prefixes, $prefixedSearchables, $searchTerm, $entitiesToExclude);
-        return $results;
-    }
-    public function prepareSearchables()
-    {
-        $prefixedSearchables = '';
-        foreach ($this->fe_config as $ontology => $value) {
-            $name = $this->fromConfigGet('name', $ontology);
-            $searchables = $this->fromConfigGet('searchable', $ontology);
-            if (empty($name) || empty($searchables)) continue;
-
-            $prefixedSearchables .= implode(",\n", array_map(function ($searchable) use ($name) {
-                return "{$name}:{$searchable}";
-            }, $searchables)) . ",\n";
-        }
-        $prefixedSearchables = Str::replaceLast(",\n", '', $prefixedSearchables);
-        return $prefixedSearchables;
+        return Queries::searchEntities($searchTerm, $entitiesToExclude);
     }
     public function getCleanEntityProperties($id): array
     {
         $entity = [];
 
         $properties = Queries::getRawEntityProperties($id);
-        if ($this->isTechnique($properties)) {
+        if (RandomHelper::isTechnique($properties)) {
             $relationNames = Queries::getRelations($id, 'mitigates', 'usesTechnique');
             $relationNames = $this->mapTechniqueRelations($relationNames);
             $properties = array_merge($properties, $relationNames);
@@ -59,17 +35,6 @@ class Service implements InterfaceService
         $entity = $this->mapExistingData($entity, $properties);
         $entity = $this->getDataForObjectProperties($entity);
         return $entity;
-    }
-
-    public function isTechnique(array $result)
-    {
-        foreach ($result as $item) {
-            $propertyValues = array_column($item, 'value', 'property');
-            if (strcmp($propertyValues[1], "Technique") == 0) {
-                return true; // Is technique
-            }
-        }
-        return false; // Is not technique
     }
 
     public function mapExistingData(array $entity, array $properties): array
@@ -81,8 +46,8 @@ class Service implements InterfaceService
         $entityId = $properties[0]['entity']['value']; //ID of the named individual (not a property)
         $entity[$entityId] = [$entityId];
         foreach ($properties as $prop) {
-            $propertyName = $prop['property']['value']; //hasAliases, hasName, hasDescription
-            $propertyValue = $prop['value']['value'];   //Wcr, Wnncr, Wnncr
+            $propertyName = $prop['property']['value']; 
+            $propertyValue = $prop['value']['value'];
 
             // Check if the property already exists in $entity
             if (array_key_exists($propertyName, $entity)) {
@@ -102,7 +67,7 @@ class Service implements InterfaceService
 
     public function getDataForObjectProperties($entity): array
     {
-        $objectProps = $this->fromConfigGet("object_properties");
+        $objectProps = RandomHelper::fromConfigGet("object_properties");
         foreach ($objectProps as $objectProp => $value) {
             if (isset($entity[$objectProp])) {
                 $entityIds = $entity[$objectProp];
@@ -119,30 +84,12 @@ class Service implements InterfaceService
 
     private function getNamesForIds($entityIds)
     {
-        //todo tutu fetchujeme names a IDcka pre malware ale pre ine ontologie sa budu fetchovat mozno ine veci
-        //Treba nejak z configu vybrat ze co. Urcite to bude meno, teda searchables, a ak maju tak ID.
-        //malware ma ID ako dataproperty, ale CVE ma ID v about proste.
-        //Kazdopadne ani jednu ontologiu nemame prepojenu a neviem ani jak to funguje.
         $namesAndIds = [];
         foreach (array_chunk((array) $entityIds, 100) as $chunk) {
             $preparedIds = implode(" ", array_map(fn ($id) => "<$id>", $chunk));
             $namesAndIds += Queries::getNames($preparedIds);
         }
         return $namesAndIds;
-    }
-    public function fromConfigGet($attribute, $ontologyName = null)
-    {
-        if ($ontologyName) {
-            return $this->fe_config[$ontologyName][$attribute] ?? [];
-        }
-
-        $result = [];
-        foreach ($this->fe_config as $config) {
-            if (isset($config[$attribute])){
-                $result = array_merge($result, (array) $config[$attribute]);
-            }
-        }
-        return $result;
     }
 
     public function mapTechniqueRelations($relations)

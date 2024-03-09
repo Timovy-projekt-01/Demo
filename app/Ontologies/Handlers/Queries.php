@@ -3,16 +3,16 @@
 namespace App\Ontologies\Handlers;
 
 use App\Ontologies\Helpers\HttpService;
-use Illuminate\Support\Facades\Cache;
+use App\Ontologies\Helpers\RandomHelper;
+use App\Ontologies\Traits\QueryDataInitialization;
 
 class Queries
 {
-    private static $feiOntology = 'http://stufei/ontologies/malware#';
-
+    use QueryDataInitialization;
     public static function getRelations(string $techniqueId, string $relationType1, string $relationType2)
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
+        $query = self::getPreparedPrefixes() .
+                'SELECT
                     ?entity
                 WHERE {
                     {
@@ -32,29 +32,29 @@ class Queries
 
     public static function getNames($entityIds): array
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
+        $query = self::getPreparedPrefixes() .
+            'SELECT
                     ?entity
                     ?name
                 WHERE {
                     VALUES ?entity { ' . $entityIds . ' }
-                    ?entity malware:hasName ?name .
+                    ?entity (' . self::getPreparedSearchables('|') . ') ?name .
                     }';
         $result = HttpService::get($query);
         return $result;
     }
 
 
-    public static function searchEntities(string $uriPrefixes, string $searchables, string $searchTerm, $entitiesToExclude)
+    public static function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        $query = $uriPrefixes .
-        'SELECT
+        $query = self::getPreparedPrefixes() .
+            'SELECT
                     ?entity ?property ?value
                 WHERE {
                     ?entity ?property ?value .
                     FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
                     FILTER (?property IN (
-                        ' . $searchables . '
+                        ' . self::getPreparedSearchables(',') . '
                     )) .
 
                     FILTER NOT EXISTS {
@@ -72,19 +72,21 @@ class Queries
 
     public static function getRawEntityProperties($entityId)
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
-                ?entity ?property ?value
+        $query = self::getPreparedPrefixes() .
+                'SELECT
+                    ?entity ?property ?value
                 WHERE {
-                BIND(<' . $entityId . '>  AS ?entity)
-                <' . $entityId . '> ?property ?value.
-                }
+                    BIND(<' . $entityId . '>  AS ?entity)
+                    <' . $entityId . '> ?property ?value.
+                    }
                 ORDER BY (STRLEN(?value))';
         $result = HttpService::get($query);
         return $result;
     }
 }
-/* (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
-                (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
-                (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
+/*
+Keby som nahodou potreboval orezavat prefixy
+(IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+(IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
+(IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
  */
