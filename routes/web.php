@@ -35,7 +35,7 @@ Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controller
 
 Route::get('/update', function(){
     return view('upload-page');
-})->name('update');
+})->name('update')->middleware('lang');
 
 //Route::post('/update/upload', [UploadOntology::class, 'uploadFile'])->name('upload');
 Route::get('logout', function(Logout $logout) {
