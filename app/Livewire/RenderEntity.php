@@ -28,6 +28,7 @@ class RenderEntity extends Component
     public function showNewEntity($id, Service $service)
     {
         $this->entity = $service->getCleanEntityProperties($id);
+        dd($this->entity);
         $this->dispatch('newSearch', $this->entity);
 
     }

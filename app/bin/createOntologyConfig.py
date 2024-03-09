@@ -1,9 +1,12 @@
 # pip install owlready2 treba dat
 from owlready2 import *
+from bs4 import BeautifulSoup
 import os
 import json
+from time import sleep
 
-
+# pip install beautifulsoup4
+# pip install lxml
 def getOntology(owl_file_name):
     file_path = "owlFiles/" + owl_file_name + ".owl"
     try:
@@ -14,11 +17,11 @@ def getOntology(owl_file_name):
         sys.exit(1)
 
 def parseProperties(owl_file_name):
-    owlFile = getOntology(owl_file_name)
+    ontology = getOntology(owl_file_name)
 
     # Delete prefix from predicates
-    object_properties = {str(prop).split('.')[-1]: "" for prop in owlFile.object_properties() if not isinstance(prop, ThingClass)}
-    data_properties = {str(prop).split('.')[-1]: "" for prop in owlFile.data_properties()}
+    object_properties = {ontology.base_iri+str(prop).split('.')[-1]:str(prop).split('.')[-1] for prop in ontology.object_properties() if not isinstance(prop, ThingClass)}
+    data_properties = {ontology.base_iri+str(prop).split('.')[-1]:str(prop).split('.')[-1] for prop in ontology.data_properties()}
 
     return data_properties, object_properties
 
@@ -42,12 +45,12 @@ def saveProperties(owl_file_name):
 def createOntologyInConfig(owl_file_name):
     with open('fe_config.json') as json_file:
         config_data = json.load(json_file)
-        
-    owlFile = getOntology(owl_file_name)
+
+    ontology = getOntology(owl_file_name)
     config_data[owl_file_name] = {
         "name": owl_file_name,
-        "baseURI": owlFile.base_iri,
-        "ontologyPrefix": "PREFIX " + owl_file_name + ": <" + owlFile.base_iri + ">",
+        "baseURI": ontology.base_iri,
+        "ontologyPrefix": "PREFIX " + owl_file_name + ": <" + ontology.base_iri + ">",
         "searchable": [],
         "data_properties": {},
         "object_properties": {}

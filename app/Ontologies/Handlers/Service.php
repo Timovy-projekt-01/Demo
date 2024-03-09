@@ -8,51 +8,56 @@ use App\Ontologies\Handlers\Queries;
 use App\Ontologies\Handlers\Parser;
 use App\Ontologies\Handlers\ServiceInterface;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Service implements InterfaceService
 {
-    private $objectProperties;
     private $fe_config;
 
     public function __construct()
     {
         $this->fe_config = json_decode(Storage::get('ontology/fe_config.json'), true);
-
     }
 
     public function updateMalware(): string
     {
         return HttpService::postOwl(Parser::parseMalware());
     }
+
     public function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        $prefixes = implode(" ", array_column($this->fe_config, 'ontologyPrefix'));
-        $searchables = '';
-        // Create a single string with all the searchable properties
-        foreach ($this->fe_config as $config) {
-            $searchables .= implode(",\n", array_map(function ($searchable) use ($config) {
-                return "{$config['name']}:$searchable";
-            }, $config['searchable'])) . ",\n";
-        }
-        // Remove the trailing comma and newline, if any (because it brakes SPARQL queries)
-        $searchables = rtrim($searchables, ",\n");
-        //dd($searchables);
-        $results = Queries::searchEntities($prefixes, $searchables, $searchTerm, $entitiesToExclude);
+        $prefixes = implode(" ", $this->fromConfigGet('ontologyPrefix'));
+        $prefixedSearchables = $this->prepareSearchables();
+        $results = Queries::searchEntities($prefixes, $prefixedSearchables, $searchTerm, $entitiesToExclude);
         return $results;
     }
+    public function prepareSearchables()
+    {
+        $prefixedSearchables = '';
+        foreach ($this->fe_config as $ontology => $value) {
+            $name = $this->fromConfigGet('name', $ontology);
+            $searchables = $this->fromConfigGet('searchable', $ontology);
+            if (empty($name) || empty($searchables)) continue;
 
+            $prefixedSearchables .= implode(",\n", array_map(function ($searchable) use ($name) {
+                return "{$name}:{$searchable}";
+            }, $searchables)) . ",\n";
+        }
+        $prefixedSearchables = Str::replaceLast(",\n", '', $prefixedSearchables);
+        return $prefixedSearchables;
+    }
     public function getCleanEntityProperties($id): array
     {
         $entity = [];
-        $properties = Queries::getRawEntityProperties($id);
 
+        $properties = Queries::getRawEntityProperties($id);
         if ($this->isTechnique($properties)) {
             $relationNames = Queries::getRelations($id, 'mitigates', 'usesTechnique');
             $relationNames = $this->mapTechniqueRelations($relationNames);
             $properties = array_merge($properties, $relationNames);
         }
         $entity = $this->mapExistingData($entity, $properties);
-        $entity = $this->getNamesToIds($entity);
+        $entity = $this->getDataForObjectProperties($entity);
         return $entity;
     }
 
@@ -95,32 +100,49 @@ class Service implements InterfaceService
         return $entity;
     }
 
-    public function getNamesToIds($entity): array
+    public function getDataForObjectProperties($entity): array
     {
-        $objectProps = [];
-        foreach($this->fe_config as $config){
-            $objectProps += $config['object_properties'];
-        }
+        $objectProps = $this->fromConfigGet("object_properties");
         foreach ($objectProps as $objectProp => $value) {
             if (isset($entity[$objectProp])) {
                 $entityIds = $entity[$objectProp];
-                $results = [];
+                $namesAndIds = $this->getNamesForIds($entityIds);
 
-                foreach (array_chunk((array) $entityIds, 100) as $chunk) {
-                    $ids = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $chunk));
-                    $chunkResult = Queries::getNames($ids);
-                    $results = array_merge($results, $chunkResult);
-                }
-
-                $names = [];
-                foreach ($results as $result) {
-                    $names[] = $result['name']['value'];
-                }
-                $entity[$objectProp] = array_map(fn ($id, $name) => ['id' => $id, 'name' => $name], (array) $entityIds, (array) $names);
+                $entity[$objectProp] = array_map(fn ($id, $result) =>
+                    ['id' => $id, 'name' => $result['name']['value']],
+                    (array) $entityIds, (array) $namesAndIds
+                );
             }
         }
-
         return $entity;
+    }
+
+    private function getNamesForIds($entityIds)
+    {
+        //todo tutu fetchujeme names a IDcka pre malware ale pre ine ontologie sa budu fetchovat mozno ine veci
+        //Treba nejak z configu vybrat ze co. Urcite to bude meno, teda searchables, a ak maju tak ID.
+        //malware ma ID ako dataproperty, ale CVE ma ID v about proste.
+        //Kazdopadne ani jednu ontologiu nemame prepojenu a neviem ani jak to funguje.
+        $namesAndIds = [];
+        foreach (array_chunk((array) $entityIds, 100) as $chunk) {
+            $preparedIds = implode(" ", array_map(fn ($id) => "<$id>", $chunk));
+            $namesAndIds += Queries::getNames($preparedIds);
+        }
+        return $namesAndIds;
+    }
+    public function fromConfigGet($attribute, $ontologyName = null)
+    {
+        if ($ontologyName) {
+            return $this->fe_config[$ontologyName][$attribute] ?? [];
+        }
+
+        $result = [];
+        foreach ($this->fe_config as $config) {
+            if (isset($config[$attribute])){
+                $result = array_merge($result, (array) $config[$attribute]);
+            }
+        }
+        return $result;
     }
 
     public function mapTechniqueRelations($relations)

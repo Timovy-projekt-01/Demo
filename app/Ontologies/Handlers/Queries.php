@@ -13,15 +13,15 @@ class Queries
     {
         $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
-                    (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+                    ?entity
                 WHERE {
                     {
-                        ?e malware:' . $relationType1 . ' ?id .
+                        ?entity malware:' . $relationType1 . ' ?id .
                         FILTER regex(str(?id), "' . $techniqueId . '")
                     }
                     UNION
                     {
-                        ?e malware:' . $relationType2 . ' ?id .
+                        ?entity malware:' . $relationType2 . ' ?id .
                         FILTER regex(str(?id), "' . $techniqueId . '")
                     }
                 }';
@@ -34,13 +34,12 @@ class Queries
     {
         $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
-                    (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+                    ?entity
                     ?name
                 WHERE {
-                    VALUES ?e { ' . $entityIds . ' }
-                    ?e malware:hasName ?name .
+                    VALUES ?entity { ' . $entityIds . ' }
+                    ?entity malware:hasName ?name .
                     }';
-
         $result = HttpService::get($query);
         return $result;
     }
@@ -49,14 +48,12 @@ class Queries
     public static function searchEntities(string $uriPrefixes, string $searchables, string $searchTerm, $entitiesToExclude)
     {
         $query = $uriPrefixes .
-            'SELECT
-                    (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
-                    (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
-                    (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
+        'SELECT
+                    ?entity ?property ?value
                 WHERE {
-                    ?e ?p ?v .
-                    FILTER (regex(?v, "^' . $searchTerm . '", "i")) .
-                    FILTER (?p IN (
+                    ?entity ?property ?value .
+                    FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
+                    FILTER (?property IN (
                         ' . $searchables . '
                     )) .
 
@@ -64,7 +61,7 @@ class Queries
                         VALUES ?fetchedEntities {
                              ' . $entitiesToExclude . '
                         }
-                        FILTER (?e IN (?fetchedEntities))
+                        FILTER (?entity IN (?fetchedEntities))
                     }
                 }
                 LIMIT 3';
@@ -77,15 +74,17 @@ class Queries
     {
         $query = 'PREFIX malware: <' . self::$feiOntology . '>
                 SELECT
-                (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
-                (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
-                (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
+                ?entity ?property ?value
                 WHERE {
-                BIND(malware:' . $entityId . '  AS ?e)
-                malware:' . $entityId . ' ?p ?v.
+                BIND(<' . $entityId . '>  AS ?entity)
+                <' . $entityId . '> ?property ?value.
                 }
                 ORDER BY (STRLEN(?value))';
         $result = HttpService::get($query);
         return $result;
     }
 }
+/* (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+                (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
+                (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
+ */
