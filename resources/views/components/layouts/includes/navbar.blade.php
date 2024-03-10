@@ -52,7 +52,7 @@
 
                 <li  x-data="{ langDropdownisOpen: false }">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"
-                        class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center">
+                        class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center md:hover:text-blue-500 ">
                         {{ Config::get('languages')[App::getLocale()] }}
 
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -68,7 +68,11 @@
                             @foreach (Config::get('languages') as $lang => $language)
                                 @if ($lang != App::getLocale())
                                     <li>
-                                        <a wire:navigate class="block pl-1 pr-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        <a wire:navigate
+                                           class="block pl-1 pr-4 py-2
+                                           hover:bg-gray-100
+                                           dark:hover:bg-gray-600
+                                           dark:hover:text-white"
                                            href="{{ route('lang.switch', $lang) }}">
                                             {{$language}}
                                         </a>
