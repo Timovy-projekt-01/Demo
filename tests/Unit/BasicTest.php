@@ -78,4 +78,99 @@ class BasicTest extends TestCase
         // Assert the response status is 200 (OK)
         $this->assertEquals(200, $response->getStatusCode());
     }
+
+    public function test_client_gets_correct_response_for_api_endpoint_with_existing_searched_term(){
+        // Create a Guzzle HTTP client
+        $client = new \GuzzleHttp\Client();
+
+        // Send a GET request to the API endpoint
+        $response = $client->get('http://localhost:9999/bigdata/sparql', [
+            'query' => [
+                'query' => 'SELECT ?entity ?property ?value
+                WHERE { 
+                  ?entity ?property ?value .
+                  FILTER (regex(?value, "^Linux", "i")) .
+                  FILTER (?property IN (<http://stufei/ontologies/malware#hasName>, 
+                  <http://stufei/ontologies/malware#name>, 
+                  <http://stufei/ontologies/malware#hasSubmitName>)) .
+                }
+                LIMIT 3',
+            ],
+            'headers' => [
+                'Accept' => 'application/sparql-results+json',
+            ],
+        ]);
+
+        $shouldBeEqualTo = '{
+            "head": {
+                "vars": [
+                    "entity",
+                    "property",
+                    "value"
+                ]
+            },
+            "results": {
+                "bindings": [
+                    {
+                        "entity": {
+                            "type": "uri",
+                            "value": "http://stufei/ontologies/malware#S0362"
+                        },
+                        "property": {
+                            "type": "uri",
+                            "value": "http://stufei/ontologies/malware#hasName"
+                        },
+                        "value": {
+                            "type": "literal",
+                            "value": "Linux Rabbit"
+                        }
+                    }
+                ]
+            }
+        }';
+  
+        $this->assertEquals(json_decode($shouldBeEqualTo, true), 
+        json_decode($response->getBody()->getContents(), true));
+
+    }
+
+    public function test_client_gets_correct_response_for_api_endpoint_with_non_existing_searched_term(){
+        // Create a Guzzle HTTP client
+        $client = new \GuzzleHttp\Client();
+
+        // Send a GET request to the API endpoint
+        $response = $client->get('http://localhost:9999/bigdata/sparql', [
+            'query' => [
+                'query' => 'SELECT ?entity ?property ?value
+                WHERE { 
+                  ?entity ?property ?value .
+                  FILTER (regex(?value, "^NotExisting", "i")) .
+                  FILTER (?property IN (<http://stufei/ontologies/malware#hasName>, 
+                  <http://stufei/ontologies/malware#name>, 
+                  <http://stufei/ontologies/malware#hasSubmitName>)) .
+                }
+                LIMIT 3',
+            ],
+            'headers' => [
+                'Accept' => 'application/sparql-results+json',
+            ],
+        ]);
+
+        $shouldBeEqualTo = '{
+            "head": {
+                "vars": [
+                    "entity",
+                    "property",
+                    "value"
+                ]
+            },
+            "results": {
+                "bindings": []
+            }
+        }';
+  
+        $this->assertEquals(json_decode($shouldBeEqualTo, true), 
+        json_decode($response->getBody()->getContents(), true));
+
+    }
 }
