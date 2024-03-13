@@ -2,6 +2,7 @@
 
 namespace App\Ontologies\Helpers;
 
+use App\Exceptions\HttpException;
 use Illuminate\Support\Facades\Http;
 class HttpService {
     public static function get($query): array {
@@ -31,7 +32,12 @@ class HttpService {
 
         $response = shell_exec('curl -X POST -H "Content-Type: application/rdf+xml" --data-binary @' . $file_path . ' ' . $blazegraphEndpoint);
         if (empty($response)){
-            return false;
+            throw new HttpException('Failed to upload file', [
+                'response' => [
+                    'error' => true,
+                    'url' => $blazegraphEndpoint,
+                ],
+            ]);
         }
 
         return true;

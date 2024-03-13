@@ -22,7 +22,7 @@ class Service implements InterfaceService
 
     public function updateMalware(): string
     {
-        //todo cronjob yada yada
+        //todo cronjob yada yada + exception...
         return HttpService::postOwl(Parser::parseMalware());
     }
     public function searchEntities(string $searchTerm, $entitiesToExclude)

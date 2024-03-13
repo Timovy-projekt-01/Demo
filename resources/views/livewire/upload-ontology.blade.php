@@ -3,9 +3,62 @@
         .file-upload-label {
             transition: background-color 1s ease;
         }
+        .toggleContainer {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            width: fit-content;
+            border: 3px solid #343434;
+            border-radius: 0.5rem;
+            background: #343434;
+            font-weight: bold;
+            color: #343434;
+            cursor: pointer;
+        }
+        .toggleContainer::before {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            left: 0%;
+            border-radius:0.5rem;
+            background: white;
+            transition: all 0.3s;
+        }
+        .toggleCheckbox:checked + .toggleContainer::before {
+            left: 50%;
+        }
+        .toggleContainer div {
+            padding: 6px;
+            text-align: center;
+            z-index: 1;
+        }
+        .toggleCheckbox {
+            display: none;
+        }
+        .toggleCheckbox:checked + .toggleContainer div:first-child{
+            color: white;
+            transition: color 0.3s;
+        }
+        .toggleCheckbox:checked + .toggleContainer div:last-child{
+            color: #343434;
+            transition: color 0.3s;
+        }
+        .toggleCheckbox + .toggleContainer div:first-child{
+            color: #343434;
+            transition: color 0.3s;
+        }
+        .toggleCheckbox + .toggleContainer div:last-child{
+            color: white;
+            transition: color 0.3s;
+        }
     </style>
     <h1 class="text-3xl font-bold text-center border-b-2 border-slate-600 my-4 py-4 items-center text-gray-900">
-        {{__('upload-page.title')}}
+        <input wire:change='action' type="checkbox" id="toggle" class="toggleCheckbox" />
+        <label for="toggle" class='toggleContainer m-auto mb-4'>
+          <div>{{__('upload-page.add')}}</div>   
+          <div>{{__('upload-page.update')}}</div>
+        </label>
         <span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2 py-0.5 rounded ms-2">
             {{__('upload-page.ontology')}}
         </span>
@@ -53,36 +106,4 @@
             </div>
         @endif
     </form>
-
-{{-- //todo if someone wants to change the upload here is the old code --}}
-{{-- UPLOAD AND PARSE FORM --}}
-    {{-- <div class="bg-slate-200 my-10">
-        <div class="text-center mb-2">
-            <h1 class="text-2xl font-bold">Upload and Create Config for Ontology</h1>
-        </div>
-        <form wire:submit.prevent="createOwlConfig" class="max-w-md mx-auto">
-            @csrf
-            <div x-data="{ uploading: false, progress: 0 }" x-on:livewire-upload-start="uploading = true"
-                x-on:livewire-upload-finish="uploading = false" x-on:livewire-upload-cancel="uploading = false"
-                x-on:livewire-upload-error="uploading = false"
-                x-on:livewire-upload-progress="progress = $event.detail.progress">
-                <div class="mb-4 space-y-2">
-                    <label for="owlFile" class="text-gray-700 text-sm font-bold">Select .owl File:</label>
-                    <input wire:model="ontologyFile" type="file" name="owlFile" id="owlFile" accept=".owl"
-                        class="appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-
-                <div class="mb-6">
-                    <button type="submit"
-                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Upload File
-                    </button>
-                </div>
-                <div x-show="uploading">
-                    <progress max="100" x-bind:value="progress"></progress>
-                </div>
-            </div>
-        </form>
-    </div> --}}
-
 </div>
