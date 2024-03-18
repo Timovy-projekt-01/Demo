@@ -10,38 +10,27 @@ Livewire component to render an entire entity
             {{--              FIRST PART (name, crated, aliases)  --}}
             {{-- ------------------------------------------------ --}}
             <div class="py-5">
-                @if (isset($entity['hasName']))
-                    <h2 class="text-4xl font-bold mb-2">{{ $entity['hasName'] }}</h2>
-                    @unset($entity['hasName'])
+                @if (isset($entity['data_properties']['hasName']))
+                    <h2 class="text-4xl font-bold mb-2">{{ $entity['data_properties']['hasName'] }}</h2>
+                    @unset($entity['data_properties']['hasName'])
                 @endif
 
-                @if (isset($entity['hasId']))
-                {{-- Prints the entity ID which is always FIRST element in associative array --}}
+                @if (isset($entity['data_properties']['hasId']))
+                    {{-- Prints the entity ID which is always FIRST element in associative array --}}
                     <h5 class="text-slate-500 font-mono">{{ $entity[array_key_first($entity)] }}</h5>
                     @unset($entity[array_key_first($entity)])
                 @endif
             </div>
 
             <div class="py-5">
-                {{-- Prints only simple properties with one or two strings --}}
-                @foreach ($entity as $key => $value)
-                    {{-- Checks if the $value is NOT associative array, if it is, it should be rendered as collapse list at the end --}}
-                    @if (!(isset($value[0]) && is_array($value[0]) && !array_is_list($value[0])))
-                        <x-entityComponents.simple-property :property="$value" :label="$key" />
-                        @unset($entity[$key])
-                    @endif
+                @foreach ($entity['data_properties'] as $key => $value)
+                    <x-entityComponents.simple-property :property="$value" :label="$key" />
                 @endforeach
             </div>
 
             <div class="py-5">
-                {{-- Renders colapsable lists at the end --}}
-                @foreach ($entity as $key => $value)
-                    {{-- Checks if the $value is associative array
-                        Shouldn't be neccesary as we unset all properties along the way but just to be sure --}}
-                    @if (isset($value[0]) && is_array($value[0]) && !array_is_list($value[0]))
-                        <livewire:paginated-colapse-property-list :list="$value" :label="$key"
-                            :key="'unique_' . uniqid()" />
-                    @endif
+                @foreach ($entity['object_properties'] as $key => $value)
+                    <livewire:paginated-colapse-property-list :list="$value" :label="$key" :key="'unique_' . uniqid()" />
                 @endforeach
             </div>
         </div>
@@ -64,8 +53,8 @@ Livewire component to render an entire entity
                     history.push(newSearch[0]);
                     localStorage.setItem('searchHistory', JSON.stringify(history));
                     $wire.dispatch('update-history', {
-                    history: history
-                })
+                        history: history
+                    })
                 }
             }
         </script>

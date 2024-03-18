@@ -9,7 +9,7 @@ use App\Ontologies\Traits\QueryDataInitialization;
 class Queries
 {
     use QueryDataInitialization;
-    public static function getRelations(string $techniqueId, string $relationType1, string $relationType2)
+    public static function getRelations(string $techniqueId, string $relationType1, string $relationType2, string $relationType3)
     {
         $query = self::getPreparedPrefixes() .
                 'SELECT
@@ -22,6 +22,11 @@ class Queries
                     UNION
                     {
                         ?entity malware:' . $relationType2 . ' ?id .
+                        FILTER regex(str(?id), "' . $techniqueId . '")
+                    }
+                    UNION
+                    {
+                        ?entity malware:' . $relationType3 . ' ?id .
                         FILTER regex(str(?id), "' . $techniqueId . '")
                     }
                 }';
@@ -84,6 +89,7 @@ class Queries
         return $result;
     }
 }
+
 /*
 Keby som nahodou potreboval orezavat prefixy
 (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)

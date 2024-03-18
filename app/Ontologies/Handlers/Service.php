@@ -28,40 +28,57 @@ class Service implements InterfaceService
 
         $properties = Queries::getRawEntityProperties($id);
         if (RandomHelper::isTechnique($properties)) {
-            $relationNames = Queries::getRelations($id, 'mitigates', 'usesTechnique');
+            $relationNames = Queries::getRelations($id, 'mitigates', 'usesTechnique', "hasAttckTechnique");
             $relationNames = $this->mapTechniqueRelations($relationNames);
             $properties = array_merge($properties, $relationNames);
         }
         $entity = $this->mapExistingData($entity, $properties);
         $entity = $this->getDataForObjectProperties($entity);
+        $entity = $this->mapToReadableNames($entity);
+        return $entity;
+    }
+
+    public function mapToReadableNames($entity): array
+    {
+        $entity = $this->parseAndMapProperties($entity, "data_properties");
+        foreach($entity['object_properties'] as $entityObjecyProp => $value){
+            $entity = $this->parseAndMapProperties($entity, "object_properties");
+        }
+        //dd($entity);
+        return $entity;
+    }
+    public function parseAndMapProperties($entity, $propertyType)
+    {
+        $configProperties = RandomHelper::fromConfigGet($propertyType);
+
+        foreach($entity[$propertyType] as $entityProp => $value){
+            foreach($configProperties as $configProp => $configPropValue){
+                if($entityProp === $configProp){
+                    $tmpValue = $entity[$propertyType][$entityProp];
+                    unset($entity[$propertyType][$entityProp]);
+                    $entity[$propertyType][$configPropValue] = $tmpValue;
+                }
+            }
+        }
         return $entity;
     }
 
     public function mapExistingData(array $entity, array $properties): array
     {
-        if (empty($properties)) {
-            throw new ScriptFailedException("No properties found for the given ID", "");
-        }
-
         $entityId = $properties[0]['entity']['value']; //ID of the named individual (not a property)
-        $entity[$entityId] = [$entityId];
+        $entity[$entityId] = $entityId;
         foreach ($properties as $prop) {
-            $propertyName = $prop['property']['value']; 
+            $propertyName = $prop['property']['value'];
             $propertyValue = $prop['value']['value'];
+            $valueType = $prop['value']['type'];
 
-            // Check if the property already exists in $entity
-            if (array_key_exists($propertyName, $entity)) {
-                // If it exists, append the value to the existing array
-                $entity[$propertyName][] = $propertyValue;
-            } else {
-                // If it doesn't exist, create a new array with the value
-                $entity[$propertyName] = [$propertyValue];
+            if ($valueType === "uri") {
+                $entity['object_properties'][$propertyName][] = $propertyValue;
+            }
+            else{
+                $entity['data_properties'][$propertyName] = $propertyValue;
             }
         }
-        // Map the values into an associative array except arrays with more than one element.
-        $entity = array_map(function ($values) {
-            return count($values) > 1 ? $values : $values[0] ?? null;
-        }, $entity);
         return $entity;
     }
 
@@ -69,14 +86,15 @@ class Service implements InterfaceService
     {
         $objectProps = RandomHelper::fromConfigGet("object_properties");
         foreach ($objectProps as $objectProp => $value) {
-            if (isset($entity[$objectProp])) {
-                $entityIds = $entity[$objectProp];
+            if (isset($entity['object_properties'][$objectProp])) {
+                $entityIds = $entity['object_properties'][$objectProp];
                 $namesAndIds = $this->getNamesForIds($entityIds);
 
-                $entity[$objectProp] = array_map(fn ($id, $result) =>
-                    ['id' => $id, 'name' => $result['name']['value']],
-                    (array) $entityIds, (array) $namesAndIds
-                );
+                if (!empty($namesAndIds)) {
+                    $entity['object_properties'][$objectProp] = array_map(function ($id, $result) {
+                        return ['uriId' => $id, 'id' => $id, 'name' => $result['name']['value']];
+                    }, (array) $entityIds, (array) $namesAndIds);
+                }
             }
         }
         return $entity;
@@ -102,6 +120,7 @@ class Service implements InterfaceService
                 "value" => ["type" => "uri", "value" => $entityId],
             ];
         }
+        #dd($relations);
         return $relations;
     }
 }

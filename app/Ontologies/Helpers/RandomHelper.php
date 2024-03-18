@@ -27,7 +27,7 @@ class RandomHelper
     {
         foreach ($result as $item) {
             $propertyValues = array_column($item, 'value', 'property');
-            if (strcmp($propertyValues[1], "Technique") == 0) {
+            if (strcmp($propertyValues[2], "http://stufei/ontologies/malware#Technique") == 0) {
                 return true; // Is technique
             }
         }
