@@ -35,7 +35,7 @@ class SearchBar extends Component
             return $entity['entity']['value'];
         }, $this->entitiesFromSearch);
 
-        $entitiesToExclude = implode(" ", array_map(fn ($id) => "<http://stufei/ontologies/malware#{$id}>", $idsToExclude));
+        $entitiesToExclude = implode(" ", array_map(fn ($id) => "<{$id}>", $idsToExclude));
 
         $moreResults = $service->searchEntities($this->searchTerm, (string) $entitiesToExclude);
         $this->entitiesFromSearch = array_merge($this->entitiesFromSearch, $moreResults);

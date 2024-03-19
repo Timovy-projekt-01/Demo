@@ -20,7 +20,12 @@ class Service implements InterfaceService
 
     public function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        return Queries::searchEntities($searchTerm, $entitiesToExclude);
+        $results = Queries::searchEntities($searchTerm, $entitiesToExclude);
+        $results = array_map(function ($result) {
+            $result['displayId'] = RandomHelper::getSubstrAfterLastSpecialChar($result['entity']['value']);
+            return $result;
+        }, $results);
+        return $results;
     }
     public function getCleanEntityProperties($id): array
     {
@@ -41,10 +46,8 @@ class Service implements InterfaceService
     public function mapToReadableNames($entity): array
     {
         $entity = $this->parseAndMapProperties($entity, "data_properties");
-        foreach($entity['object_properties'] as $entityObjecyProp => $value){
-            $entity = $this->parseAndMapProperties($entity, "object_properties");
-        }
-        //dd($entity);
+        $entity = $this->parseAndMapProperties($entity, "object_properties");
+
         return $entity;
     }
     public function parseAndMapProperties($entity, $propertyType)
@@ -54,9 +57,10 @@ class Service implements InterfaceService
         foreach($entity[$propertyType] as $entityProp => $value){
             foreach($configProperties as $configProp => $configPropValue){
                 if($entityProp === $configProp){
-                    $tmpValue = $entity[$propertyType][$entityProp];
+                    $literal = $entity[$propertyType][$entityProp];
                     unset($entity[$propertyType][$entityProp]);
-                    $entity[$propertyType][$configPropValue] = $tmpValue;
+                    $entity[$propertyType][$configPropValue] = $literal;
+                    unset($configProperties[$configProp]);
                 }
             }
         }
@@ -66,7 +70,8 @@ class Service implements InterfaceService
     public function mapExistingData(array $entity, array $properties): array
     {
         $entityId = $properties[0]['entity']['value']; //ID of the named individual (not a property)
-        $entity[$entityId] = $entityId;
+        $entity["uri"] = $entityId;
+        $entity["displayId"] = RandomHelper::getSubstrAfterLastSpecialChar($entityId);
         foreach ($properties as $prop) {
             $propertyName = $prop['property']['value'];
             $propertyValue = $prop['value']['value'];
@@ -84,17 +89,17 @@ class Service implements InterfaceService
 
     public function getDataForObjectProperties($entity): array
     {
-        $objectProps = RandomHelper::fromConfigGet("object_properties");
-        foreach ($objectProps as $objectProp => $value) {
-            if (isset($entity['object_properties'][$objectProp])) {
-                $entityIds = $entity['object_properties'][$objectProp];
-                $namesAndIds = $this->getNamesForIds($entityIds);
+        foreach ($entity['object_properties'] as $objectPropKey => $objectPropArray) {
+            $entityIds = $entity['object_properties'][$objectPropKey];
+            $namesAndIds = $this->getNamesForIds($entityIds);
 
-                if (!empty($namesAndIds)) {
-                    $entity['object_properties'][$objectProp] = array_map(function ($id, $result) {
-                        return ['uriId' => $id, 'id' => $id, 'name' => $result['name']['value']];
-                    }, (array) $entityIds, (array) $namesAndIds);
-                }
+            if (!empty($namesAndIds)) {
+                $entity['object_properties'][$objectPropKey] = array_map(function ($namesAndIds) {
+                    $strippedId = RandomHelper::getSubstrAfterLastSpecialChar($namesAndIds['entity']['value']);
+                    return ['uri' => $namesAndIds['entity']['value'],
+                            'id' => $strippedId,
+                            'name' => $namesAndIds['name']['value'] ?? $strippedId];
+                }, (array) $namesAndIds);
             }
         }
         return $entity;
@@ -105,7 +110,7 @@ class Service implements InterfaceService
         $namesAndIds = [];
         foreach (array_chunk((array) $entityIds, 100) as $chunk) {
             $preparedIds = implode(" ", array_map(fn ($id) => "<$id>", $chunk));
-            $namesAndIds += Queries::getNames($preparedIds);
+            $namesAndIds = array_merge($namesAndIds, Queries::getNames($preparedIds));
         }
         return $namesAndIds;
     }

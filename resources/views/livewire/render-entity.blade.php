@@ -15,11 +15,7 @@ Livewire component to render an entire entity
                     @unset($entity['data_properties']['hasName'])
                 @endif
 
-                @if (isset($entity['data_properties']['hasId']))
-                    {{-- Prints the entity ID which is always FIRST element in associative array --}}
-                    <h5 class="text-slate-500 font-mono">{{ $entity[array_key_first($entity)] }}</h5>
-                    @unset($entity[array_key_first($entity)])
-                @endif
+                <h5 class="text-slate-500 font-mono">{{ $entity['displayId'] ?? $entity['uri'] }}</h5>
             </div>
 
             <div class="py-5">

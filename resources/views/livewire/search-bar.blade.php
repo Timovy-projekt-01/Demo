@@ -22,7 +22,7 @@ to RenderEntity component. That component is then responsible for rendering the 
                                     {{ $entity['value']['value'] }}
                                 </p>
                                 <span
-                                    class="text-slate-500 font-mono text-base mb-2">{{ $entity['entity']['value'] }}</span>
+                                    class="text-slate-500 font-mono text-base mb-2">{{ $entity['displayId'] }}</span>
                             </li>
                         @endforeach
                         <button class="p-2 hover:bg-slate-200" wire:click="showMoreResults()">{{__('app-labels.search bar more')}}</button>

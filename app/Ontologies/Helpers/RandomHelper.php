@@ -33,4 +33,21 @@ class RandomHelper
         }
         return false; // Is not technique
     }
+
+    public static function getSubstrAfterLastSpecialChar($uri)
+    {
+        try {
+            $delimiters = array('/', '?', '#', ':', ';', '=', '&');
+            $reversed = strrev($uri);
+            $uriAsArray = str_split($reversed);
+            foreach ($uriAsArray as $char) {
+                if (in_array($char, $delimiters)) {
+                    $literal = Str::afterLast($uri, $char);
+                    return $literal;
+                }
+            }
+        } catch (\Exception $e) {
+            return $uri;
+        }
+    }
 }

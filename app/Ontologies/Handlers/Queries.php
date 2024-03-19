@@ -12,7 +12,7 @@ class Queries
     public static function getRelations(string $techniqueId, string $relationType1, string $relationType2, string $relationType3)
     {
         $query = self::getPreparedPrefixes() .
-                'SELECT
+            'SELECT
                     ?entity
                 WHERE {
                     {
@@ -43,8 +43,10 @@ class Queries
                     ?name
                 WHERE {
                     VALUES ?entity { ' . $entityIds . ' }
-                    ?entity (' . self::getPreparedSearchables('|') . ') ?name .
-                    }';
+                    OPTIONAL {
+                        ?entity (' . self::getPreparedSearchables('|') . ') ?name .
+                    }
+                }';
         $result = HttpService::get($query);
         return $result;
     }
@@ -78,7 +80,7 @@ class Queries
     public static function getRawEntityProperties($entityId)
     {
         $query = self::getPreparedPrefixes() .
-                'SELECT
+            'SELECT
                     ?entity ?property ?value
                 WHERE {
                     BIND(<' . $entityId . '>  AS ?entity)
