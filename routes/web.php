@@ -8,6 +8,7 @@ use App\Livewire\Test;
 use App\Livewire\Dashboard;
 use App\Livewire\SearchHistory;
 use App\Livewire\UploadOntology;
+use App\Livewire\Admin;
 use App\Livewire\Actions\Logout;
 
 /*
@@ -46,5 +47,11 @@ Route::get('logout', function(Logout $logout) {
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+
+Route::get('/admin', function(){
+    return view('admin-section');
+})->name('admin');
+
 
 require __DIR__.'/auth.php';
