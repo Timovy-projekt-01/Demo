@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Exceptions\FileSystemException;
 use App\Exceptions\ScriptFailedException;
+use App\Models\UserFile;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Ontologies\Helpers\HttpService;
@@ -39,6 +40,11 @@ class UploadOntology extends Component
             $file_names = $this->saveFile();
             if($this->action_add){
                 $this->createOwlConfig($file_names['original_name']);
+                $userFile = new UserFile();
+                $userFile->name = $file_names['original_name'];
+                $userFile->user_id = auth()->user()->id;
+                $userFile->path = $file_names['full_path'];
+                $userFile->save();
             }
             $this->getHttpService()->postOwl($file_names['full_path']);
         } catch (Exception $e) {
