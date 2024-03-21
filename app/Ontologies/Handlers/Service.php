@@ -45,21 +45,21 @@ class Service implements InterfaceService
 
     public function mapToConfigNames($entity): array
     {
-        $entity = $this->parseAndMapProperties($entity, "data_properties");
-        $entity = $this->parseAndMapProperties($entity, "object_properties");
+        $entity = $this->parseAndMapProperties($entity, "data_properties", "data_properties");
+        $entity = $this->parseAndMapProperties($entity, "object_properties", "object_properties");
+        $entity = $this->parseAndMapProperties($entity, "builtin_object_properties", "object_properties", "builtin");
 
         return $entity;
     }
-    public function parseAndMapProperties($entity, $propertyType)
+    public function parseAndMapProperties($entity, $entityPropType, $configPropType, $ontologyName = null)
     {
-        $configProperties = RandomHelper::fromConfigGet($propertyType);
-
-        foreach($entity[$propertyType] as $entityProp => $value){
+        $configProperties = RandomHelper::fromConfigGet($configPropType, $ontologyName);
+        foreach($entity[$entityPropType] as $entityProp => $value){
             foreach($configProperties as $configProp => $configPropValue){
                 if($entityProp === $configProp){
-                    $literal = $entity[$propertyType][$entityProp];
-                    unset($entity[$propertyType][$entityProp]);
-                    $entity[$propertyType][$configPropValue] = $literal;
+                    $literal = $entity[$entityPropType][$entityProp];
+                    unset($entity[$entityPropType][$entityProp]);
+                    $entity[$entityPropType][$configPropValue] = $literal;
                     unset($configProperties[$configProp]);
                 }
             }
@@ -72,22 +72,23 @@ class Service implements InterfaceService
         $entityId = $properties[0]['entity']['value']; //ID of the named individual (not a property)
         $entity["uri"] = $entityId;
         $entity["displayId"] = RandomHelper::getSubstrAfterLastSpecialChar($entityId);
+        $builtinProperties = RandomHelper::fromConfigGet('object_properties', "builtin");
         foreach ($properties as $prop) {
             $propertyName = $prop['property']['value'];
             $propertyValue = $prop['value']['value'];
             $valueType = $prop['value']['type'];
-            
+
             if ($valueType === "literal") {
                 $entity['data_properties'][$propertyName] = $propertyValue;
             }
-            elseif(array_key_exists($propertyName, RandomHelper::fromConfigGet('object_properties', "builtin"))){
+            elseif(array_key_exists($propertyName, $builtinProperties)){
+                $propertyValue = RandomHelper::getSubstrAfterLastSpecialChar($propertyValue);
                 $entity['builtin_object_properties'][$propertyName][] = $propertyValue;
             }
             else{
                 $entity['object_properties'][$propertyName][] = $propertyValue;
             }
         }
-        dd($entity);
         return $entity;
     }
 

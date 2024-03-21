@@ -6,16 +6,16 @@ Livewire component to render an entire entity
     @if ($entity != null)
         <div class="flex flex-col shadow-lg my-5 p-5 divide-y divide-black mx-auto" wire:loading.class="opacity-20">
 
-            {{-- ------------------------------------------------ --}}
-            {{--              FIRST PART (name, crated, aliases)  --}}
-            {{-- ------------------------------------------------ --}}
             <div class="py-5">
-                @if (isset($entity['data_properties']['hasName']))
-                    <h2 class="text-4xl font-bold mb-2">{{ $entity['data_properties']['hasName'] }}</h2>
-                    @unset($entity['data_properties']['hasName'])
-                @endif
+                <h2 class="text-4xl font-bold mb-2">{{ $entity['data_properties']['hasName'] ?? $entity['displayId'] }}</h2>
 
                 <h5 class="text-slate-500 font-mono">{{ $entity['displayId'] ?? $entity['uri'] }}</h5>
+            </div>
+
+            <div class="py-5">
+                @foreach ($entity['builtin_object_properties'] as $key => $value)
+                    <x-entityComponents.simple-property :property="$value" :label="$key" />
+                @endforeach
             </div>
 
             <div class="py-5">

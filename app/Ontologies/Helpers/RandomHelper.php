@@ -34,20 +34,31 @@ class RandomHelper
         return false; // Is not technique
     }
 
-    public static function getSubstrAfterLastSpecialChar($uri)
+    public static function getSubstrAfterLastSpecialChar($uris)
     {
-        try {
-            $delimiters = array('/', '?', '#', ':', ';', '=', '&');
-            $reversed = strrev($uri);
-            $uriAsArray = str_split($reversed);
-            foreach ($uriAsArray as $char) {
-                if (in_array($char, $delimiters)) {
-                    $literal = Str::afterLast($uri, $char);
-                    return $literal;
-                }
-            }
-        } catch (\Exception $e) {
-            return $uri;
+        if (!is_array($uris)) {
+            $uris = array($uris);
         }
+        $delimiters = array('/', '?', '#', ':', ';', '=', '&');
+        $result = array();
+        foreach ($uris as $uri) {
+            try {
+                $reversed = strrev($uri);
+                $uriAsArray = str_split($reversed);
+                foreach ($uriAsArray as $char) {
+                    if (in_array($char, $delimiters)) {
+                        $literal = Str::afterLast($uri, $char);
+                        $result[] = $literal;
+                        break;
+                    }
+                }
+            } catch (\Exception $e) {
+                $result[] = $uri;
+            }
+        }
+        return count($result) === 1 ? $result[0] : $result;
     }
 }
+
+
+# http://www.w3.org/2002/07/owl#NamedIndividual
