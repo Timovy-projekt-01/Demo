@@ -38,12 +38,12 @@ class Service implements InterfaceService
             $properties = array_merge($properties, $relationNames);
         }
         $entity = $this->mapExistingData($entity, $properties);
-        $entity = $this->getDataForObjectProperties($entity);
-        $entity = $this->mapToReadableNames($entity);
+        $entity = $this->getNameForObjectProperties($entity);
+        $entity = $this->mapToConfigNames($entity);
         return $entity;
     }
 
-    public function mapToReadableNames($entity): array
+    public function mapToConfigNames($entity): array
     {
         $entity = $this->parseAndMapProperties($entity, "data_properties");
         $entity = $this->parseAndMapProperties($entity, "object_properties");
@@ -76,31 +76,34 @@ class Service implements InterfaceService
             $propertyName = $prop['property']['value'];
             $propertyValue = $prop['value']['value'];
             $valueType = $prop['value']['type'];
-
-            if ($valueType === "uri") {
-                $entity['object_properties'][$propertyName][] = $propertyValue;
-            }
-            else{
+            
+            if ($valueType === "literal") {
                 $entity['data_properties'][$propertyName] = $propertyValue;
             }
+            elseif(array_key_exists($propertyName, RandomHelper::fromConfigGet('object_properties', "builtin"))){
+                $entity['builtin_object_properties'][$propertyName][] = $propertyValue;
+            }
+            else{
+                $entity['object_properties'][$propertyName][] = $propertyValue;
+            }
         }
+        dd($entity);
         return $entity;
     }
 
-    public function getDataForObjectProperties($entity): array
+    public function getNameForObjectProperties($entity): array
     {
         foreach ($entity['object_properties'] as $objectPropKey => $objectPropArray) {
             $entityIds = $entity['object_properties'][$objectPropKey];
             $namesAndIds = $this->getNamesForIds($entityIds);
 
-            if (!empty($namesAndIds)) {
-                $entity['object_properties'][$objectPropKey] = array_map(function ($namesAndIds) {
-                    $strippedId = RandomHelper::getSubstrAfterLastSpecialChar($namesAndIds['entity']['value']);
-                    return ['uri' => $namesAndIds['entity']['value'],
-                            'id' => $strippedId,
-                            'name' => $namesAndIds['name']['value'] ?? $strippedId];
-                }, (array) $namesAndIds);
-            }
+            $entity['object_properties'][$objectPropKey] = array_map(function ($namesAndIds) {
+                $strippedId = RandomHelper::getSubstrAfterLastSpecialChar($namesAndIds['entity']['value']);
+                return ['uri' => $namesAndIds['entity']['value'],
+                        'id' => $strippedId,
+                        'name' => $namesAndIds['name']['value'] ?? $strippedId];
+            }, (array) $namesAndIds);
+
         }
         return $entity;
     }
