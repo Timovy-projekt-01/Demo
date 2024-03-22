@@ -12,23 +12,29 @@ Livewire component to render an entire entity
                 <h5 class="text-slate-500 font-mono">{{ $entity['displayId'] }}</h5>
             </div>
 
-            <div class="py-5">
-                @foreach ($entity['builtin_object_properties'] as $key => $value)
-                    <x-entityComponents.simple-property :property="$value" :label="$key" />
-                @endforeach
-            </div>
+            @if (!empty($entity['builtin_object_properties']))
+                <div class="py-5">
+                    @foreach ($entity['builtin_object_properties'] as $key => $value)
+                        <x-entityComponents.simple-property :property="$value" :label="$key" />
+                    @endforeach
+                </div>
+            @endif
 
-            <div class="py-5">
-                @foreach ($entity['data_properties'] as $key => $value)
-                    <x-entityComponents.simple-property :property="$value" :label="$key" />
-                @endforeach
-            </div>
+            @if (!empty($entity['data_properties']))
+                <div class="py-5">
+                    @foreach ($entity['data_properties'] as $key => $value)
+                        <x-entityComponents.simple-property :property="$value" :label="$key" />
+                    @endforeach
+                </div>
+            @endif
 
-            <div class="py-5">
-                @foreach ($entity['object_properties'] as $key => $value)
-                    <livewire:paginated-colapse-property-list :list="$value" :label="$key" :key="'unique_' . uniqid()" />
-                @endforeach
-            </div>
+            @if (!empty($entity['object_properties']))
+                <div class="py-5">
+                    @foreach ($entity['object_properties'] as $key => $value)
+                        <livewire:paginated-colapse-property-list :list="$value" :label="$key" :key="'unique_' . uniqid()" />
+                    @endforeach
+                </div>
+            @endif
         </div>
     @endif
 
@@ -44,7 +50,7 @@ Livewire component to render an entire entity
                 const filteredArray = history.filter(element => {
                     return Object.values(element)[0] === Object.values(newSearch[0])[0];
                 });
-
+                // If it doesnt exist, add it local storage and dispatch the event to update the history in the component
                 if (filteredArray.length === 0) {
                     history.push(newSearch[0]);
                     localStorage.setItem('searchHistory', JSON.stringify(history));

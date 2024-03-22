@@ -32,7 +32,7 @@ class SearchBar extends Component
     public function showMoreResults(Service $service)
     {
         $idsToExclude = array_map(function ($entity) {
-            return $entity['entity']['value'];
+            return $entity['uri'];
         }, $this->entitiesFromSearch);
 
         $entitiesToExclude = implode(" ", array_map(fn ($id) => "<{$id}>", $idsToExclude));

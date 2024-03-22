@@ -50,7 +50,11 @@
         "name": "malware",
         "baseURI": "http://stufei/ontologies/malware#",
         "ontologyPrefix": "PREFIX malware: <http://stufei/ontologies/malware#>",
-        "searchable": ["http://stufei/ontologies/malware#hasName", "http://stufei/ontologies/malware#hasSubmitName", "http://stufei/ontologies/malware#name"],
+        "searchable": [
+            "http://stufei/ontologies/malware#hasName",
+            "http://stufei/ontologies/malware#hasSubmitName",
+            "http://stufei/ontologies/malware#name"
+        ],
         "data_properties": {
             "http://stufei/ontologies/malware#hasId": "hasId",
             "http://stufei/ontologies/malware#hasDomain": "hasDomain",
