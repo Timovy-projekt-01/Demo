@@ -28,7 +28,7 @@ interface InterfaceService {
      * @param array $properties The properties array.
      * @return array The updated malware array.
      */
-    public function mapExistingData(array $malware, array $properties): array;
+    public function mapExistingData(array $properties): void;
     /**
      * Retrieves and maps the names corresponding to the given entity IDs for a malware.
      * When displaying entity names, we want to display the name of the entity along with the ID.
@@ -39,5 +39,5 @@ interface InterfaceService {
      * @param array $colapsProps The properties to retrieve names for.
      * @return array The updated malware data with names mapped to entity IDs.
      */
-    public function getNameForObjectProperties($malware): array;
+    public function getNameForObjectProperties(): void;
 }

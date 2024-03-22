@@ -14,12 +14,12 @@ to RenderEntity component. That component is then responsible for rendering the 
                     @if (!empty($entitiesFromSearch))
                         @foreach ($entitiesFromSearch as $entity)
                             <li class="flex flex-col cursor-pointer hover:bg-gray-100 px-3 py-1"
-                                wire:key="{{ $entity['entity']['value'] }}"
+                                wire:key="{{ $entity['uri'] }}"
                                 wire:click.prevent="
                                 clearSearch();
-                                $dispatch('show-new-entity', { id: '{{ $entity['entity']['value'] }}' });">
+                                $dispatch('show-new-entity', { id: '{{ $entity['uri'] }}' });">
                                 <p type="button" class="font-semibold">
-                                    {{ $entity['value']['value'] }}
+                                    {{ $entity['title'] }}
                                 </p>
                                 <span
                                     class="text-slate-500 font-mono text-base mb-2">{{ $entity['displayId'] }}</span>
