@@ -27,6 +27,8 @@ class Service implements InterfaceService
         }, $results);
         return $results;
     }
+
+    # Order of methods is important
     public function getCleanEntityProperties($id): array
     {
         $entity = [];
@@ -39,10 +41,22 @@ class Service implements InterfaceService
         }
         $entity = $this->mapExistingData($entity, $properties);
         $entity = $this->getNameForObjectProperties($entity);
+        $entity = $this->addTitle($entity);
         $entity = $this->mapToConfigNames($entity);
         return $entity;
     }
 
+    public function addTitle($entity): array
+    {
+        $searchables = RandomHelper::fromConfigGet('searchable');
+        foreach($entity['data_properties'] as $key => $value){
+            if(in_array($key, $searchables)){
+                $entity['title'] = $value;
+                break;
+            }
+        }
+        return $entity;
+    }
     public function mapToConfigNames($entity): array
     {
         $entity = $this->parseAndMapProperties($entity, "data_properties", "data_properties");
@@ -61,6 +75,7 @@ class Service implements InterfaceService
                     unset($entity[$entityPropType][$entityProp]);
                     $entity[$entityPropType][$configPropValue] = $literal;
                     unset($configProperties[$configProp]);
+                    break;
                 }
             }
         }

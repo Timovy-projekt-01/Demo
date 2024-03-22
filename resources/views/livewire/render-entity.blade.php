@@ -7,7 +7,7 @@ Livewire component to render an entire entity
         <div class="flex flex-col shadow-lg my-5 p-5 divide-y divide-black mx-auto" wire:loading.class="opacity-20">
 
             <div class="py-5">
-                <h2 class="text-4xl font-bold mb-2">{{ $entity['data_properties']['hasName'] ?? $entity['displayId'] }}</h2>
+                <h2 class="text-4xl font-bold mb-2">{{ $entity['title'] ?? $entity['displayId'] ?? $entity['uri']}}</h2>
 
                 <h5 class="text-slate-500 font-mono">{{ $entity['displayId'] ?? $entity['uri'] }}</h5>
             </div>
