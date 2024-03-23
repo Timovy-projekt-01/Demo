@@ -79,14 +79,19 @@ class Queries
 
     public static function getRawEntityProperties($entityId)
     {
-        $query = self::getPreparedPrefixes() .
-            'SELECT
-                    ?entity ?property ?value
-                WHERE {
-                    BIND(<' . $entityId . '>  AS ?entity)
-                    <' . $entityId . '> ?property ?value.
-                    }
-                ORDER BY (STRLEN(?value))';
+        $query = self::getPreparedPrefixes(). '
+        SELECT ?entity ?property ?value ?name
+            WHERE {
+                VALUES ?entity { <' . $entityId . '> }
+                ?entity ?property ?value .
+                OPTIONAL {
+                    ?value ?dataProperty ?name .
+                    FILTER(isLiteral(?name)) .
+                    FILTER(?dataProperty IN (' . self::getPreparedSearchables(',') . ')) .
+                }
+            }
+            ORDER BY (STRLEN(?value))
+        ';
         $result = HttpService::get($query);
         return $result;
     }

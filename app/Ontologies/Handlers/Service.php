@@ -51,7 +51,6 @@ class Service implements InterfaceService
             $properties = array_merge($properties, $relationNames);
         }
         $this->mapExistingData($properties);
-        $this->getNameForObjectProperties();
         $this->addTitle();
         $this->mapToConfigNames();
         return $this->entity;
@@ -103,48 +102,27 @@ class Service implements InterfaceService
         $this->entity["displayId"] = RandomHelper::getSubstrAfterLastSpecialChar($entityId);
         $builtinProperties = RandomHelper::fromConfigGet('object_properties', "builtin");
         foreach ($properties as $prop) {
-            $propertyName = $prop['property']['value'];
-            $propertyValue = $prop['value']['value'];
+            $propertyValue = $prop['property']['value'];
+            $valueValue = $prop['value']['value'];
             $valueType = $prop['value']['type'];
 
             if ($valueType === "literal") {
-                $this->entity['data_properties'][$propertyName] = $propertyValue;
+                $this->entity['data_properties'][$propertyValue] = $valueValue;
             }
-            elseif(array_key_exists($propertyName, $builtinProperties)){
-                $propertyValue = RandomHelper::getSubstrAfterLastSpecialChar($propertyValue);
-                $this->entity['builtin_object_properties'][$propertyName][] = $propertyValue;
+            elseif(array_key_exists($propertyValue, $builtinProperties)){
+                $propertyValue = RandomHelper::getSubstrAfterLastSpecialChar($valueValue);
+                $this->entity['builtin_object_properties'][$propertyValue][] = $propertyValue;
             }
             else{
-                $this->entity['object_properties'][$propertyName][] = $propertyValue;
+                $strippedId = RandomHelper::getSubstrAfterLastSpecialChar($valueValue);
+                $objectEntityData = [
+                    'uri' => $valueValue,
+                    'id' => $strippedId,
+                    'name' => $prop['name']['value'] ?? $strippedId
+                ];
+                $this->entity['object_properties'][$propertyValue][] = $objectEntityData;
             }
         }
-    }
-
-    public function getNameForObjectProperties():void
-    {
-        if(!isset($this->entity['object_properties'])) return;
-
-        foreach ($this->entity['object_properties'] as $objectPropKey => $objectPropArray) {
-            $entityIds = $this->entity['object_properties'][$objectPropKey];
-            $namesAndIds = $this->getNamesForIds($entityIds);
-
-            $this->entity['object_properties'][$objectPropKey] = array_map(function ($namesAndIds) {
-                $strippedId = RandomHelper::getSubstrAfterLastSpecialChar($namesAndIds['entity']['value']);
-                return ['uri' => $namesAndIds['entity']['value'],
-                        'id' => $strippedId,
-                        'name' => $namesAndIds['name']['value'] ?? $strippedId];
-            }, (array) $namesAndIds);
-        }
-    }
-
-    private function getNamesForIds($entityIds)
-    {
-        $namesAndIds = [];
-        foreach (array_chunk((array) $entityIds, 100) as $chunk) {
-            $preparedIds = implode(" ", array_map(fn ($id) => "<$id>", $chunk));
-            $namesAndIds = array_merge($namesAndIds, Queries::getNames($preparedIds));
-        }
-        return $namesAndIds;
     }
 
     private function mapTechniqueRelations($relations)
