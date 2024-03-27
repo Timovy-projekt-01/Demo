@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Console\Commands\UpdateMalwareCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Storage;
 
 class Kernel extends ConsoleKernel
 {
@@ -22,6 +24,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        //todo 2 separate schedules for parse and upload imho idk
+        $schedule->command(UpdateMalwareCommand::class)
+            ->pingBefore('localhost:9999')
+            ->sendOutputTo('malware_update.log')
+            ->everyMinute();
     }
 
     /**

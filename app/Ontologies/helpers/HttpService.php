@@ -3,8 +3,13 @@
 namespace App\Ontologies\Helpers;
 
 use App\Exceptions\HttpException;
+use App\Exceptions\ScriptFailedException;
+use App\Traits\Script;
 use Illuminate\Support\Facades\Http;
 class HttpService {
+
+    use Script;
+
     public static function get($query): array {
 
         $blazegraphEndpoint = 'http://localhost:9999/bigdata/sparql';
@@ -25,20 +30,19 @@ class HttpService {
      *
      * @param string $file_path
      * @return bool
+     * @throws ScriptFailedException
      */
     public static function postOwl(string $file_path): bool
     {
-        $blazegraphEndpoint = getenv('CLIENT_REST_BLAZEGRAPH_UPLOAD_URL');
-
-        $response = shell_exec('curl -X POST -H "Content-Type: application/rdf+xml" --data-binary @' . $file_path . ' ' . $blazegraphEndpoint);
-        if (empty($response)){
-            throw new HttpException('Failed to upload file', [
-                'response' => [
-                    'error' => true,
-                    'url' => $blazegraphEndpoint,
-                ],
-            ]);
-        }
+        self::runCurlScript([
+            '-X',
+            'POST',
+            '-H',
+            '"Content-Type: application/rdf+xml"',
+            '--data-binary',
+            '@' . $file_path . ' ',
+            getenv('CLIENT_REST_BLAZEGRAPH_UPLOAD_URL'),
+        ]);
 
         return true;
     }

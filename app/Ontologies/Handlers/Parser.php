@@ -3,10 +3,16 @@
 namespace App\Ontologies\Handlers;
 
 use App\Exceptions\ScriptFailedException;
+use App\Traits\Path;
+use App\Traits\Script;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Storage;
 
 class Parser
 {
+
+    use Script;
+
     /**
      * Parses the malware ontology using a Python script.
      *
@@ -19,38 +25,16 @@ class Parser
         //todo pip install owlready2
         //todo pip install mitreattack-python
         //todo cronjob to run this script every x hours/days
-        $command = getenv('PYTHON_COMMAND') . ' ' . base_path('app/bin/ontologyMappers/malware-attck.py') . ' ' . escapeshellarg(base_path('app/bin/malware/malwareTemplate.owl')) . ' ' . escapeshellarg(base_path('app/bin/malware/output/malware.owl'));
-        $output = [];
-        $return_var = -1;
-        exec($command, $output, $return_var);
-
-        if ($return_var == 0) {
-            return base_path('app/bin/output/malware.owl');
-        }
-        throw new ScriptFailedException('Failed to update Malware!', [
-            'response' => [
-                'error' => true,
-                'script_name' => 'malware-attck.py',
-                'ontology' => 'malware',
-                'return_var' => $return_var,
+        return self::runPythonScript(base_path('app/bin/ontologyMappers/malware-attck.py'), [
+            base_path('app/bin/malware/malwareTemplate.owl'),
+            base_path('app/bin/malware/output/malware.owl')
             ],
-        ]);
+            base_path('app/bin/malware/output/malware.owl')
+        );
     }
 
     public static function createOntologyConfig($owlFileName)
     {
-        $path = app_path() . '\bin';
-        //todo validate that this works, replace in env vars depending on your enviroment
-        $command = getenv('PYTHON_COMMAND') . ' createOntologyConfig.py ' . $owlFileName;
-
-        $result = Process::path($path)->run($command);
-        return $result->successful();
-        /* dd(
-            $result->successful(),
-            $result->failed(),
-            $result->exitCode(),
-            $result->output(),
-            $result->errorOutput()
-        ); */
+        return self::runPythonScript('createOntologyConfig.py', [$owlFileName]);
     }
 }

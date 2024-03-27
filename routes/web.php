@@ -1,6 +1,7 @@
 <?php
 
 use App\Exceptions\ScriptFailedException;
+use App\Ontologies\Handlers\Service;
 use App\Ontologies\Helpers\HttpService;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
