@@ -59,7 +59,7 @@ class Queries
                     ?entity ?property ?value
                 WHERE {
                     ?entity ?property ?value .
-                    FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
+                    FILTER (regex(?value, "' . $searchTerm . '", "i")) .
                     FILTER (?property IN (
                         ' . self::getPreparedSearchables(',') . '
                     )) .

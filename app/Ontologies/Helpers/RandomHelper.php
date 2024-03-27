@@ -23,17 +23,6 @@ class RandomHelper
         return $result;
     }
 
-    public static function isTechnique(array $result)
-    {
-        foreach ($result as $item) {
-            $propertyValues = array_column($item, 'value', 'property');
-            if (strcmp($propertyValues[2], "http://stufei/ontologies/malware#Technique") == 0) {
-                return true; // Is technique
-            }
-        }
-        return false; // Is not technique
-    }
-
     public static function getSubstrAfterLastSpecialChar($uris)
     {
         if (!is_array($uris)) {

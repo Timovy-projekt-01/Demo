@@ -44,11 +44,6 @@ class Service implements InterfaceService
     {
 
         $properties = Queries::getRawEntityProperties($id);
-        if (RandomHelper::isTechnique($properties)) {
-            $relationNames = Queries::getRelations($id, 'mitigates', 'usesTechnique', "hasAttckTechnique");
-            $relationNames = $this->mapTechniqueRelations($relationNames);
-            $properties = array_merge($properties, $relationNames);
-        }
         $this->mapExistingData($properties);
         return $this->entity;
     }
@@ -96,18 +91,6 @@ class Service implements InterfaceService
     }
     private function mapToConfigName($propValue, $configProperty)
     {
-        return RandomHelper::fromConfigGet($configProperty)[$propValue] ?? "usedBy";
-    }
-    private function mapTechniqueRelations($relations)
-    {
-        foreach ($relations as $key => $relation) {
-            $entityId = $relation['entity']['value'];
-            $propertyVal = 'usedIn';
-            $relations[$key] = [
-                "property" => ["type" => "uri", "value" => $propertyVal],
-                "value" => ["type" => "uri", "value" => $entityId],
-            ];
-        }
-        return $relations;
+        return RandomHelper::fromConfigGet($configProperty)[$propValue] ?? $propValue;
     }
 }

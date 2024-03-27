@@ -1,12 +1,11 @@
 # pip install owlready2 treba dat
 from owlready2 import *
-from bs4 import BeautifulSoup
 import os
 import json
-from time import sleep
 import json
+import os
 import shutil
-import os
+
 
 def getOntology(owl_file_name):
     file_path = "owlFiles/" + owl_file_name + ".owl"
@@ -34,7 +33,7 @@ def createOntologyInConfig(owl_file_name):
     try:
         ontology = getOntology(owl_file_name)
         data_properties, object_properties = parseProperties(owl_file_name)
-        
+
         config_data[owl_file_name] = {
             "name": owl_file_name,
             "baseURI": ontology.base_iri,
