@@ -21,3 +21,4 @@ yarn-error.log
 .jnl
 rules.log
 blazegraph.jnl
+node_modules
