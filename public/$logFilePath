@@ -1,0 +1,8 @@
+* Owlready2 * Warning: optimized Cython parser module 'owlready2_optimized' is not available, defaulting to slower Python implementation
+Running script with owl_file_name: CVE-2000-owl.owl
+Traceback (most recent call last):
+  File "C:\xampp\htdocs\Demo\app\bin\createOntologyConfig.py", line 79, in <module>
+    main(owl_file_name)
+  File "C:\xampp\htdocs\Demo\app\bin\createOntologyConfig.py", line 61, in main
+    os.chdir('../../storage/app/ontology/')
+FileNotFoundError: [WinError 3] The system cannot find the path specified: '../../storage/app/ontology/'
