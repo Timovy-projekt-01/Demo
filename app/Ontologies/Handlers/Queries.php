@@ -3,25 +3,30 @@
 namespace App\Ontologies\Handlers;
 
 use App\Ontologies\Helpers\HttpService;
-use Illuminate\Support\Facades\Cache;
+use App\Ontologies\Helpers\RandomHelper;
+use App\Ontologies\Traits\QueryDataInitialization;
 
 class Queries
 {
-    private static $feiOntology = 'http://stufei/ontologies/malware#';
-
-    public static function getRelations(string $techniqueId, string $relationType1, string $relationType2)
+    use QueryDataInitialization;
+    public static function getRelations(string $techniqueId, string $relationType1, string $relationType2, string $relationType3)
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
-                    (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+        $query = self::getPreparedPrefixes() .
+            'SELECT
+                    ?entity
                 WHERE {
                     {
-                        ?e malware:' . $relationType1 . ' ?id .
+                        ?entity malware:' . $relationType1 . ' ?id .
                         FILTER regex(str(?id), "' . $techniqueId . '")
                     }
                     UNION
                     {
-                        ?e malware:' . $relationType2 . ' ?id .
+                        ?entity malware:' . $relationType2 . ' ?id .
+                        FILTER regex(str(?id), "' . $techniqueId . '")
+                    }
+                    UNION
+                    {
+                        ?entity malware:' . $relationType3 . ' ?id .
                         FILTER regex(str(?id), "' . $techniqueId . '")
                     }
                 }';
@@ -32,39 +37,38 @@ class Queries
 
     public static function getNames($entityIds): array
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
-                    (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+        $query = self::getPreparedPrefixes() .
+            'SELECT
+                    ?entity
                     ?name
                 WHERE {
-                    VALUES ?e { ' . $entityIds . ' }
-                    ?e malware:hasName ?name .
-                    }';
-
+                    VALUES ?entity { ' . $entityIds . ' }
+                    OPTIONAL {
+                        ?entity (' . self::getPreparedSearchables('|') . ') ?name .
+                    }
+                }';
         $result = HttpService::get($query);
         return $result;
     }
 
 
-    public static function searchEntities(string $uriPrefixes, string $searchables, string $searchTerm, $entitiesToExclude)
+    public static function searchEntities(string $searchTerm, $entitiesToExclude)
     {
-        $query = $uriPrefixes .
+        $query = self::getPreparedPrefixes() .
             'SELECT
-                    (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
-                    (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
-                    (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
+                    ?entity ?property ?value
                 WHERE {
-                    ?e ?p ?v .
-                    FILTER (regex(?v, "^' . $searchTerm . '", "i")) .
-                    FILTER (?p IN (
-                        ' . $searchables . '
+                    ?entity ?property ?value .
+                    FILTER (regex(?value, "' . $searchTerm . '", "i")) .
+                    FILTER (?property IN (
+                        ' . self::getPreparedSearchables(',') . '
                     )) .
 
                     FILTER NOT EXISTS {
                         VALUES ?fetchedEntities {
                              ' . $entitiesToExclude . '
                         }
-                        FILTER (?e IN (?fetchedEntities))
+                        FILTER (?entity IN (?fetchedEntities))
                     }
                 }
                 LIMIT 3';
@@ -75,17 +79,27 @@ class Queries
 
     public static function getRawEntityProperties($entityId)
     {
-        $query = 'PREFIX malware: <' . self::$feiOntology . '>
-                SELECT
-                (IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
-                (IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
-                (IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
-                WHERE {
-                BIND(malware:' . $entityId . '  AS ?e)
-                malware:' . $entityId . ' ?p ?v.
+        $query = self::getPreparedPrefixes(). '
+        SELECT ?entity ?property ?value ?name
+            WHERE {
+                VALUES ?entity { <' . $entityId . '> }
+                ?entity ?property ?value .
+                OPTIONAL {
+                    ?value ?dataProperty ?name .
+                    FILTER(isLiteral(?name)) .
+                    FILTER(?dataProperty IN (' . self::getPreparedSearchables(',') . ')) .
                 }
-                ORDER BY (STRLEN(?value))';
+            }
+            ORDER BY (STRLEN(?value))
+        ';
         $result = HttpService::get($query);
         return $result;
     }
 }
+
+/*
+Keby som nahodou potreboval orezavat prefixy
+(IF(CONTAINS(STR(?e), "#"), STRAFTER(STR(?e), "#"), STR(?e)) AS ?entity)
+(IF(CONTAINS(STR(?p), "#"), STRAFTER(STR(?p), "#"), STR(?p)) AS ?property)
+(IF(CONTAINS(str(?v), "#"), STRAFTER(str(?v), "#"), str(?v)) AS ?value)
+ */
