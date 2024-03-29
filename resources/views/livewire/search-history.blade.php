@@ -14,7 +14,7 @@
                         wire:key="{{ $entity['uri'] }}"
                         wire:click.prevent="retrieveLoadedEntity('{{ $entity['uri'] }}')"
                         @click="() => { window.scrollTo({top: 0, behavior: 'smooth'}); }">
-                        <p class="font-mono  ">
+                        <p class="font-mono break-all ">
                             {{ $entity['title'] }}
                         </p>
                         <p class="font-mono text-sm text-gray-600 break-all">
