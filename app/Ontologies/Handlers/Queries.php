@@ -3,8 +3,7 @@
 namespace App\Ontologies\Handlers;
 
 use App\Ontologies\Helpers\HttpService;
-use App\Ontologies\Helpers\RandomHelper;
-use App\Ontologies\Traits\QueryDataInitialization;
+use App\Traits\QueryDataInitialization;
 
 class Queries
 {

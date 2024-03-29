@@ -50,11 +50,13 @@ def createOntologyInConfig(owl_file_name):
 
         # Replace original file with the temporary file
         shutil.move(temp_file, 'fe_config.json')
+        return config_data
     except Exception as e:
         print("An error occurred:", str(e))
         # Clean up temporary file if it exists
         if os.path.exists(temp_file):
             os.remove(temp_file)
+
 
 
 def main(owl_file_name):

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Ontologies\Traits;
+namespace App\Traits;
 
 use App\Ontologies\Helpers\RandomHelper;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
 trait QueryDataInitialization
 {
     public static $uriPrefixes;
