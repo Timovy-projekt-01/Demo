@@ -13,13 +13,15 @@ class HttpService {
     public static function get($query): array {
 
         $blazegraphEndpoint = 'http://localhost:9999/bigdata/sparql';
-
-        $response = Http::acceptJson()->get($blazegraphEndpoint, [
-            'query' => $query,
-        ]);
-        $results = $response->json();
-        $results = $results['results']['bindings'] ?? [];
-
+        try {
+            $response = Http::acceptJson()->get($blazegraphEndpoint, [
+                'query' => $query,
+            ]);
+            $results = $response->json();
+            $results = $results['results']['bindings'] ?? [];
+        } catch (\Exception $e) {
+            $results = [];
+        }
         return $results;
     }
 
