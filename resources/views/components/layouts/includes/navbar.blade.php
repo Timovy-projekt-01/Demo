@@ -50,6 +50,17 @@
                     </a>
                 </li>
 
+                <li class="py-2">
+                    <a  wire:navigate href="{{ route('login') }}"
+                       class="block px-5 pl-3 pr-4 rounded
+                             md:border-0 md:hover:text-blue-500 md:p-0 text-white
+                             md:dark:hover:text-blue-500
+                             md:dark:hover:bg-transparent">
+                             Login
+                        {{-- {{__('app-labels.upload')}} --}}
+                    </a>
+                </li>
+
                 <li  x-data="{ langDropdownisOpen: false }">
                     <button @click="langDropdownisOpen = !langDropdownisOpen"
                         class="text-white font-semibold text-base pl-3 pr-4 py-2 text-center relative inline-flex items-center md:hover:text-blue-500 ">
