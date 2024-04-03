@@ -1,16 +1,9 @@
 <?php
 
-use App\Exceptions\ScriptFailedException;
-use App\Ontologies\Handlers\Service;
-use App\Ontologies\Helpers\HttpService;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Test;
-use App\Livewire\Dashboard;
 use App\Livewire\SearchHistory;
-use App\Livewire\UploadOntology;
-use App\Livewire\Admin;
 use App\Livewire\Actions\Logout;
+use App\Ontologies\Handlers\Parser;
 
 /*
 |--------------------------------------------------------------------------

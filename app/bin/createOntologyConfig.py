@@ -4,13 +4,12 @@ import os
 import json
 import json
 import os
-import shutil
+import mysql.connector
 
 
 def getOntology(owl_file_name):
-    file_path = "owlFiles/" + owl_file_name + ".owl"
     try:
-        ontology = get_ontology(file_path).load()
+        ontology = get_ontology(owl_file_name + '.owl').load()
         return ontology
     except FileNotFoundError:
         print("File not found")
@@ -26,15 +25,12 @@ def parseProperties(owl_file_name):
     return data_properties, object_properties
 
 
-def createOntologyInConfig(owl_file_name):
-    with open('fe_config.json') as json_file:
-        config_data = json.load(json_file)
-
+def createOntologyInConfig(owl_file_name, connection, user_id):
     try:
         ontology = getOntology(owl_file_name)
         data_properties, object_properties = parseProperties(owl_file_name)
 
-        config_data[owl_file_name] = {
+        config_data = {
             "name": owl_file_name,
             "baseURI": ontology.base_iri,
             "ontologyPrefix": "PREFIX " + owl_file_name + ": <" + ontology.base_iri + ">",
@@ -43,39 +39,49 @@ def createOntologyInConfig(owl_file_name):
             "object_properties": object_properties
         }
 
-        # Write updated configuration to a temporary file
-        temp_file = 'fe_config_temp.json'
-        with open(temp_file, 'w') as json_file:
-            json.dump(config_data, json_file, indent=4)
+        with connection.cursor(buffered=True) as cursor:
+            cursor.execute('SELECT id FROM user_files WHERE user_id = %s AND name = %s', (user_id, owl_file_name + '.owl',))
+            file_id = cursor.fetchone()[0]
+            cursor.execute('INSERT INTO ontology_configs (name, content, user_file_id) VALUES (%s, %s, %s)', (owl_file_name, json.dumps(config_data), file_id))
+            connection.commit()
 
-        # Replace original file with the temporary file
-        shutil.move(temp_file, 'fe_config.json')
-        return config_data
     except Exception as e:
         print("An error occurred:", str(e))
-        # Clean up temporary file if it exists
-        if os.path.exists(temp_file):
-            os.remove(temp_file)
 
 
 
-def main(owl_file_name):
+def main(owl_file_name, connection, user_id):
     # Set current directory
-    os.chdir('../../storage/app/ontology/')
+    os.chdir('../../storage/app/ontology/owlTemplates/' + user_id + '/')
     if owl_file_name.endswith('.owl'):
         owl_file_name = owl_file_name[:-4]
 
-    createOntologyInConfig(owl_file_name)
+    createOntologyInConfig(owl_file_name, connection, user_id)
+
+    connection.close()
 
 
 if __name__ == "__main__":
     # Check if two parameters are provided
-    if len(sys.argv) != 2:
-        print("Usage: python propertyParser.py <owl_file_name>")
+    if len(sys.argv) != 8:
+        print("Usage: python propertyParser.py <owl_file_name> <auth_user_id> <db_host> <db_user> <db_password> <db_name> <db_port>")
+        sys.exit(1)
+
+    mydb = mysql.connector.connect(
+        host=sys.argv[3],
+        user=sys.argv[4],
+        password=sys.argv[5],
+        database=sys.argv[6],
+        port=sys.argv[7]
+    )
+
+    if not mydb.is_connected():
+        print("Database connection failed")
         sys.exit(1)
 
     # Extract parameters
     owl_file_name = sys.argv[1]
-    main(owl_file_name)
+    user_id = sys.argv[2]
+    main(owl_file_name, mydb, user_id)
 
 

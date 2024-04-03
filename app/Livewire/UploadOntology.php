@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Exceptions\FileSystemException;
 use App\Exceptions\ScriptFailedException;
+use App\Models\OntologyConfig;
 use App\Models\UserFile;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -40,11 +41,7 @@ class UploadOntology extends Component
             $file_names = $this->saveFile();
             if($this->action_add){
                 $this->createOwlConfig($file_names['original_name']);
-                $userFile = new UserFile();
-                $userFile->name = $file_names['original_name'];
-                $userFile->user_id = auth()->user()->id;
-                $userFile->path = $file_names['full_path'];
-                $userFile->save();
+                $this->createUserFile($file_names);
             }
             $this->getHttpService()->postOwl($file_names['full_path']);
         } catch (Exception $e) {
@@ -56,6 +53,15 @@ class UploadOntology extends Component
         return redirect()->route('update');
     }
 
+    protected function createUserFile(array $file_names): void
+    {
+        UserFile::create([
+            'name' => $file_names['original_name'],
+            'user_id' => auth()->user()->id,
+            'path' => $file_names['full_path'],
+        ]);
+    }
+
     protected function saveFile(): ?array
     {
         $this->validate([
@@ -63,7 +69,7 @@ class UploadOntology extends Component
         ]);
 
         $originalName = $this->ontologyFile->getClientOriginalName();
-        if (!($path = Storage::putFileAs('ontology/owlFiles', $this->ontologyFile, $originalName, Visibility::PRIVATE))) {
+        if (!($path = Storage::putFileAs('ontology/owlTemplates/' . auth()->user()->id, $this->ontologyFile, $originalName, Visibility::PRIVATE))) {
             throw new FileSystemException('Error saving file', []);
         }
 

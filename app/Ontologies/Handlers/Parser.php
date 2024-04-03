@@ -35,6 +35,14 @@ class Parser
 
     public static function createOntologyConfig($owlFileName)
     {
-        return self::runPythonScript('createOntologyConfig.py', [$owlFileName]);
+        return self::runPythonScript('createOntologyConfig.py', [
+            $owlFileName,
+            auth()->user()->id,
+            getenv('DB_HOST'),
+            getenv('DB_USERNAME'),
+            getenv('DB_PASSWORD'),
+            getenv('DB_DATABASE'),
+            getenv('DB_PORT'),
+        ]);
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->json('content');
+            $table->unsignedBigInteger('user_file_id');
             $table->foreign('user_file_id')->references('id')
                 ->on('user_files')
                 ->onDelete('cascade');
