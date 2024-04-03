@@ -20,4 +20,9 @@ class UserFile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function ontologyConfig()
+    {
+        return $this->hasOne(OntologyConfig::class);
+    }
 }
