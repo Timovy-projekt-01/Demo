@@ -36,9 +36,10 @@ class UploadOntology extends Component
     }
 
     public function uploadFile()
-    {
+    {   
+        $type = $this->action_add ? 'owlTemplates' : 'owlFiles';
         try{
-            $file_names = $this->saveFile();
+            $file_names = $this->saveFile($type);
             if($this->action_add){
                 $this->createOwlConfig($file_names['original_name']);
                 $this->createUserFile($file_names);
@@ -62,14 +63,14 @@ class UploadOntology extends Component
         ]);
     }
 
-    protected function saveFile(): ?array
+    protected function saveFile(string $type): ?array
     {
         $this->validate([
             'ontologyFile' => 'required|file|max:204800',
         ]);
 
         $originalName = $this->ontologyFile->getClientOriginalName();
-        if (!($path = Storage::putFileAs('ontology/owlTemplates/' . auth()->user()->id, $this->ontologyFile, $originalName, Visibility::PRIVATE))) {
+        if (!($path = Storage::putFileAs('ontology/' . $type . '/' . auth()->user()->id, $this->ontologyFile, $originalName, Visibility::PRIVATE))) {
             throw new FileSystemException('Error saving file', []);
         }
 
@@ -81,18 +82,7 @@ class UploadOntology extends Component
 
     public function createOwlConfig(string $originalName): void
     {
-        if (!Parser::createOntologyConfig($originalName)) {
-            //todo move to parser
-            //todo add translations
-            throw new ScriptFailedException('Failed to create config', [
-                'response' => [
-                    'error' => true,
-                    'script_name' => 'createOntologyConfig.py',
-                    'ontology' => $originalName,
-                    'return_var' => null,
-                ],
-            ]);
-        }
+        Parser::createOntologyConfig($originalName);
     }
 
     protected function getHttpService()

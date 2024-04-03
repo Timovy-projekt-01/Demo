@@ -33,7 +33,7 @@ class Parser
         );
     }
 
-    public static function createOntologyConfig($owlFileName)
+    public static function createOntologyConfig(string $owlFileName)
     {
         return self::runPythonScript('createOntologyConfig.py', [
             $owlFileName,
