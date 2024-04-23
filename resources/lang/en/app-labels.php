@@ -2,6 +2,9 @@
 
 return [
     'about' => 'About',
+    'logout' => 'Logout',
+    'login' => 'Login',
+    'profile' => 'Profile',
     'upload' => 'Upload',
     'search history title' => 'Search History',
     'search history empty' => 'Empty',
