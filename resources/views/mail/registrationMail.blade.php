@@ -8,6 +8,6 @@
 </head>
 <body>
     <H1>TEST MAILU</H1>
-    <p>Vaše vygenerované heslo je: {{$password}}</p>
+    <p>Bol Vám pridelený účet do systému. Prihlásiť sa môžete s heslom: {{$password}}. Dané helso odporúčame okamžite zmeniť.</p>
 </body>
 </html>
