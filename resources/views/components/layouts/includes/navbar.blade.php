@@ -50,16 +50,19 @@
                     </a>
                 </li>
 
-                <li class="py-2">
-                    <a  wire:navigate href="{{ route('login') }}"
-                       class="block px-5 pl-3 pr-4 rounded
-                             md:border-0 md:hover:text-blue-500 md:p-0 text-white
-                             md:dark:hover:text-blue-500
-                             md:dark:hover:bg-transparent">
-                             Login
-                        {{-- {{__('app-labels.upload')}} --}}
-                    </a>
-                </li>
+                @if (!Auth::user())
+                    <li class="py-2">
+                        <a  wire:navigate href="{{ route('login') }}"
+                        class="block px-5 pl-3 pr-4 rounded
+                                md:border-0 md:hover:text-blue-500 md:p-0 text-white
+                                md:dark:hover:text-blue-500
+                                md:dark:hover:bg-transparent">
+                                Login
+                            {{-- {{__('app-labels.upload')}} --}}
+                        </a>
+                    </li>
+                @endif
+                {{-- {{dd(Auth::user())}} --}}
 
                 @if (Auth::user() && Auth::user()->role == 'superAdmin')
                     <li class="py-2">
