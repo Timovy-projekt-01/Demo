@@ -11,7 +11,7 @@ class BasicTest extends TestCase
         $this->get('/')->assertStatus(200);
     }
 
-    public function test_user_can_view_the_aboug_page(): void
+    public function test_user_can_view_the_about_page(): void
     {
         $this->get('/about')->assertStatus(200);
     }
