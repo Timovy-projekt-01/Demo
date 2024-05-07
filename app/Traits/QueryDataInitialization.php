@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Ontologies\Helpers\RandomHelper;
+use App\Ontologies\Helpers\ServiceHelper;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -19,7 +19,7 @@ trait QueryDataInitialization
      */
     public static function getPreparedPrefixes()
     {
-        return implode(" ", RandomHelper::fromConfigGet('ontologyPrefix'));
+        return implode(" ", ServiceHelper::fromConfigGet('ontologyPrefix'));
     }
 
     /**
@@ -33,7 +33,7 @@ trait QueryDataInitialization
         $config = json_decode(Storage::get('ontology/fe_config.json'), true);
         $prefixedSearchables = '';
         foreach ($config as $ontology => $value) {
-            $searchables = RandomHelper::fromConfigGet('searchable', $ontology);
+            $searchables = ServiceHelper::fromConfigGet('searchable', $ontology);
             if (empty($searchables)) continue;
 
             $prefixedSearchables .= implode($delimiter, array_map(function ($searchable) {

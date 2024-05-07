@@ -5,7 +5,7 @@ namespace App\Ontologies\Helpers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class RandomHelper
+class ServiceHelper
 {
     public static function fromConfigGet($attribute, $ontologyName = null)
     {

@@ -5,7 +5,7 @@ namespace App\Ontologies\Handlers;
 use App\Ontologies\Helpers\HttpService;
 use App\Ontologies\Handlers\Queries;
 use App\Ontologies\Handlers\Parser;
-use App\Ontologies\Helpers\RandomHelper;
+use App\Ontologies\Helpers\ServiceHelper;
 class Service
 {
     private $entity = [
@@ -40,7 +40,7 @@ class Service
         $entities = array_map(function ($result) {
             return [
                 "uri" => $result['entity']['value'],
-                "displayId" => RandomHelper::getSubstrAfterLastSpecialChar($result['entity']['value']),
+                "displayId" => ServiceHelper::getSubstrAfterLastSpecialChar($result['entity']['value']),
                 "title" => $result['value']['value'],
             ];
         }, $results);
@@ -72,10 +72,10 @@ class Service
 
         $entityId = $properties[0]['entity']['value']; //ID of the named individual (not a property)
         $this->entity["uri"] = $entityId;
-        $this->entity["displayId"] = RandomHelper::getSubstrAfterLastSpecialChar($entityId);
+        $this->entity["displayId"] = ServiceHelper::getSubstrAfterLastSpecialChar($entityId);
 
-        $builtinProperties = RandomHelper::fromConfigGet('object_properties', "builtin");
-        $searchables = RandomHelper::fromConfigGet('searchable');
+        $builtinProperties = ServiceHelper::fromConfigGet('object_properties', "builtin");
+        $searchables = ServiceHelper::fromConfigGet('searchable');
 
         foreach ($properties as $prop) {
             $propertyValue = $prop['property']['value'];
@@ -128,7 +128,7 @@ class Service
      */
     private function processBuiltinObjectProperty($propertyValue, $valueValue)
     {
-        $valueValue = RandomHelper::getSubstrAfterLastSpecialChar($valueValue);
+        $valueValue = ServiceHelper::getSubstrAfterLastSpecialChar($valueValue);
         $strippedPropValue = $this->mapToConfigName($propertyValue, 'object_properties');
         $this->entity['builtin_object_properties'][$strippedPropValue][] = $valueValue;
     }
@@ -143,7 +143,7 @@ class Service
      */
     private function processObjectProperty($propertyValue, $valueValue, $prop)
     {
-        $strippedId = RandomHelper::getSubstrAfterLastSpecialChar($valueValue);
+        $strippedId = ServiceHelper::getSubstrAfterLastSpecialChar($valueValue);
         $objectEntityData = [
             'uri' => $valueValue,
             'id' => $strippedId,
@@ -161,6 +161,6 @@ class Service
      */
     private function mapToConfigName($propValue, $configProperty)
     {
-        return RandomHelper::fromConfigGet($configProperty)[$propValue] ?? $propValue;
+        return ServiceHelper::fromConfigGet($configProperty)[$propValue] ?? $propValue;
     }
 }
