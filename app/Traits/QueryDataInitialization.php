@@ -12,11 +12,22 @@ trait QueryDataInitialization
     public static $searchables;
 
 
+    /**
+     * Get the prepared prefixes as a string.
+     *
+     * @return string The prepared prefixes.
+     */
     public static function getPreparedPrefixes()
     {
         return implode(" ", RandomHelper::fromConfigGet('ontologyPrefix'));
     }
 
+    /**
+     * Get the prepared searchables as a string with a specified delimiter.
+     *
+     * @param string $delimiter The delimiter to use for separating the searchables.
+     * @return string The prepared searchables as a string.
+     */
     public static function getPreparedSearchables($delimiter)
     {
         $config = json_decode(Storage::get('ontology/fe_config.json'), true);

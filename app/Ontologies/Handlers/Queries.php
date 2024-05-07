@@ -9,47 +9,31 @@ class Queries
 {
     use QueryDataInitialization;
 
-    public static function getNames($entityIds): array
-    {
-        $query =
-            'SELECT
-                    ?entity
-                    ?name
-                WHERE {
-                    VALUES ?entity { ' . $entityIds . ' }
-                    OPTIONAL {
-                        ?entity (' . self::getPreparedSearchables('|') . ') ?name .
-                    }
-                }';
-        $result = HttpService::get($query);
-        return $result;
-    }
-
 
     public static function searchEntities(string $searchTerm, $entitiesToExclude)
     {
         $query =
             'SELECT
-                    ?entity ?property ?value
-                WHERE {
-                    ?entity ?property ?value .
-                    FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
-                    FILTER (?property IN (
-                        ' . self::getPreparedSearchables(',') . '
-                    )) .
+            ?entity ?property ?value
+        WHERE {
+            ?entity ?property ?value .
+            FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
+            FILTER (?property IN (
+                ' . self::getPreparedSearchables(',') . '
+            )) .
 
-                    FILTER NOT EXISTS {
-                        VALUES ?fetchedEntities {
-                             ' . $entitiesToExclude . '
-                        }
-                        FILTER (?entity IN (?fetchedEntities))
-                    }
+            FILTER NOT EXISTS {
+                VALUES ?fetchedEntities {
+                    ' . $entitiesToExclude . '
                 }
-                LIMIT 5';
-
+                FILTER (?entity IN (?fetchedEntities))
+            }
+        }
+        LIMIT 5';
         $result = HttpService::get($query);
         return $result;
     }
+
 
     public static function getRawEntityProperties($entityId)
     {
