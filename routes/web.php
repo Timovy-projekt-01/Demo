@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Livewire\SearchHistory;
 use App\Livewire\Actions\Logout;
+use App\Livewire\ConfigEdit;
+use App\Livewire\ConfigList;
 use App\Ontologies\Handlers\Parser;
 
 /*
@@ -42,6 +44,12 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::get('/profile/configs', function(){
+    return view('config-wrapper');
+})->name('config-list');
+Route::get('/profile/configs/{config}', function(){
+    return view('config-edit-wrapper');
+})->name('config-edit');
 
 Route::get('/admin', function(){
     return view('admin-section');

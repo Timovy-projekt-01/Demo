@@ -1,9 +1,12 @@
 <x-app-layout>
 {{-- <div> --}}
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
+        <div class="flex flex-row gap-6">
+            <h2 class="font-bold text-xl text-gray-800 leading-tight">
+                {{ __('Profile') }}
+            </h2>
+            <a class="text-xl text-gray-800 leading-tight" href="{{ route('config-list') }}">Configs</a>
+        </div>
     </x-slot>
 
     <div class="py-12">
