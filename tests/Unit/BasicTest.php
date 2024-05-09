@@ -53,13 +53,13 @@ class BasicTest extends TestCase
         // Assert that the about page contains English text
         $response->assertSee('About project');
 
-        // Set the language to Spanish
+        // Set the language to Slovak
         $this->followingRedirects()->get(route('lang.switch', 'sk'));
 
         // Get the about page
         $response = $this->get('/about');
 
-        // Assert that the about page contains Spanish text
+        // Assert that the about page contains Slovak text
         $response->assertSee('O projekte');
     }
 
