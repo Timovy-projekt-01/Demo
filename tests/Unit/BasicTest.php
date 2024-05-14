@@ -6,22 +6,22 @@ use Tests\TestCase;
 
 class BasicTest extends TestCase
 {
-    public function test_user_can_view_the_home_page(): void
+    public function test_home_page_accessibility(): void
     {
         $this->get('/')->assertStatus(200);
     }
 
-    public function test_user_can_view_the_about_page(): void
+    public function test_about_page_accessibility(): void
     {
         $this->get('/about')->assertStatus(200);
     }
 
-    public function test_user_can_view_the_update_page(): void
+    public function test_update_page_accessibility(): void
     {
         $this->get('/update')->assertStatus(200);
     }
 
-    public function test_chosen_language_corresponds_with_about_home_text()
+    public function test_language_correspondence_on_home_page()
     {
         // Set the language to English
         $this->followingRedirects()->get(route('lang.switch', 'en'));
@@ -42,7 +42,7 @@ class BasicTest extends TestCase
         $response->assertSee('História vyhľadávania');
     }
 
-    public function test_chosen_language_corresponds_with_about_page_text()
+    public function test_language_correspondence_about_pages()
     {
         // Set the language to English
         $this->followingRedirects()->get(route('lang.switch', 'en'));
@@ -63,7 +63,7 @@ class BasicTest extends TestCase
         $response->assertSee('O projekte');
     }
 
-    public function test_client_gets_correct_response_for_api_endpoint()
+    public function test_api_endpoint_response()
     {
         // Create a Guzzle HTTP client
         $client = new \GuzzleHttp\Client();
@@ -79,7 +79,8 @@ class BasicTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function test_client_gets_correct_response_for_api_endpoint_with_existing_searched_term(){
+    public function test_api_response_with_existing_searched_term()
+    {
         // Create a Guzzle HTTP client
         $client = new \GuzzleHttp\Client();
 
@@ -134,7 +135,8 @@ class BasicTest extends TestCase
 
     }
 
-    public function test_client_gets_correct_response_for_api_endpoint_with_non_existing_searched_term(){
+    public function test_api_response_with_non_existing_searched_term()
+    {
         // Create a Guzzle HTTP client
         $client = new \GuzzleHttp\Client();
 
