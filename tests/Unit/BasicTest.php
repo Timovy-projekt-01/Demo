@@ -3,9 +3,12 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User; // Adjust the namespace as per your application
 
 class BasicTest extends TestCase
 {
+
     public function test_home_page_accessibility(): void
     {
         $this->get('/')->assertStatus(200);
@@ -16,11 +19,46 @@ class BasicTest extends TestCase
         $this->get('/about')->assertStatus(200);
     }
 
-    public function test_update_page_accessibility(): void
+    public function test_update_page_accessibility_for_guest_users(): void
     {
+        $this->get('/profile')->assertStatus(302);
+    }
+
+    public function test_update_page_accessibility_for_logged_in_users(): void
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
         $this->get('/update')->assertStatus(200);
     }
 
+    public function test_profile_page_accessibility_for_guest_users(): void
+    {
+        $this->get('/profile')->assertStatus(302);
+    }
+
+    public function test_profile_registration_for_guest_users(): void
+    {
+        $this->get('/register')->assertStatus(302);
+    }
+
+    public function test_profile_registration_for_logged_in_users(): void
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
+        $this->get('/register')->assertStatus(200);
+    }
+
+    public function test_profile_page_accessibility_for_logged_in_users(): void
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
+        $this->get('/profile')->assertStatus(200);
+    }
+    
+    
     public function test_login_page_accessibility(): void
     {
         $this->get('/login')->assertStatus(200);
@@ -43,6 +81,9 @@ class BasicTest extends TestCase
 
     public function test_language_correspondence_on_update_page()
     {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
         $this->assertLanguageCorrespondence('Update', 'Aktualizovať', '/update');
     }
     
