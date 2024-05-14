@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User; // Adjust the namespace as per your application
+use App\Models\User;
 
 class BasicTest extends TestCase
 {
