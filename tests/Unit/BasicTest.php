@@ -21,6 +21,16 @@ class BasicTest extends TestCase
         $this->get('/update')->assertStatus(200);
     }
 
+    public function test_login_page_accessibility(): void
+    {
+        $this->get('/login')->assertStatus(200);
+    }
+
+    public function test_non_existing_page_accessibility(): void
+    {
+        $this->get('/non-existing-page')->assertStatus(404);
+    }
+
     public function test_language_correspondence_on_home_page()
     {
         // Set the language to English
