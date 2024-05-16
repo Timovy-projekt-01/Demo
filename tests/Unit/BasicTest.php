@@ -3,87 +3,103 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class BasicTest extends TestCase
 {
-    public function test_user_can_view_the_home_page(): void
+
+    public function test_home_page_accessibility(): void
     {
         $this->get('/')->assertStatus(200);
     }
 
-    public function test_user_can_view_the_about_page(): void
+    public function test_about_page_accessibility(): void
     {
         $this->get('/about')->assertStatus(200);
     }
 
-    public function test_user_can_view_the_update_page(): void
+    public function test_update_page_accessibility_for_guest_users(): void
     {
+        $this->get('/profile')->assertStatus(302);
+    }
+
+    public function test_update_page_accessibility_for_logged_in_users(): void
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
         $this->get('/update')->assertStatus(200);
     }
 
-    public function test_chosen_language_corresponds_with_about_home_text()
+    public function test_profile_page_accessibility_for_guest_users(): void
     {
-        // Set the language to English
+        $this->get('/profile')->assertStatus(302);
+    }
+
+    public function test_profile_registration_for_guest_users(): void
+    {
+        $this->get('/register')->assertStatus(302);
+    }
+
+    public function test_profile_registration_for_logged_in_users(): void
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
+        $this->get('/register')->assertStatus(200);
+    }
+
+    public function test_profile_page_accessibility_for_logged_in_users(): void
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
+        $this->get('/profile')->assertStatus(200);
+    }
+    
+    
+    public function test_login_page_accessibility(): void
+    {
+        $this->get('/login')->assertStatus(200);
+    }
+
+    public function test_non_existing_page_accessibility(): void
+    {
+        $this->get('/non-existing-page')->assertStatus(404);
+    }
+
+    public function test_language_correspondence_on_home_page()
+    {
+        $this->assertLanguageCorrespondence('Search History', 'História vyhľadávania', '/');
+    }
+    
+    public function test_language_correspondence_on_about_page()
+    {
+        $this->assertLanguageCorrespondence('About project', 'O projekte', '/about');
+    }
+
+    public function test_language_correspondence_on_update_page()
+    {
+        $email = 'superAdmin@gmail.com';
+        $user = User::where('email', $email)->first();
+        $this->actingAs($user);
+        $this->assertLanguageCorrespondence('Update', 'Aktualizovať', '/update');
+    }
+    
+    private function assertLanguageCorrespondence($englishText, $slovakText, $page)
+    {
         $this->followingRedirects()->get(route('lang.switch', 'en'));
-
-        // Get the about page
-        $response = $this->get('/');
-
-        // Assert that the about page contains English text
-        $response->assertSee('Search History');
-
-        // Set the language to Spanish
+        $response = $this->get($page);
+        $response->assertSee($englishText);
         $this->followingRedirects()->get(route('lang.switch', 'sk'));
-
-        // Get the about page
-        $response = $this->get('/');
-
-        // Assert that the about page contains Spanish text
-        $response->assertSee('História vyhľadávania');
+        $response = $this->get($page);
+        $response->assertSee($slovakText);
     }
 
-    public function test_chosen_language_corresponds_with_about_page_text()
+    public function test_api_response_with_existing_searched_term()
     {
-        // Set the language to English
-        $this->followingRedirects()->get(route('lang.switch', 'en'));
-
-        // Get the about page
-        $response = $this->get('/about');
-
-        // Assert that the about page contains English text
-        $response->assertSee('About project');
-
-        // Set the language to Spanish
-        $this->followingRedirects()->get(route('lang.switch', 'sk'));
-
-        // Get the about page
-        $response = $this->get('/about');
-
-        // Assert that the about page contains Spanish text
-        $response->assertSee('O projekte');
-    }
-
-    public function test_client_gets_correct_response_for_api_endpoint()
-    {
-        // Create a Guzzle HTTP client
         $client = new \GuzzleHttp\Client();
-
-        // Send a GET request to the API endpoint
-        $response = $client->get('http://localhost:9999/bigdata/sparql', [
-            'query' => [
-                'query' => 'SELECT * WHERE {?s ?p ?o} LIMIT 1',
-            ],
-        ]);
-
-        // Assert the response status is 200 (OK)
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
-    public function test_client_gets_correct_response_for_api_endpoint_with_existing_searched_term(){
-        // Create a Guzzle HTTP client
-        $client = new \GuzzleHttp\Client();
-
-        // Send a GET request to the API endpoint
         $response = $client->get('http://localhost:9999/bigdata/sparql', [
             'query' => [
                 'query' => 'SELECT ?entity ?property ?value
@@ -134,11 +150,9 @@ class BasicTest extends TestCase
 
     }
 
-    public function test_client_gets_correct_response_for_api_endpoint_with_non_existing_searched_term(){
-        // Create a Guzzle HTTP client
+    public function test_api_response_with_non_existing_searched_term()
+    {
         $client = new \GuzzleHttp\Client();
-
-        // Send a GET request to the API endpoint
         $response = $client->get('http://localhost:9999/bigdata/sparql', [
             'query' => [
                 'query' => 'SELECT ?entity ?property ?value
