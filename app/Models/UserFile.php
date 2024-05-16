@@ -11,8 +11,8 @@ class UserFile extends Model
 
     protected $fillable = [
         'id',
-        'file_name',
-        'file_path',
+        'name',
+        'path',
         'user_id'
     ];
 

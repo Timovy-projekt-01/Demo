@@ -31,7 +31,13 @@ trait Script
      */
     public static function runCurlScript(array $args): bool
     {
-        $result = Process::run('curl' . ' ' . implode(' ', $args));
+        $result = Process::env(
+            [
+                'SYSTEMROOT' => getenv('SYSTEMROOT'),
+                'PATH' => getenv('PATH'),
+            ]
+        )->run('curl' . ' ' . implode(' ', $args));
+        
         if (!$result->successful()){
             self::throwError($result->errorOutput(), 'curl', $args);
         }
