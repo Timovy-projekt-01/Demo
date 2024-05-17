@@ -15,9 +15,9 @@ class ServiceHelper
         }
 
         $result = [];
-        foreach ($config as $config) {
-            if (isset($config[$attribute])) {
-                $result = array_merge($result, (array) $config[$attribute]);
+        foreach ($config as $setting) {
+            if (isset($setting[$attribute])) {
+                $result = array_merge($result, (array) $setting[$attribute]);
             }
         }
         return $result;

@@ -13,23 +13,22 @@ class Queries
     public static function searchEntities(string $searchTerm, $entitiesToExclude)
     {
         $query =
-            'SELECT
-            ?entity ?property ?value
-        WHERE {
-            ?entity ?property ?value .
-            FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
-            FILTER (?property IN (
-                ' . self::getPreparedSearchables(',') . '
-            )) .
+            'SELECT ?entity ?property ?value
+                WHERE {
+                    ?entity ?property ?value .
+                    FILTER (regex(?value, "^' . $searchTerm . '", "i")) .
+                    FILTER (?property IN (
+                        ' . self::getPreparedSearchables(',') . '
+                    )) .
 
-            FILTER NOT EXISTS {
-                VALUES ?fetchedEntities {
-                    ' . $entitiesToExclude . '
+                    FILTER NOT EXISTS {
+                        VALUES ?fetchedEntities {
+                            ' . $entitiesToExclude . '
+                        }
+                        FILTER (?entity IN (?fetchedEntities))
+                    }
                 }
-                FILTER (?entity IN (?fetchedEntities))
-            }
-        }
-        LIMIT 5';
+            LIMIT 5';
         $result = HttpService::get($query);
         return $result;
     }
@@ -54,4 +53,3 @@ class Queries
         return $result;
     }
 }
-
