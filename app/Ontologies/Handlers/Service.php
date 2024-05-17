@@ -9,13 +9,13 @@ use App\Ontologies\Helpers\ServiceHelper;
 class Service
 {
     private $entity = [
-            "uri" => null,
-            "displayId" => null,
-            "title" => null,
-            "data_properties" => [],
-            "object_properties" => [],
-            "builtin_object_properties" => [],
-        ];
+                "uri" => null,
+                "displayId" => null,
+                "title" => null,
+                "data_properties" => [],
+                "object_properties" => [],
+                "builtin_object_properties" => [],
+                ];
 
     /**
      * Updates the malware using the HttpService class.

@@ -9,7 +9,7 @@
             <h3 class="text-xl font-bold text-center border-b-2 border-slate-600 pb-3">
                 {{ __('app-labels.search history title') }}</h3>
             <div class="py-3 divide-y">
-                @forelse ($history as $index => $entity)
+                @forelse ($this->history as $entity)
                     <div class="transition-transform duration-500 ease-in-out hover:underline border-b py-2 cursor-pointer transform hover:translate-x-1"
                         wire:key="{{ $entity['uri'] }}"
                         wire:click.prevent="retrieveLoadedEntity('{{ $entity['uri'] }}')"
@@ -41,8 +41,7 @@
 @script
     <script>
         let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
-        console.log("PIPIK: ", history, $wire);
-        $wire.dispatch('update-history', {
+        $wire.call('updateHistory', {
             history: history
         });
     </script>

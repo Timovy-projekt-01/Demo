@@ -12,13 +12,15 @@ class SearchHistory extends Component
 
     public function render()
     {
+        //dd($this->history);
         return view('livewire.search-history');
     }
 
     #[On('update-history')]
     public function updateHistory($history)
     {
-        $this->history = $history;
+
+        $this->history = $history["history"] ?? $history;
     }
 
     #[On('clear-history')]
