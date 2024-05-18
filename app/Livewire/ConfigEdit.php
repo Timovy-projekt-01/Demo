@@ -36,6 +36,7 @@ class ConfigEdit extends Component
     {
         $content = array_merge($this->content_single, $this->content_array);
         $content[self::SEARCHABLE] = explode(',', is_array($content[self::SEARCHABLE]) ? '' : $content[self::SEARCHABLE]);
+        $this->config->name = $content['name'];
         $this->config->content = json_encode($content);
         $this->config->save();
         $this->message = 'Config updated';

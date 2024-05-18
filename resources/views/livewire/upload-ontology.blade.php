@@ -1,4 +1,4 @@
-<div class="w-3/4">
+<div class="w-3/4 shadow-lg p-5 my-5">
     <style>
         .file-upload-label {
             transition: background-color 1s ease;
@@ -56,7 +56,7 @@
     <h1 class="text-3xl font-bold text-center border-b-2 border-slate-600 my-4 py-4 items-center text-gray-900">
         <input wire:change='action' type="checkbox" id="toggle" class="toggleCheckbox" />
         <label for="toggle" class='toggleContainer m-auto mb-4'>
-          <div>{{__('upload-page.add')}}</div>   
+          <div>{{__('upload-page.add')}}</div>
           <div>{{__('upload-page.update')}}</div>
         </label>
         <span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2 py-0.5 rounded ms-2">
@@ -99,9 +99,9 @@
             <div class="flex items-center justify-center w-1/2 m-auto">
                 <button wire:loading.attr="disabled"
                         wire:loading.class="opacity-50"
-                        class="bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-4"
-                        >
-                        {{__('upload-page.upload butt')}}
+                        class="bg-blue-100 text-blue-800 text-xl font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-4 hover:bg-blue-500 hover:text-white"
+                >
+                    {{__('upload-page.upload butt')}}
                 </button>
             </div>
         @endif
