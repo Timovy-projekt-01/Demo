@@ -4,6 +4,7 @@ return [
     'about' => 'About',
     'logout' => 'Logout',
     'login' => 'Login',
+    'register' => 'Register',
     'profile' => 'Profile',
     'upload' => 'Upload',
     'search history title' => 'Search History',

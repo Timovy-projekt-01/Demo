@@ -5,6 +5,7 @@ return [
     'upload' => 'Nahrať',
     'logout' => 'Odhlásiť sa',
     'login' => 'Prihlásiť sa',
+    'register' => 'Registrovať sa',
     'profile' => 'Profil',
     'search history title' => 'História vyhľadávania',
     'search history empty' => 'Prázdne',

@@ -88,7 +88,7 @@
                                 md:border-0 md:hover:text-blue-500 md:p-0 text-white
                                 md:dark:hover:text-blue-500
                                 md:dark:hover:bg-transparent">
-                                Register
+                                {{__('app-labels.register')}}
                             {{-- {{__('app-labels.upload')}} --}}
                         </a>
                     </li>

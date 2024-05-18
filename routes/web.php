@@ -46,10 +46,10 @@ Route::view('profile', 'profile')
 
 Route::get('/profile/configs', function(){
     return view('config-wrapper');
-})->name('config-list');
+})->name('config-list')->middleware('lang');
 Route::get('/profile/configs/{config}', function(){
     return view('config-edit-wrapper');
-})->name('config-edit');
+})->name('config-edit')->middleware('lang');
 
 Route::get('/admin', function(){
     return view('admin-section');
