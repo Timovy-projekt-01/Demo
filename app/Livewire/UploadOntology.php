@@ -36,13 +36,13 @@ class UploadOntology extends Component
     }
 
     public function uploadFile()
-    {   
+    {
         $type = $this->action_add ? 'owlTemplates' : 'owlFiles';
         try{
             $file_names = $this->saveFile($type);
             if($this->action_add){
-                $this->createOwlConfig($file_names['original_name']);
                 $this->createUserFile($file_names);
+                $this->createOwlConfig($file_names['original_name']);
             }
             $this->getHttpService()->postOwl($file_names['full_path']);
         } catch (Exception $e) {

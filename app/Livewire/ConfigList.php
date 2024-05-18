@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\OntologyConfig;
 use Livewire\Component;
+use App\Models\UserFile;
 
 class ConfigList extends Component
 {
@@ -11,7 +12,8 @@ class ConfigList extends Component
 
     public function mount()
     {
-        $this->files = OntologyConfig::where('user_file_id', auth()->id())->get();
+        $file_ids = UserFile::where('user_id', auth()->id())->pluck('id');
+        $this->files = OntologyConfig::whereIn('user_file_id', $file_ids)->get();
     }
 
     public function render()
