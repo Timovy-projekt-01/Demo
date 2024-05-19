@@ -2,12 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Ontologies\Handlers\Parser;
 use Livewire\Component;
-use App\Ontologies\Handlers\Queries;
 use App\Ontologies\Handlers\Service;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Computed;
 
 class RenderEntity extends Component
 {

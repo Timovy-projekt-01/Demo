@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
+use App\Models\OntologyConfig;
 use App\Ontologies\Helpers\ServiceHelper;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 trait QueryDataInitialization
@@ -30,10 +30,9 @@ trait QueryDataInitialization
      */
     public static function getPreparedSearchables($delimiter)
     {
-        $config = json_decode(Storage::get('ontology/fe_config.json'), true);
         $prefixedSearchables = '';
-        foreach ($config as $ontology => $value) {
-            $searchables = ServiceHelper::fromConfigGet('searchable', $ontology);
+        foreach (OntologyConfig::select('name')->pluck('name') as $name) {
+            $searchables = ServiceHelper::fromConfigGet('searchable', $name);
             if (empty($searchables)) continue;
 
             $prefixedSearchables .= implode($delimiter, array_map(function ($searchable) {

@@ -3,9 +3,6 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Item;
-use App\Ontologies\Handlers\Queries;
-use Livewire\Attributes\On;
 use App\Ontologies\Handlers\Service;
 
 class SearchBar extends Component

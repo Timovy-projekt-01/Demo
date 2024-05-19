@@ -2,20 +2,22 @@
 
 namespace App\Ontologies\Helpers;
 
-use Illuminate\Support\Facades\Storage;
+use App\Models\OntologyConfig;
 use Illuminate\Support\Str;
 
 class ServiceHelper
 {
     public static function fromConfigGet($attribute, $ontologyName = null)
     {
-        $config = json_decode(Storage::get('ontology/fe_config.json'), true);
+        $qb = OntologyConfig::select('content');
         if ($ontologyName) {
-            return $config[$ontologyName][$attribute] ?? [];
+            $content = $qb->where('name', $ontologyName)->limit(1)->pluck('content')->toArray()[0];
+            return json_decode($content, true)[$attribute] ?? [];
         }
 
         $result = [];
-        foreach ($config as $setting) {
+        foreach ($qb->pluck('content') as $content) {
+            $setting = json_decode($content, true);
             if (isset($setting[$attribute])) {
                 $result = array_merge($result, (array) $setting[$attribute]);
             }

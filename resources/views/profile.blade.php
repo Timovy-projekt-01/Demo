@@ -6,6 +6,7 @@
                 {{ __('Profile') }}
             </h2>
             <a class="text-xl text-gray-800 leading-tight" href="{{ route('config-list') }}">Configs</a>
+            <a class="text-xl text-gray-800 leading-tight" href="{{ route('update') }}">Upload</a>
         </div>
     </x-slot>
 

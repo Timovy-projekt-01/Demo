@@ -10,6 +10,7 @@ class ConfigEdit extends Component
     const SEARCHABLE = 'searchable';
     public $content_single;
     public $content_array;
+    public $searchable;
     public $message;
     public $config;
 
@@ -25,6 +26,9 @@ class ConfigEdit extends Component
     {
         foreach ($content as $key => $value) {
             if(is_array($value)){
+                if($key === self::SEARCHABLE){
+                    $this->searchable = implode(',', $value);
+                }
                 $this->content_array[$key] = $value;
                 continue;
             }
@@ -35,7 +39,7 @@ class ConfigEdit extends Component
     public function submit()
     {
         $content = array_merge($this->content_single, $this->content_array);
-        $content[self::SEARCHABLE] = explode(',', is_array($content[self::SEARCHABLE]) ? '' : $content[self::SEARCHABLE]);
+        $this->content_array[self::SEARCHABLE] = $content[self::SEARCHABLE] = explode(',', $this->searchable) ?? [];
         $this->config->name = $content['name'];
         $this->config->content = json_encode($content);
         $this->config->save();

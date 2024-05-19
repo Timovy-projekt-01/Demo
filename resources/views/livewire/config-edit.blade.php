@@ -31,7 +31,7 @@
                     </h1>
                 @if (self::SEARCHABLE == $key)
                     <div class="mb-6 gap-0 bg-blue-100 w-full text-left p-5 rounded">
-                        <input wire:model='content_array.{{$key}}' type="text" id="{{ $key }}" value="{{ implode(',', $value) }}" class="mb-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 pt-2.5" />
+                        <input wire:model='searchable' type="text" id="{{ $key }}" value="{{ $searchable }}" class="mb-0 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 pt-2.5" />
                         <p class="mt-0 text-sm text-gray-500 ">Supported formats: x1,x2,x3,x4 (comma separated).</p>
                     </div>
                     @continue

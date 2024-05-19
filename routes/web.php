@@ -6,6 +6,7 @@ use App\Livewire\Actions\Logout;
 use App\Livewire\ConfigEdit;
 use App\Livewire\ConfigList;
 use App\Ontologies\Handlers\Parser;
+use App\Ontologies\Handlers\Service;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,14 +47,13 @@ Route::view('profile', 'profile')
 
 Route::get('/profile/configs', function(){
     return view('config-wrapper');
-})->name('config-list')->middleware('lang');
+})->name('config-list')->middleware(['auth', 'lang']);
 Route::get('/profile/configs/{config}', function(){
     return view('config-edit-wrapper');
-})->name('config-edit')->middleware('lang');
+})->name('config-edit')->middleware(['auth', 'lang']);
 
 Route::get('/admin', function(){
     return view('admin-section');
 })->name('admin');
-
 
 require __DIR__.'/auth.php';
