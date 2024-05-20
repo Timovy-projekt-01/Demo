@@ -1,66 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Inštalačná príručka k webovej aplikácii Security domain ontology browser
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Treba mať :
+- webový server
+- databázu
+- Python
+- PHP
 
-## About Laravel
+Z Python balíkov treba mať nainštalované :
+-  owlready2
+-  mitreattack-python
+-  mysql-connector-python
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+V prípade potreby (ak by nefungovalo uploadovanie .owl súborov) je potrebné si zväčšiť limit na upload v php.ini súbore. 
+Treba upraviť 2 premenné (upload_max_filesize , post_max_size).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Postup :
+1.	Vytvoriť .env súbor (v koreňovom adresári) podľa .env.example súboru, ktorý sa nachádza v koreňovom priečinku (tie tri čiarky ``` na konci súboru nekopírovať!)
+2.	Vytvoriť si databázu s názvom ‚laravel‘ a nastaviť databázové spojenie na základe údajov vyplnených v .env.example file prípadne zmeniť ich podľa potreby
+(v prípade, že nemáte nastavené heslo ku databáze vyplňte DB_PASSWORD ako ‘ ““ ‘ )
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1 
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=’””’
+```
+ 
+3.	V koreňovom priečinku spustiť cez terminál príkaz `composer install`
+4.	V koreňovom priečinku spustiť cez terminál príkaz `npm install`
+5.	V koreňovom priečinku spustiť cez terminál príkaz `php artisan key:generate`
+6.	V koreňovom priečinku spustiť cez terminál príkaz `php artisan migrate --seed`
 
-## Learning Laravel
+Príkazy v krokoch 7, 8 a 9 budú bežať v troch termináloch súčasne:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+7.	V koreňovom priečinku spustiť cez terminál príkaz `php artisan serve`
+8.	V koreňovom priečinku spustiť cez ďalší terminál príkaz `php artisan bg`
+9.	V koreňovom priečinku spustiť cez ďalší terminál príkaz `npm run dev`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Webová aplikácia bude bežať na http://127.0.0.1:8000/ (ak ste si nezmenili DB_HOST v kroku 2)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+10.	Aby bolo možné používať webovú aplikáciu na prehliadanie dát, je potrebné nimi naplniť databázu 
+- je potrebné sa v záložke ‘Upload’ v navigačnom paneli prihlásiť údajmi poskytnutými nižšie
+- kliknúť na plochu pre upload súboru
+- vybrať súbor, ktorý sa nachádza od koreňového adresára na ceste  /app/bin/malware/output/malware.owl
+pozor: upload bude trvať aj niekoľko minút (ide o veľký súbor)
+- keď sa pozadie plochy na upload sfarbí na zeleno a objaví sa tlačidlo pre upload, treba ho stlačiť a počkať
+- po úspešnom uploade dát do databázy budete presmerovaní naspäť na podstránku pre upload
+- v profile v záložke configs si treba v príslušnom konfiguračnom súbore nastaviť pole searchable na konkrétny prefix, podľa ktorého bude aplikácia vyhľadávať (vzor: http://stufei/ontologies/malware#hasName)
+- teraz už je možné vyhľadávať dáta pomocou search baru na domovskej stránke webovej aplikácie
 
-## Laravel Sponsors
+Prihlasovacie údaje do admin systému :
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Meno: superAdmin@gmail.com
 
-### Premium Partners
+Heslo: Pa55w0rd
+ 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
