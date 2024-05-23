@@ -50,7 +50,7 @@ class ConfigEdit extends Component
         $cnt = 0;
         foreach($this->content_array as $key => $value){
             if($key === self::SEARCHABLE){
-                $this->content_array[self::SEARCHABLE] =  explode(',', $this->searchable) ?? [];
+                $data[self::SEARCHABLE] = $this->content_array[self::SEARCHABLE] = explode(',', $this->searchable) ?? [];
                 continue;
             }
             foreach($value as $property => $p_val){
@@ -58,9 +58,7 @@ class ConfigEdit extends Component
                 $cnt++;
             }
         }
-
         $content = array_merge($this->content_single, $data);
-        $content[self::SEARCHABLE] = $this->content_array[self::SEARCHABLE];
         $this->config->name = $content['name'];
         $this->config->content = json_encode($content);
         $this->config->save();

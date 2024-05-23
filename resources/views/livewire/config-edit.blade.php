@@ -21,9 +21,9 @@
                     <div class="mb-6 grid gap-4 md:grid-cols-2 sm:grid-cols-1 w-full">
                         <label for="{{ $key }}"
                             class="block mb-2 text-sm underline text-gray-900 font-medium">{{ $key }}</label>
-                        <input wire:model='content_single.{{ $key }}' type="text" id="{{ $key }}"
-                            name="{{ $key }}" value="{{ $value }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full" />
+                        <div class="font-mono bg-blue-100 border border-blue-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full">
+                            {{ $value }}
+                        </div>
                     </div>
                 @endforeach
             </div>
