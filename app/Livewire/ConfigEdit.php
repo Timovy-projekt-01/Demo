@@ -30,6 +30,9 @@ class ConfigEdit extends Component
             if(is_array($value)){
                 if($key === self::SEARCHABLE){
                     $this->searchable = implode(',', $value);
+                    $this->map[$cnt] = '';
+                    $this->content_array[$key][$cnt] = '';
+                    $cnt++;
                 }
                 foreach ($value as $property => $p_val){
                     $this->map[$cnt] = $property;
