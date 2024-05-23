@@ -27,6 +27,11 @@ DB_DATABASE=laravel
 DB_USERNAME=root
 DB_PASSWORD=’””’
 ```
+Taktiež treba na konci .env suboru pridat cestu k python interpreteru ktorý obsahuje potrebne knižnice.  
+Priklád:
+```
+PYTHON_COMMAND="C:\\xampp\\htdocs\\venv\\Scripts\\python.exe"
+```
  
 3.	V koreňovom priečinku spustiť cez terminál príkaz `composer install`
 4.	V koreňovom priečinku spustiť cez terminál príkaz `npm install`
