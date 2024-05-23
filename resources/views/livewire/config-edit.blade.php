@@ -37,9 +37,9 @@
                     @continue
                 @endif
                 <div class="mb-6 grid gap-4 md:grid-cols-2 sm:grid-cols-1 bg-blue-100 w-full text-left p-5 rounded">
-                    @foreach ($value as $name => $val)
-                        <label for="{{ $name }}" class="block mb-2 text-sm font-medium text-gray-900">{{ $name }}</label>
-                        <input wire:key={{ $name }} wire:model='content_array.{{$key}}.{{$name}}' type="text" id="{{ $name }}" value="{{ $val }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
+                    @foreach ($value as $id => $val)
+                        <label for="{{ $id }}" class="block mb-2 text-sm font-medium text-gray-900">{{ $map[$id] }}</label>
+                        <input wire:model='content_array.{{$key}}.{{ $id }}' type="text" id="{{ $id }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
                     @endforeach
                 </div>
             @endforeach
